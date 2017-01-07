@@ -1,0 +1,50 @@
+{
+  "name": "scrollload",
+  "version": "1.0.0",
+  "description": "scroll load more data 滚动加载更多的数据",
+  "main": "lib/Scrollload.js",
+  "scripts": {
+    "start": "webpack-dev-server --env=dev --host 0.0.0.0",
+    "dist": "rimraf dist/* & webpack --env=dist",
+    "pub": "rimraf lib/* & node processCss.js & webpack --env=pub",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "scrollload",
+    "scroll",
+    "load",
+    "more"
+  ],
+  "author": "fa-ge",
+  "license": "ISC",
+  "devDependencies": {
+    "autoprefixer": "^6.6.1",
+    "babel-core": "^6.21.0",
+    "babel-loader": "^6.2.10",
+    "babel-preset-es2015": "^6.18.0",
+    "css-loader": "^0.26.1",
+    "extract-text-webpack-plugin": "^2.0.0-beta.4",
+    "html-webpack-plugin": "^2.25.0",
+    "minimist": "^1.2.0",
+    "node-sass": "^4.1.1",
+    "postcss-loader": "^1.2.1",
+    "readdirp": "^2.1.0",
+    "rimraf": "^2.5.4",
+    "sass-loader": "^4.1.1",
+    "style-loader": "^0.13.1",
+    "webpack": "^2.2.0-rc.3",
+    "webpack-dev-server": "^1.16.2"
+  },
+  "dependencies": {
+    "scrollfixplus": "^1.0.0",
+    "swiper": "^3.4.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fa-ge/scrollload.git"
+  },
+  "bugs": {
+    "url": "https://github.com/fa-ge/scrollload/issues"
+  },
+  "homepage": "https://github.com/fa-ge/scrollload#readme"
+}

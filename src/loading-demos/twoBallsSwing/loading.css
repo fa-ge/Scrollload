@@ -1,0 +1,59 @@
+/**
+<div class="two-balls-swing">
+    <div class="two-balls-swing-circle"></div>
+    <div class="two-balls-swing-circle"></div>
+</div>
+*/
+
+@keyframes two-balls-swing-anim1 {
+    0% {
+        left: -26px;
+    }
+    50% {
+        left: 10px;
+    }
+    100% {
+        left: -26px;
+    }
+}
+
+@keyframes two-balls-swing-anim2 {
+    0% {
+        left: 10px;
+    }
+
+    50% {
+        z-index: 1;
+        left: -26px;
+    }
+    100% {
+        left: 10px;
+        z-index: 10;
+    }
+}
+
+.two-balls-swing {
+    background: none;
+    position: relative;
+    height: 30px;
+    width: 0px;
+    margin: 0 auto;
+}
+.two-balls-swing > .two-balls-swing-circle {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    position: absolute;
+    top: 7px;
+}
+.two-balls-swing > .two-balls-swing-circle:nth-of-type(1) {
+    left: -26px;
+    background: #0462dc;
+    z-index: 5;
+    animation: two-balls-swing-anim1 1.3s linear infinite;
+}
+.two-balls-swing > .two-balls-swing-circle:nth-of-type(2) {
+    left: 10px;
+    background: #fc0284;
+    animation: two-balls-swing-anim2 1.3s linear infinite;
+}
