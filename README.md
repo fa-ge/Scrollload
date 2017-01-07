@@ -9,25 +9,25 @@ scrolllaod是一个无依赖，体积极小（压缩+gzip后不到2k），可配
 
 ### 示例
 
-[无任何效果](https://fa-ge.github.io/scrollload/dist/feature-demos/demo1/index.html)
+[无任何效果](https://fa-ge.github.io/Scrollload/dist/feature-demos/demo1/index.html)
 
-[有loading动画一](https://fa-ge.github.io/scrollload/dist/loading-demos/twoBallsSwing/index.html)
+[有loading动画一](https://fa-ge.github.io/Scrollload/dist/loading-demos/twoBallsSwing/index.html)
 
-[有loading动画二(百度移动端)](https://fa-ge.github.io/scrollload/dist/loading-demos/baidu-mobile/index.html)
+[有loading动画二(百度移动端)](https://fa-ge.github.io/Scrollload/dist/loading-demos/baidu-mobile/index.html)
 
-[多个tab效果](https://fa-ge.github.io/scrollload/dist/feature-demos/demo2/index.html)
+[多个tab效果](https://fa-ge.github.io/Scrollload/dist/feature-demos/demo2/index.html)
 
-[div容器中的滚动加载](https://fa-ge.github.io/scrollload/dist/feature-demos/demo3/index.html)
+[div容器中的滚动加载](https://fa-ge.github.io/Scrollload/dist/feature-demos/demo3/index.html)
 
-***[左右滑动tab并且滚动加载](https://fa-ge.github.io/scrollload/dist/complex-demos/swiper-tab/index.html)***
+***[左右滑动tab并且滚动加载](https://fa-ge.github.io/Scrollload/dist/complex-demos/swiper-tab/index.html)***
 
-[异常处理](https://fa-ge.github.io/scrollload/dist/feature-demos/demo4/index.html)
+[异常处理](https://fa-ge.github.io/Scrollload/dist/feature-demos/demo4/index.html)
 
-[点击刷新重新加载](https://fa-ge.github.io/scrollload/dist/feature-demos/demo5/index.html)
+[点击刷新重新加载](https://fa-ge.github.io/Scrollload/dist/feature-demos/demo5/index.html)
 
 
 
-[示例源码](https://github.com/fa-ge/scrollload/tree/master/src)
+[示例源码](https://github.com/fa-ge/Scrollload/tree/master/src)
 
 ### 实现原理
 首先得区分一下全局滚动和局部滚动。  
@@ -55,16 +55,16 @@ scrolllaod是一个无依赖，体积极小（压缩+gzip后不到2k），可配
     }
 ```
 原理很简单，我判断底部DOM的上边框到视窗上边框的距离是否要大于视窗的高度。就那么简单。这边有做一个小小的性能优化，因为isBottom函数是scroll事件和resize事件的回调函数，执行频率相当高。函数节流当然有做，这边还对window.innerHeight这个值做了缓存。实在没必要每次执行这个函数都去获取以下window的高度。除去给window.innerHeight直接赋值外，我能想到能改变window的高度的一定会触发resize.所以我在resize事件的回调中更新window.innerHeight就可以了。  
-详细的源码请看 [源码](https://github.com/fa-ge/scrollload/blob/master/src/scrollload.js)  
+详细的源码请看 [源码](https://github.com/fa-ge/Scrollload/blob/master/src/Scrollload.js)  
 
 ### 安装
-npm install scrollload --save
+npm install Scrollload --save
 
 ### 使用
 如果你没有用模块管理，直接从window对象下取Scrollload对象也是可以的，打包后的js放在lib目录下，可以直接用script标签引入  
 同时支持模块引入  
-ES6: import Scrollload from 'scrollload'  
-commonjs: const Scrollload = require('scrollload').default  
+ES6: import Scrollload from 'Scrollload'  
+commonjs: const Scrollload = require('Scrollload').default  
 当然也支持amd,不过我没用过。  
 真正用起来也非常简单  
 ```javascript
@@ -143,12 +143,12 @@ new Scrollload(container, {
 - win: 视窗对象
 
 ### 交流
-如果你有好的加载更多动画的效果，可以在loading-demos文件夹下写一些自己的demo，loading的css必须是loading.css，并在头部加入loadingHtml的dom结构。[参考](https://fa-ge.github.io/scrollload/dist/loading-demos/baidu-mobile/loading.css),然后提一个pr给我。  
+如果你有好的加载更多动画的效果，可以在loading-demos文件夹下写一些自己的demo，loading的css必须是loading.css，并在头部加入loadingHtml的dom结构。[参考](https://fa-ge.github.io/Scrollload/dist/loading-demos/baidu-mobile/loading.css),然后提一个pr给我。  
 
 当然用的时候有什么建议都可以和我提，有什么不懂得也可以和我提。任何形式和我提都可以。
 
 原创文章，转载请注明来自fa-ge [http://www.fa-ge.me](http://www.fa-ge.me)  
-本文地址：https://github.com/fa-ge/scrollload/
+本文地址：https://github.com/fa-ge/Scrollload/
 
 
 
