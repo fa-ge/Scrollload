@@ -7,15 +7,6 @@ ul {
     list-style: none;
     font-size: 14px;
 }
-
-.tab li {
-    height: 84px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px;
-    border-bottom: 1px solid #ddd;
-}
 .info {
     display: flex;
 }
@@ -46,13 +37,22 @@ h1 {
     text-align: center;
     margin-bottom: 20px;
 }
-.tab {
-    display: none;
-}
 .header {
     display: flex;
 }
 .header li {
     flex: 1;
     text-align: center;
+}
+
+.container {
+    display: none;
+}
+.list li {
+    height: 84px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
 }

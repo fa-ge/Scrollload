@@ -2,11 +2,7 @@ import 'core-js/fn/array/from'
 
 import Scrollload from '../../Scrollload'
 import './index.css'
-import './loading.css'
-
-function $(str) {
-    return document.querySelector(str)
-}
+import '../../loading-demos/baidu-mobile/loading.css'
 
 const data = [
     {
@@ -60,8 +56,17 @@ function getData() {
     }).join('')
 }
 let count = 0
-const scrollload = new Scrollload($('.tab'), {
-    window: $('.window'),
+const scrollload = new Scrollload(document.querySelector('.container'), function(sl){
+    setTimeout(() => {
+        if (count++ < 5) {
+            document.querySelector('.list').insertAdjacentHTML('beforeend', getData())
+            sl.unLock()
+        } else {
+            sl.noData()
+        }
+    }, 500)
+},{
+    window: document.querySelector('.window'),
     loadingHtml: `
             <div class="s-loading-frame">
                 <div class="load-img-wrapper">
@@ -75,16 +80,9 @@ const scrollload = new Scrollload($('.tab'), {
                 <span>真的拉不出新东西了~</span>
             </div>
 `,
-    loadMoreFn(sl) {
-        setTimeout(() => {
-            if (count++ < 5) {
-                sl.bottomDom.insertAdjacentHTML('beforebegin', getData())
-                sl.unLock()
-            } else {
-                sl.noData()
-            }
-        }, 500)
-    }
 })
+
+
+
 
 

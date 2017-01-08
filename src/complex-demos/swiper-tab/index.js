@@ -1,23 +1,14 @@
-
-
 import 'core-js/fn/array/from'
 
 import Scrollload from '../../Scrollload'
 import './index.css'
-import './loading.css'
+import '../../loading-demos/baidu-mobile/loading.css'
+
 
 import Swiper from 'swiper/dist/js/swiper.min'
 import 'swiper/dist/css/swiper.css'
 
 import ScrollFixPlus from 'Scrollfixplus'
-
-function $(str) {
-    return document.querySelector(str)
-}
-
-function $$(str) {
-    return document.querySelectorAll(str)
-}
 
 const data = [
     {
@@ -71,9 +62,19 @@ function getData() {
     }).join('')
 }
 const scrollloads = []
-Array.from($$('.tab')).forEach((tab, index) => {
-    scrollloads.push(new Scrollload(tab, {
-        window: $$('.window')[index],
+Array.from(document.querySelectorAll('.container')).forEach((container, index) => {
+    scrollloads.push(new Scrollload(container, function(sl){
+        setTimeout(() => {
+            sl.count = sl.count || 0
+            if (sl.count++ < 5) {
+                sl.container.querySelector('.list').insertAdjacentHTML('beforeend', getData())
+                sl.unLock()
+            } else {
+                sl.noData()
+            }
+        }, 500)
+    }, {
+        window: document.querySelectorAll('.window')[index],
         loadingHtml: `
             <div class="s-loading-frame">
                 <div class="load-img-wrapper">
@@ -88,17 +89,6 @@ Array.from($$('.tab')).forEach((tab, index) => {
             </div>
 `,
         isInitLock: index === 0 ? false : true,
-        loadMoreFn(sl) {
-            setTimeout(() => {
-                sl.count = sl.count || 0
-                if (sl.count++ < 5) {
-                    sl.bottomDom.insertAdjacentHTML('beforebegin', getData())
-                    sl.unLock()
-                } else {
-                    sl.noData()
-                }
-            }, 500)
-        }
     }))
 })
 
@@ -107,7 +97,7 @@ Array.from($$('.tab')).forEach((tab, index) => {
  * 我用这个插件主要是很多人比较熟悉这个插件
  *
  */
-var mySwiper = new Swiper ('.swiper-container', {
+var mySwiper = new Swiper('.swiper-container', {
     onSlideChangeStart: function (swiper) {
         scrollloads.forEach((scrollload, index) => {
             index === swiper.activeIndex ? scrollload.unLock() : scrollload.lock()
@@ -115,11 +105,18 @@ var mySwiper = new Swiper ('.swiper-container', {
     }
 })
 
-const swiperContainerHeight = $('.swiper-container').clientHeight
-$$('.window').forEach((win) => {
+const swiperContainerHeight = document.querySelector('.swiper-container').clientHeight
+document.querySelectorAll('.window').forEach((win) => {
     //我之所以不在css中设置高度100%，是因为ios有一个诡异的bug。如果父容器设置了高度，那么该容器如果设置了百分比高度将不能局部滚动。用calc中带百分比计算的也不行。
     //真的。。太他妈诡异了
     win.style.height = swiperContainerHeight + 'px'
     //ScrollFixPlus是我对ScorllFix的改进。ScrollFix主要也是为了修一个bug，在ios中局部滚动滑到顶端瞬间上滑是会有bug的
     new ScrollFixPlus(win)
 })
+
+/**
+ 局部滚动已知bug：
+ 在QQ浏览器中如果body，html设置为固定的值，那么滚动到body底部的时候会出现滚不下去。放手再滚一次就可以了
+
+
+ */

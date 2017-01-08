@@ -1,6 +1,6 @@
 {
   "name": "scrollload",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "scroll load more data 滚动加载更多的数据",
   "main": "lib/Scrollload.js",
   "scripts": {
@@ -24,7 +24,9 @@
     "babel-preset-es2015": "^6.18.0",
     "css-loader": "^0.26.1",
     "extract-text-webpack-plugin": "^2.0.0-beta.4",
+    "find": "^0.2.7",
     "html-webpack-plugin": "^2.25.0",
+    "humps": "^2.0.0",
     "minimist": "^1.2.0",
     "node-sass": "^4.1.1",
     "postcss-loader": "^1.2.1",

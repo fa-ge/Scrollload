@@ -8,14 +8,6 @@ ul {
     font-size: 14px;
 }
 
-.tab li {
-    height: 84px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px;
-    border-bottom: 1px solid #ddd;
-}
 .info {
     display: flex;
 }
@@ -46,11 +38,19 @@ h1 {
     text-align: center;
     margin-bottom: 20px;
 }
+.list li {
+    height: 84px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+}
 .window {
     width: 100%;
-    margin-top: 100px;
-    height: 300px;
+    margin-top: 30px;
+    height: 400px;
     border: 1px solid black;
-    overflow:auto;
+    overflow: auto;
     -webkit-overflow-scrolling: touch;
 }

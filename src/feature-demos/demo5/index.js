@@ -2,11 +2,7 @@ import 'core-js/fn/array/from'
 
 import Scrollload from '../../Scrollload'
 import './index.css'
-import './loading.css'
-
-function $(str) {
-    return document.querySelector(str)
-}
+import '../../loading-demos/baidu-mobile/loading.css'
 
 const data = [
     {
@@ -60,7 +56,16 @@ function getData() {
     }).join('')
 }
 let count = 0
-const scrollload = new Scrollload($('.tab'), {
+const scrollload = new Scrollload(document.querySelector('.container'), function(sl){
+    setTimeout(() => {
+        if (count++ < 5) {
+            document.querySelector('.list').insertAdjacentHTML('beforeend', getData())
+            sl.unLock()
+        } else {
+            sl.noData()
+        }
+    }, 500)
+}, {
     loadingHtml: `
             <div class="s-loading-frame">
                 <div class="load-img-wrapper">
@@ -74,21 +79,11 @@ const scrollload = new Scrollload($('.tab'), {
                 <span>真的拉不出新东西了~</span><a class="clickHandler" style="color: red;font-size: 16px">点我重新刷新</a>
             </div>
 `,
-    loadMoreFn(sl) {
-        setTimeout(() => {
-            if (count++ < 5) {
-                sl.bottomDom.insertAdjacentHTML('beforebegin', getData())
-                sl.unLock()
-            } else {
-                sl.noData()
-            }
-        }, 500)
-    }
 })
 
 scrollload.container.addEventListener('click', function (event) {
     if (event.target.classList.contains('clickHandler')) {
-        scrollload.container.innerHTML = ''
+        document.querySelector('.list').innerHTML = ''
         scrollload.refreshData()
         count = 0
     }

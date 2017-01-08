@@ -2,16 +2,7 @@ import 'core-js/fn/array/from'
 
 import Scrollload from '../../Scrollload'
 import './index.css'
-import './loading.css'
-
-
-function $(str) {
-    return document.querySelector(str)
-}
-
-function $$(str) {
-    return document.querySelectorAll(str)
-}
+import '../../loading-demos/baidu-mobile/loading.css'
 
 const data = [
     {
@@ -65,8 +56,18 @@ function getData() {
     }).join('')
 }
 const scrollloads = []
-Array.from($$('.tab')).forEach((tab, index) => {
-    scrollloads.push(new Scrollload(tab, {
+Array.from(document.querySelectorAll('.container')).forEach((container, index) => {
+    scrollloads.push(new Scrollload(container, function(sl) {
+        setTimeout(() => {
+            sl.count = sl.count || 0
+            if (sl.count++ < 5) {
+                sl.container.querySelector('.list').insertAdjacentHTML('beforeend', getData())
+                sl.unLock()
+            } else {
+                sl.noData()
+            }
+        }, 500)
+    },{
         loadingHtml: `
             <div class="s-loading-frame">
                 <div class="load-img-wrapper">
@@ -81,25 +82,14 @@ Array.from($$('.tab')).forEach((tab, index) => {
             </div>
 `,
         isInitLock: index === 0 ? false : true,
-        loadMoreFn(sl) {
-            setTimeout(() => {
-                sl.count = sl.count || 0
-                if (sl.count++ < 5) {
-                    sl.bottomDom.insertAdjacentHTML('beforebegin', getData())
-                    sl.unLock()
-                } else {
-                    sl.noData()
-                }
-            }, 500)
-        }
     }))
 })
 
-Array.from($$('.header li')).forEach((li, i) => {
+Array.from(document.querySelectorAll('.header li')).forEach((li, i) => {
     li.addEventListener('click', function () {
         scrollloads.forEach((scrollload, index) => {
             index === i ? scrollload.unLock() : scrollload.lock()
         })
-        Array.from($$('.tab')).forEach((tab, index) => tab.style.display = index === i ? 'block' : 'none')
+        Array.from(document.querySelectorAll('.container')).forEach((container, index) => container.style.display = index === i ? 'block' : 'none')
     })
 })

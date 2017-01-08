@@ -4,9 +4,6 @@ import Scrollload from '../../Scrollload'
 import './index.css'
 import './loading.css'
 
-function $(str) {
-    return document.querySelector(str)
-}
 
 const data = [
     {
@@ -60,21 +57,20 @@ function getData() {
     }).join('')
 }
 let count = 0
-const scrollload = new Scrollload($('.tab'), {
+const scrollload = new Scrollload(document.querySelector('.container'), function(sl){
+    setTimeout(() => {
+        if (count++ < 5) {
+            document.querySelector('.list').insertAdjacentHTML('beforeend', getData())
+            sl.unLock()
+        } else {
+            sl.noData()
+        }
+    }, 500)
+}, {
     loadingHtml: `
             <div class="two-balls-swing">
                 <div class="two-balls-swing-circle"></div>
                 <div class="two-balls-swing-circle"></div>
             </div>
 `,
-    loadMoreFn(sl) {
-        setTimeout(() => {
-            if (count++ < 5) {
-                sl.bottomDom.insertAdjacentHTML('beforebegin', getData())
-                sl.unLock()
-            } else {
-                sl.noData()
-            }
-        }, 500)
-    }
 })

@@ -4,10 +4,6 @@ import Scrollload from '../../Scrollload'
 import './index.css'
 import './loading.css'
 
-function $(str) {
-    return document.querySelector(str)
-}
-
 const data = [
     {
         image: 'http://imagesrcdola.b0.upaiyun.com/0/20141222121421_798.jpg',
@@ -60,7 +56,16 @@ function getData() {
     }).join('')
 }
 let count = 0
-const scrollload = new Scrollload($('.tab'), {
+const scrollload = new Scrollload(document.querySelector('.container'), function(sl){
+    setTimeout(() => {
+        if (count++ < 5) {
+            document.querySelector('.list').insertAdjacentHTML('beforeend', getData())
+            sl.unLock()
+        } else {
+            sl.noData()
+        }
+    }, 500)
+}, {
     loadingHtml: `
             <div class="s-loading-frame">
                 <div class="load-img-wrapper">
@@ -74,15 +79,5 @@ const scrollload = new Scrollload($('.tab'), {
                 <span>真的拉不出新东西了~</span>
             </div>
 `,
-    loadMoreFn(sl) {
-        setTimeout(() => {
-            if (count++ < 5) {
-                sl.bottomDom.insertAdjacentHTML('beforebegin', getData())
-                sl.unLock()
-            } else {
-                sl.noData()
-            }
-        }, 500)
-    }
 })
 

@@ -8,14 +8,6 @@ ul {
     font-size: 14px;
 }
 
-.tab li {
-    height: 84px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px;
-    border-bottom: 1px solid #ddd;
-}
 .info {
     display: flex;
 }
@@ -50,15 +42,19 @@ h1 {
     top: 0;
     line-height: 50px;
 }
-
+.list li {
+    height: 84px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+}
 .window {
     overflow:auto;
     -webkit-overflow-scrolling: touch;
     padding-top: 50px;
 }
-body, html {
+body, html, .swiper-container {
     height:100%;
-}
-.swiper-container {
-    height: 100%;
 }

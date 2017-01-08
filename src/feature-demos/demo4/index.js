@@ -2,11 +2,7 @@ import 'core-js/fn/array/from'
 
 import Scrollload from '../../Scrollload'
 import './index.css'
-import './loading.css'
-
-function $(str) {
-    return document.querySelector(str)
-}
+import '../../loading-demos/baidu-mobile/loading.css'
 
 const data = [
     {
@@ -60,7 +56,22 @@ function getData() {
     }).join('')
 }
 let count = 0
-const scrollload = new Scrollload($('.tab'), {
+const scrollload = new Scrollload(document.querySelector('.container'), function(sl){
+    setTimeout(() => {
+        if (count === 2) {
+            count++
+            sl.throwException()
+            return
+        }
+
+        if (count++ < 5) {
+            document.querySelector('.list').insertAdjacentHTML('beforeend', getData())
+            sl.unLock()
+        } else {
+            sl.noData()
+        }
+    }, 500)
+},{
     loadingHtml: `
             <div class="s-loading-frame">
                 <div class="load-img-wrapper">
@@ -77,22 +88,6 @@ const scrollload = new Scrollload($('.tab'), {
     exceptionHtml: `
     <div style="text-align: center;line-height: 50px;font-size: 14px;">出现异常，点击恢复异常：<a class="clickHandler" style="color: red;font-size: 16px">点我</a></div>
 `,
-    loadMoreFn(sl) {
-        setTimeout(() => {
-            if (count === 2) {
-                count++
-                sl.throwException()
-                return
-            }
-
-            if (count++ < 5) {
-                sl.bottomDom.insertAdjacentHTML('beforebegin', getData())
-                sl.unLock()
-            } else {
-                sl.noData()
-            }
-        }, 500)
-    }
 })
 
 scrollload.container.addEventListener('click', function (event) {

@@ -3,10 +3,6 @@ import 'core-js/fn/array/from'
 import Scrollload from '../../Scrollload'
 import './index.css'
 
-function $(str) {
-    return document.querySelector(str)
-}
-
 const data = [
     {
         image: 'http://imagesrcdola.b0.upaiyun.com/0/20141222121421_798.jpg',
@@ -60,15 +56,14 @@ function getData() {
 }
 
 let count = 0
-const scrollload = new Scrollload($('.tab'), {
-    loadMoreFn(sl) {
-        setTimeout(() => {
-            if (count++ < 5) {
-                sl.bottomDom.insertAdjacentHTML('beforebegin', getData())
-                sl.unLock()
-            } else {
-                sl.noData()
-            }
-        }, 500)
-    }
+const scrollload = new Scrollload(document.querySelector('.container'), function (sl) {
+    setTimeout(() => {
+        if (count++ < 5) {
+            //如果你有用jquery，那么可以用$('.list').append(getData())
+            document.querySelector('.list').insertAdjacentHTML('beforeend', getData())
+            sl.unLock()
+        } else {
+            sl.noData()
+        }
+    }, 500)
 })
