@@ -2,6 +2,7 @@ const webpack = require('webpack')
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const find = require('find')
 
 const args = require('minimist')(process.argv.slice(2))
 const extractCSS = new ExtractTextPlugin('[name].css')
@@ -34,16 +35,7 @@ if (args.env === 'pub') {
     }
 } else {
     config = {
-        entry: {
-            demo1: './src/feature-demos/demo1/index.js',
-            demo2: './src/feature-demos/demo2/index.js',
-            demo3: './src/feature-demos/demo3/index.js',
-            demo4: './src/feature-demos/demo4/index.js',
-            demo5: './src/feature-demos/demo5/index.js',
-            twoBallsSwing: './src/loading-demos/twoBallsSwing/index.js',
-            baiduMobile: './src/loading-demos/baidu-mobile/index.js',
-            swiperTab: './src/complex-demos/swiper-tab/index.js',
-        },
+        entry: {},
         output: {
             path: './dist',
             filename: '[name].js'
@@ -81,46 +73,6 @@ if (args.env === 'pub') {
             ],
         },
         plugins: [
-            new HtmlWebpackPlugin({
-                filename: './feature-demos/demo1/index.html',
-                template: './src/feature-demos/demo1/index.html',
-                chunks: ['demo1']
-            }),
-            new HtmlWebpackPlugin({
-                filename: './feature-demos/demo2/index.html',
-                template: './src/feature-demos/demo2/index.html',
-                chunks: ['demo2']
-            }),
-            new HtmlWebpackPlugin({
-                filename: './feature-demos/demo3/index.html',
-                template: './src/feature-demos/demo3/index.html',
-                chunks: ['demo3']
-            }),
-            new HtmlWebpackPlugin({
-                filename: './feature-demos/demo4/index.html',
-                template: './src/feature-demos/demo4/index.html',
-                chunks: ['demo4']
-            }),
-            new HtmlWebpackPlugin({
-                filename: './feature-demos/demo5/index.html',
-                template: './src/feature-demos/demo5/index.html',
-                chunks: ['demo5']
-            }),
-            new HtmlWebpackPlugin({
-                filename: './loading-demos/twoBallsSwing/index.html',
-                template: './src/loading-demos/twoBallsSwing/index.html',
-                chunks: ['twoBallsSwing']
-            }),
-            new HtmlWebpackPlugin({
-                filename: './loading-demos/baidu-mobile/index.html',
-                template: './src/loading-demos/baidu-mobile/index.html',
-                chunks: ['baiduMobile']
-            }),
-            new HtmlWebpackPlugin({
-                filename: './complex-demos/swiper-tab/index.html',
-                template: './src/complex-demos/swiper-tab/index.html',
-                chunks: ['swiperTab']
-            }),
             new webpack.LoaderOptionsPlugin({
                 options: {
                     postcss: function () {
@@ -139,6 +91,15 @@ if (args.env === 'pub') {
             port: 9000
         },
     }
+    const filePaths = find.fileSync('index.js', './src')
+    filePaths.forEach((filePath, index) => {
+        config.entry[`out${index}`] = `./${filePath}`
+        config.plugins.push(new HtmlWebpackPlugin({
+            filename: filePath.replace(/js$/, 'html').replace('src/', ''),
+            template: filePath.replace(/js$/, 'html'),
+            chunks: [`out${index}`]
+        }))
+    })
 }
 
 
