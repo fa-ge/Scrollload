@@ -1,16 +1,23 @@
 import './requestAnimationFrame.js'
 import assign from './assign.js'
 
+function throwIfArgumentsMissing(n) {
+    throw new Error(`2 arguments required, but only ${n} present.`);
+}
+
 export default class Scrollload {
-    constructor(container, options) {
-        if (!container instanceof HTMLElement) {
-            console.error('container 必须是一个原生dom对象！！！')
-            return
+    constructor(container = throwIfArgumentsMissing(0), loadMoreFn = throwIfArgumentsMissing(1), options = {}) {
+        if (!(container instanceof HTMLElement)) {
+            throw new Error('parameter 1 must be a HTMLElement instance!')
+        }
+        if (typeof loadMoreFn !== 'function') {
+            throw new Error('parameter 2 must be a function!')
         }
 
-        this._options = assign({}, this.defaults, options)
         this.container = container
-        this.isLock = options.isInitLock
+        this.loadMoreFn = loadMoreFn
+        this._options = assign({}, this.defaults, options)
+        this.isLock = this._options.isInitLock
         this.hasMore = true
         this.win = this._options.window
         this.windowHeight = window.innerHeight
@@ -33,12 +40,9 @@ export default class Scrollload {
                 return
             }
 
-            const {loadMoreFn} = this._options
             if (this.isBottom()) {
                 this.isLock = true
-                if (loadMoreFn) {
-                    loadMoreFn.call(this, this)
-                }
+                this.loadMoreFn.call(this, this)
             }
         })
     }
@@ -96,7 +100,11 @@ export default class Scrollload {
     }
 
     refreshData() {
-        this.createBottomDom()
+        if (this.container.querySelector('.scrollload-bottom')) {
+            this.bottomDom.innerHTML = this._options.loadingHtml
+        } else {
+            this.createBottomDom()
+        }
         this.isLock = false
         this.hasMore = true
         this.attachScrollListener()
@@ -132,5 +140,10 @@ Scrollload.prototype.defaults = {
     noDataHtml: '<div style="text-align: center;font-size: 14px;line-height: 50px;">没有更多数据了</div>',
     exceptionHtml: '<div style="text-align: center;font-size: 14px;line-height: 50px;">出现异常</div>'
 }
+
+Scrollload.setGlobalOptions = (options) => {
+    assign(Scrollload.prototype.defaults, options)
+}
+
 
 window.Scrollload = Scrollload
