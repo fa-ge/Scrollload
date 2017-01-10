@@ -58,13 +58,21 @@ Scrollload是一个无依赖，体积极小（压缩+gzip后不到2k），可配
 详细的源码请看 [源码](https://github.com/fa-ge/Scrollload/blob/master/src/Scrollload.js)  
 
 ### 安装
+```javascript
 npm install Scrollload --save
+```
 
 ### 使用
 如果你没有用模块管理，直接从window对象下取Scrollload对象也是可以的，打包后的js放在lib目录下，可以直接用script标签引入  
 同时支持模块引入  
-ES6: import Scrollload from 'Scrollload'  
-commonjs: const Scrollload = require('Scrollload').default  
+
+```javascript
+//ES6
+import Scrollload from 'Scrollload'
+//commonjs
+const Scrollload = require('Scrollload').default
+```
+
 当然也支持amd,不过我没用过。  
 真正用起来也非常简单。记住一点。插件会把底部DOM插入到container最后一个子节点之后。  
 
@@ -171,6 +179,6 @@ new Scrollload(container, fn, {
 - win: 视窗对象
 
 ### 交流
-如果你有好的加载更多动画的效果，可以在loading-demos文件夹下写一些自己的demo，loading的css必须是loading.css，并在头部加入loadingHtml的dom结构。[参考](https://github.com/fa-ge/Scrollload/blob/master/lib/loading-css/baidu-mobile.css,然后提一个pr给我。  
+如果你有好的加载更多动画的效果，可以在loading-demos文件夹下写一些自己的demo，loading的css必须是loading.css，并在头部加入loadingHtml的dom结构。[参考](https://github.com/fa-ge/Scrollload/blob/master/lib/loading-css/baidu-mobile.css),然后提一个pr给我。  
 
 当然用的时候有什么建议都可以和我提，有什么不懂得也可以和我提。任何形式和我提都可以。

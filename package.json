@@ -38,7 +38,7 @@
     "webpack-dev-server": "^1.16.2"
   },
   "dependencies": {
-    "scrollfixplus": "^1.0.0",
+    "scrollfix": "0.0.2",
     "swiper": "^3.4.1"
   },
   "repository": {

@@ -64,14 +64,14 @@
     position: relative;
     width: 0px;
     margin: 0 auto;
+    height: 50px;
 }
 .two-balls-swing > .two-balls-swing-circle {
     width: 16px;
     height: 16px;
     border-radius: 50%;
     position: absolute;
-    top: 7px;
-    margin: 17px 0;
+    top: 17px;
 }
 .two-balls-swing > .two-balls-swing-circle:nth-of-type(1) {
     left: -26px;

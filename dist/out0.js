@@ -1224,68 +1224,9 @@ if (!Date.now) Date.now = function () {
 
 /***/ },
 /* 56 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
-var __WEBPACK_AMD_DEFINE_RESULT__;(function (root, factory) {
-    var Data = factory(root);
-    if ( true) {
-        // AMD
-        !(__WEBPACK_AMD_DEFINE_RESULT__ = function() {
-            return Data;
-        }.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-    } else if ( typeof exports === 'object') {
-        // Node.js
-        module.exports = Data;
-    } else {
-        // Browser globals
-        var _Data = root.Data;
-        
-        Data.noConflict = function () {
-            if (root.Data === Data) {
-                root.Data = _Data;
-            }
-            
-            return Data;
-        };
-        root.Data = Data;
-    }
-}(this, function (root) {
-	// Test via a getter in the options object to see 
-	// if the passive property is accessed
-	var supportsPassive = false;
-	document.createElement("div").addEventListener("test", function() {}, {
-		get passive() {
-	    	supportsPassive = true;
-	  		return false;
-		}
-	});
-
-	var ScrollFixPlus = function(elem) {
-		// Variables to track inputs
-		var startY, startTopScroll;
-		
-		elem = elem || document.querySelector(elem);
-		
-		// If there is no element, then do nothing	
-		if(!elem)
-			return;
-
-		// Handle the start of interactions
-		elem.addEventListener('touchstart', function(event){
-			startY = event.touches[0].pageY;
-			startTopScroll = elem.scrollTop;
-			
-			if(startTopScroll <= 0)
-				elem.scrollTop = 1;
-
-			if(startTopScroll + elem.offsetHeight >= elem.scrollHeight)
-				elem.scrollTop = elem.scrollHeight - elem.offsetHeight - 1;
-		}, supportsPassive ? { passive: true } : false);
-	};
-	return ScrollFixPlus;
-}));
-
-
+// removed by extract-text-webpack-plugin
 
 /***/ },
 /* 57 */
@@ -1294,12 +1235,7 @@ var __WEBPACK_AMD_DEFINE_RESULT__;(function (root, factory) {
 // removed by extract-text-webpack-plugin
 
 /***/ },
-/* 58 */
-/***/ function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ },
+/* 58 */,
 /* 59 */,
 /* 60 */,
 /* 61 */,
@@ -1307,8 +1243,7 @@ var __WEBPACK_AMD_DEFINE_RESULT__;(function (root, factory) {
 /* 63 */,
 /* 64 */,
 /* 65 */,
-/* 66 */,
-/* 67 */
+/* 66 */
 /***/ function(module, exports, __webpack_require__) {
 
 /**
@@ -1333,6 +1268,61 @@ a.setWrapperTransition(e,b),0!==e&&(a.onTransitionStart(),a.wrapper.transitionEn
 
 
 /***/ },
+/* 67 */
+/***/ function(module, exports) {
+
+/**
+ * ScrollFix v0.1
+ * http://www.joelambert.co.uk
+ *
+ * Copyright 2011, Joe Lambert.
+ * Free to use under the MIT license.
+ * http://www.opensource.org/licenses/mit-license.php
+ */
+
+(function () {
+  var ScrollFix = function(elem) {
+    // Variables to track inputs
+    var startY, startTopScroll;
+
+    elem = elem || document.querySelector(elem);
+
+    // If there is no element, then do nothing
+    if(!elem) {
+      return;
+    }
+
+    // Handle the start of interactions
+    elem.addEventListener('touchstart', function(event){
+      startY = event.touches[0].pageY;
+      startTopScroll = elem.scrollTop;
+
+      if(startTopScroll <= 0) {
+        elem.scrollTop = 1;
+      }
+
+      if(startTopScroll + elem.offsetHeight >= elem.scrollHeight) {
+        elem.scrollTop = elem.scrollHeight - elem.offsetHeight - 1;
+      }
+
+    }, false);
+
+  };
+
+  // if we've got a window and we don't have a module
+  // create a global;
+  if ((typeof window != 'undefined') && (typeof module == 'undefined')) {
+    window.ScrollFix = ScrollFix;
+  }
+  // otherwise, export it.
+  else {
+    module.exports = ScrollFix;
+  }
+
+})();
+
+
+/***/ },
 /* 68 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -1341,16 +1331,16 @@ Object.defineProperty(exports, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_core_js_fn_array_from__ = __webpack_require__(27);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_core_js_fn_array_from___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_core_js_fn_array_from__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Scrollload__ = __webpack_require__(28);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__index_css__ = __webpack_require__(58);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__index_css__ = __webpack_require__(57);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__index_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__index_css__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__loading_demos_baidu_mobile_loading_css__ = __webpack_require__(29);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__loading_demos_baidu_mobile_loading_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__loading_demos_baidu_mobile_loading_css__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_swiper_dist_js_swiper_min__ = __webpack_require__(67);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_swiper_dist_js_swiper_min__ = __webpack_require__(66);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_swiper_dist_js_swiper_min___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_swiper_dist_js_swiper_min__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_swiper_dist_css_swiper_css__ = __webpack_require__(57);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_swiper_dist_css_swiper_css__ = __webpack_require__(56);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_swiper_dist_css_swiper_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_swiper_dist_css_swiper_css__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_Scrollfixplus__ = __webpack_require__(56);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_Scrollfixplus___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_Scrollfixplus__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_scrollfix__ = __webpack_require__(67);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_scrollfix___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_scrollfix__);
 
 
 
@@ -1433,16 +1423,9 @@ document.querySelectorAll('.window').forEach(function (win) {
     //我之所以不在css中设置高度100%，是因为ios有一个诡异的bug。如果父容器设置了高度，那么该容器如果设置了百分比高度将不能局部滚动。用calc中带百分比计算的也不行。
     //真的。。太他妈诡异了
     win.style.height = swiperContainerHeight + 'px';
-    //ScrollFixPlus是我对ScorllFix的改进。ScrollFix主要也是为了修一个bug，在ios中局部滚动滑到顶端瞬间上滑是会有bug的
-    new __WEBPACK_IMPORTED_MODULE_6_Scrollfixplus___default.a(win);
+    //ScrollFix主要也是为了修一个bug，在ios中局部滚动滑到顶端瞬间上滑是会有bug的
+    new __WEBPACK_IMPORTED_MODULE_6_scrollfix___default.a(win);
 });
-
-/**
- 局部滚动已知bug：
- 在QQ浏览器中如果body，html设置为固定的值，那么滚动到body底部的时候会出现滚不下去。放手再滚一次就可以了
-
-
- */
 
 /***/ }
 /******/ ]);

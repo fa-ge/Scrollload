@@ -8,7 +8,7 @@ import '../../loading-demos/baidu-mobile/loading.css'
 import Swiper from 'swiper/dist/js/swiper.min'
 import 'swiper/dist/css/swiper.css'
 
-import ScrollFixPlus from 'Scrollfixplus'
+import ScrollFix from 'scrollfix'
 
 const data = [
     {
@@ -110,13 +110,7 @@ document.querySelectorAll('.window').forEach((win) => {
     //我之所以不在css中设置高度100%，是因为ios有一个诡异的bug。如果父容器设置了高度，那么该容器如果设置了百分比高度将不能局部滚动。用calc中带百分比计算的也不行。
     //真的。。太他妈诡异了
     win.style.height = swiperContainerHeight + 'px'
-    //ScrollFixPlus是我对ScorllFix的改进。ScrollFix主要也是为了修一个bug，在ios中局部滚动滑到顶端瞬间上滑是会有bug的
-    new ScrollFixPlus(win)
+    //ScrollFix主要也是为了修一个bug，在ios中局部滚动滑到顶端瞬间上滑是会有bug的
+    new ScrollFix(win)
 })
 
-/**
- 局部滚动已知bug：
- 在QQ浏览器中如果body，html设置为固定的值，那么滚动到body底部的时候会出现滚不下去。放手再滚一次就可以了
-
-
- */
