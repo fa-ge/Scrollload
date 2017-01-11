@@ -8,7 +8,7 @@ const args = require('minimist')(process.argv.slice(2))
 const extractCSS = new ExtractTextPlugin('[name].css')
 
 let config
-if (args.env === 'pub') {
+if (args.env === 'lib') {
     config = {
         entry: {
             Scrollload: './src/Scrollload.js'
