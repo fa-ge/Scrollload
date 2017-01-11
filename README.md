@@ -2,7 +2,7 @@
 如今移动端站点越来越多，滚动到底部加载数据的需求应该非常的常见，即使现在很多pc站点也会有这样的需求，比如百度首页就有。但是我却一直没找到特别好用的插件，基本上的插件都依赖于jquery。我想要的很简单，方便好用可定制体积又小功能又强大的插件。
 
 ### Scrollload.js介绍
-Scrollload是一个无依赖，体积极小（压缩+gzip后不到2k），可配置性高(可以自定义加载时候动画，加载完后的dom，提前加载的距离)，功能强大（能做到指定容器内的滚动，多tab的滚动,异常处理，刷新重新加载），性能好（在滚动的时候做了一些性能优化，如缓存window的高度，函数节流）的js插件。
+Scrollload是一个无依赖，体积极小（压缩+gzip后不到2k），可配置性高(可以自定义加载时候动画，加载完后的dom，提前加载的距离)，功能强大（能做到指定容器内的滚动，多tab的滚动,异常处理，刷新重新加载），性能好（在滚动的时候做了一些性能优化，如缓存window的高度，函数节流），兼容性好(修了ios局部滚动的多个bug,见[ios局部滚动的坑及解决方案](https://zhuanlan.zhihu.com/p/24837233))的js插件。
 
 ### 兼容性
 不支持ie8及以下浏览器，其他都没有问题。如果你发现哪些浏览器上有问题，请一定要联系我。
@@ -31,8 +31,8 @@ Scrollload是一个无依赖，体积极小（压缩+gzip后不到2k），可配
 
 ### 实现原理
 首先得区分一下全局滚动和局部滚动。  
-全局滚动：滚动条在body或者body上层元素或者window上  
-局部滚动：滚动条在body里的元素上。  
+全局滚动：滚动条在body或者body父级元素或者window上  
+局部滚动：滚动条在body里的子孙元素上。  
 由于浏览器兼容性原因，全局滚动都应该在window上绑定滚动事件。而局部滚动则是在产生滚动条那个元素上绑定滚动事件就可以了。之后我会把产生滚动条的元素统称为视窗。  
 核心逻辑其实就是判断是否滚动到底部。这个底部指的是列表底部的那个加载中动画div的元素的顶部，之后我都会叫他底部DOM。   
 ```javascript
@@ -146,7 +146,9 @@ new Scrollload(container, fn, {
   loadingHtml: '',
   exceptionHtml: '',
   threshold: 10,
-  isInitLock: false
+  isInitLock: false,
+  useLocalScrollFix: false,
+  useScrollFix: false
 })
 ```
 * window: 视窗的dom对象，默认是window
@@ -155,6 +157,8 @@ new Scrollload(container, fn, {
 * exceptionHtml: 出现异常的样式
 * threshold: 提前加载距离,默认是10px
 * isInitLock: 默认false，由于这个插件实例化后默认是没有锁定的所以会去调用loadMoreFn，但其实在多个tab的情况下是不应该一实例化完后就去调用的。所以有了这个参数。
+* useLocalScrollFix: 默认是false，设置为true则会修复ios上局部滚动的bug，具体bug请参见[ios局部滚动的坑及解决方案](https://zhuanlan.zhihu.com/p/24837233)。
+* useScrollFix: 默认是false，设置为true修复局部滚动滑到最高或者最低点出界的坑，参见[ios局部滚动的坑及解决方案](https://zhuanlan.zhihu.com/p/24837233)。
 
 ### API
 

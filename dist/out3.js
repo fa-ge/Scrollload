@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 71);
+/******/ 	return __webpack_require__(__webpack_require__.s = 72);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -449,9 +449,12 @@ module.exports = __webpack_require__(4).Array.from;
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__requestAnimationFrame_js__ = __webpack_require__(55);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__requestAnimationFrame_js__ = __webpack_require__(56);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__requestAnimationFrame_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__requestAnimationFrame_js__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__assign_js__ = __webpack_require__(54);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__assign_js__ = __webpack_require__(55);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_localscrollfix_src_LocalScrollFix__ = __webpack_require__(54);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_scrollfix__ = __webpack_require__(57);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_scrollfix___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_scrollfix__);
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -459,8 +462,15 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 
 
+
+
 function throwIfArgumentsMissing(n) {
     throw new Error('2 arguments required, but only ' + n + ' present.');
+}
+
+function isIos() {
+    return (/iphone/i.test(window.navigator.userAgent)
+    );
 }
 
 var Scrollload = function () {
@@ -488,6 +498,19 @@ var Scrollload = function () {
 
         this.createBottomDom();
 
+        //修复ios局部滚动的bug
+        if (this.win !== window && isIos()) {
+            if (this._options.useLocalScrollFix) {
+                this.localScrollFix = new __WEBPACK_IMPORTED_MODULE_2_localscrollfix_src_LocalScrollFix__["a" /* default */](this.win);
+            }
+            if (this._options.useScrollFix) {
+                new __WEBPACK_IMPORTED_MODULE_3_scrollfix___default.a(this.win);
+            }
+        } else {
+            this._options.useLocalScrollFix = false;
+            this._options.useScrollFix = false;
+        }
+
         this.scrollListener = this.scrollListener.bind(this);
         this.resizeListener = this.resizeListener.bind(this);
         this.attachScrollListener();
@@ -498,6 +521,21 @@ var Scrollload = function () {
         value: function createBottomDom() {
             this.container.insertAdjacentHTML('beforeend', '<div class="scrollload-bottom">' + (this._options.loadingHtml || '<div style="text-align: center;font-size: 14px;line-height: 50px;">加载中...</div>') + '</div>');
             this.bottomDom = this.container.querySelector('.scrollload-bottom');
+        }
+    }, {
+        key: 'showNoDataDom',
+        value: function showNoDataDom() {
+            this.bottomDom.innerHTML = this._options.noDataHtml;
+        }
+    }, {
+        key: 'showLoadingDom',
+        value: function showLoadingDom() {
+            this.bottomDom.innerHTML = this._options.loadingHtml;
+        }
+    }, {
+        key: 'showExceptionDom',
+        value: function showExceptionDom() {
+            this.bottomDom.innerHTML = this._options.exceptionHtml;
         }
     }, {
         key: 'scrollListener',
@@ -528,9 +566,12 @@ var Scrollload = function () {
             if (win === window) {
                 winHeight = windowHeight;
             } else {
-                var winRect = win.getBoundingClientRect();
-                winHeight = winRect.height;
-                bottomDomTop = bottomDomTop - winRect.top;
+                var _win$getBoundingClien = win.getBoundingClientRect(),
+                    height = _win$getBoundingClien.height,
+                    top = _win$getBoundingClien.top;
+
+                winHeight = height;
+                bottomDomTop = bottomDomTop - top;
             }
 
             return bottomDomTop - winHeight <= this._options.threshold;
@@ -538,6 +579,7 @@ var Scrollload = function () {
     }, {
         key: 'resizeListener',
         value: function resizeListener() {
+            //更新缓存的windowHeight
             if (this.win === window) {
                 this.windowHeight = window.innerHeight;
             }
@@ -565,43 +607,61 @@ var Scrollload = function () {
         key: 'unLock',
         value: function unLock() {
             this.isLock = false;
+
             if (this.hasMore) {
                 this.scrollListener();
+            }
+
+            if (this._options.useLocalScrollFix) {
+                this.localScrollFix.update();
             }
         }
     }, {
         key: 'noData',
         value: function noData() {
             this.lock();
+
             this.hasMore = false;
-            this.bottomDom.innerHTML = this._options.noDataHtml;
+            this.showNoDataDom();
+
+            if (this._options.useLocalScrollFix && !this.localScrollFix.isArrived) {
+                this.localScrollFix.arrived();
+            }
+
             this.detachScrollListener();
         }
     }, {
         key: 'refreshData',
         value: function refreshData() {
+            //为了同时兼容<div><ul><li></li></ul></div>和<ul><li></li></ul>的写法
             if (this.container.querySelector('.scrollload-bottom')) {
-                this.bottomDom.innerHTML = this._options.loadingHtml;
+                this.showLoadingDom();
             } else {
                 this.createBottomDom();
             }
+
             this.isLock = false;
             this.hasMore = true;
+
+            if (this._options.useLocalScrollFix) {
+                this.localScrollFix = new __WEBPACK_IMPORTED_MODULE_2_localscrollfix_src_LocalScrollFix__["a" /* default */](this.win);
+            }
+
             this.attachScrollListener();
         }
     }, {
         key: 'throwException',
         value: function throwException() {
-            this.bottomDom.innerHTML = this._options.exceptionHtml;
+            this.showExceptionDom();
         }
     }, {
         key: 'solveException',
         value: function solveException() {
             if (this.hasMore) {
-                this.bottomDom.innerHTML = this._options.loadingHtml;
+                this.showLoadingDom();
                 this.unLock();
             } else {
-                this.bottomDom.innerHTML = this._options.noDataHtml;
+                this.showNoDataDom();
             }
         }
     }, {
@@ -627,6 +687,8 @@ Scrollload.prototype.defaults = {
     threshold: 10,
     loadingHtml: '',
     window: window,
+    useLocalScrollFix: false,
+    useScrollFix: false,
     noDataHtml: '<div style="text-align: center;font-size: 14px;line-height: 50px;">没有更多数据了</div>',
     exceptionHtml: '<div style="text-align: center;font-size: 14px;line-height: 50px;">出现异常</div>'
 };
@@ -1154,6 +1216,100 @@ __webpack_require__(40)(String, 'String', function(iterated){
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/**
+ * 使ios浏览器中局部滚动内容未占满视窗的一屏时候不出界
+ */
+var LocalScrollFix = function () {
+    function LocalScrollFix(win) {
+        _classCallCheck(this, LocalScrollFix);
+
+        if (!win || win === window) return null;
+        this.win = win;
+
+        var fixDom = win.querySelector('.localScrollFix-fixDom');
+        if (!fixDom) {
+            this.createFixDom();
+        } else {
+            this.fixDom = fixDom;
+        }
+
+        this.isArrived = false;
+        this.update();
+    }
+
+    _createClass(LocalScrollFix, [{
+        key: 'createFixDom',
+        value: function createFixDom() {
+            this.win.insertAdjacentHTML('beforeend', '<div class="localScrollFix-fixDom" style="margin: 0; padding: 0"></div>');
+            this.fixDom = this.win.querySelector('.localScrollFix-fixDom');
+        }
+    }, {
+        key: 'removeFixDom',
+        value: function removeFixDom() {
+            this.win.removeChild(this.fixDom);
+            this.fixDom = null;
+        }
+    }, {
+        key: 'arrived',
+        value: function arrived() {
+            this.isArrived = true;
+            this.removeFixDom();
+        }
+    }, {
+        key: 'update',
+        value: function update() {
+            if (this.isArrived) {
+                return;
+            }
+
+            var fixDomPaddingTop = this.computerFixDomPaddingTop();
+            if (fixDomPaddingTop >= 0) {
+                this.fixDom.style.paddingTop = fixDomPaddingTop + 2 + 'px';
+            } else {
+                this.arrived();
+            }
+        }
+
+        /**
+         * 计算fixDom所需要的paddingTop值
+         * @returns {number}
+         */
+
+    }, {
+        key: 'computerFixDomPaddingTop',
+        value: function computerFixDomPaddingTop() {
+            var fixDom = this.fixDom,
+                win = this.win;
+
+
+            var fixDomTop = fixDom.getBoundingClientRect().top;
+            var winBottom = win.getBoundingClientRect().bottom;
+
+            var _window$getComputedSt = window.getComputedStyle(win, null),
+                winPaddingBottom = _window$getComputedSt.paddingBottom,
+                winBorderBottomWidth = _window$getComputedSt.borderBottomWidth;
+
+            return winBottom - parseFloat(winPaddingBottom) - parseFloat(winBorderBottomWidth) - fixDomTop;
+        }
+    }]);
+
+    return LocalScrollFix;
+}();
+
+/* harmony default export */ exports["a"] = LocalScrollFix;
+
+
+window.LocalScrollFix = LocalScrollFix;
+
+/***/ },
+/* 55 */
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
 
 var assign = function assign(target, varArgs) {
     // .length of function is 2
@@ -1183,7 +1339,7 @@ var assign = function assign(target, varArgs) {
 /* harmony default export */ exports["a"] = assign;
 
 /***/ },
-/* 55 */
+/* 56 */
 /***/ function(module, exports) {
 
 // Adapted from https://gist.github.com/paulirish/1579671 which derived from 
@@ -1223,18 +1379,71 @@ if (!Date.now) Date.now = function () {
 })();
 
 /***/ },
-/* 56 */,
-/* 57 */,
+/* 57 */
+/***/ function(module, exports) {
+
+/**
+ * ScrollFix v0.1
+ * http://www.joelambert.co.uk
+ *
+ * Copyright 2011, Joe Lambert.
+ * Free to use under the MIT license.
+ * http://www.opensource.org/licenses/mit-license.php
+ */
+
+(function () {
+  var ScrollFix = function(elem) {
+    // Variables to track inputs
+    var startY, startTopScroll;
+
+    elem = elem || document.querySelector(elem);
+
+    // If there is no element, then do nothing
+    if(!elem) {
+      return;
+    }
+
+    // Handle the start of interactions
+    elem.addEventListener('touchstart', function(event){
+      startY = event.touches[0].pageY;
+      startTopScroll = elem.scrollTop;
+
+      if(startTopScroll <= 0) {
+        elem.scrollTop = 1;
+      }
+
+      if(startTopScroll + elem.offsetHeight >= elem.scrollHeight) {
+        elem.scrollTop = elem.scrollHeight - elem.offsetHeight - 1;
+      }
+
+    }, false);
+
+  };
+
+  // if we've got a window and we don't have a module
+  // create a global;
+  if ((typeof window != 'undefined') && (typeof module == 'undefined')) {
+    window.ScrollFix = ScrollFix;
+  }
+  // otherwise, export it.
+  else {
+    module.exports = ScrollFix;
+  }
+
+})();
+
+
+/***/ },
 /* 58 */,
 /* 59 */,
-/* 60 */
+/* 60 */,
+/* 61 */,
+/* 62 */
 /***/ function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ },
-/* 61 */,
-/* 62 */,
 /* 63 */,
 /* 64 */,
 /* 65 */,
@@ -1243,7 +1452,8 @@ if (!Date.now) Date.now = function () {
 /* 68 */,
 /* 69 */,
 /* 70 */,
-/* 71 */
+/* 71 */,
+/* 72 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1251,7 +1461,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_core_js_fn_array_from__ = __webpack_require__(27);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_core_js_fn_array_from___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_core_js_fn_array_from__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Scrollload__ = __webpack_require__(28);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__index_css__ = __webpack_require__(60);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__index_css__ = __webpack_require__(62);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__index_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__index_css__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__loading_demos_baidu_mobile_loading_css__ = __webpack_require__(29);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__loading_demos_baidu_mobile_loading_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__loading_demos_baidu_mobile_loading_css__);
@@ -1306,6 +1516,8 @@ var scrollload = new __WEBPACK_IMPORTED_MODULE_1__Scrollload__["a" /* default */
     }, 500);
 }, {
     window: document.querySelector('.window'),
+    useLocalScrollFix: true,
+    useScrollFix: true,
     loadingHtml: '\n            <div class="s-loading-frame">\n                <div class="load-img-wrapper">\n                    <img class="load-ing-img" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADYAAAA2CAYAAACMRWrdAAADXElEQVRo3u2az2sTQRTHE2njwULbbQsmngv+CLb+A4Iglh7ceGoPvVmtBExrRETUghU8p/WP8Og1p5JetGhsReul+h8IRvtDjUVc38AbeDw26+xmZne2ePhCaHdm3md/vHnz3st4npc5jMocWrALC16qFSfYcdAUqAaqg7ZBLdAvVAv/VsdrpnCMlWAOqAJ6CfoD8kJKjHmBczg2gOXxru9FgOmkPZwznwRYDvQQtO9jmHjd1kCPQFdARdAgjsnh7yL+T1zTwDF8nu+gRRwTC9goqOljyBvQXNhXibzKN3AOv3lHTYO5oB228CbokkbnI+Z6z9bYwbWNgF0D/SaL/QRVQUcMeNYe0C1cQ64n1r6uG6zM7uBH0HgM+9Q4rkXXLusCc9mTeg0aiXETHsE16ZNzuwUTH+0umVTsU30JRBh9uLa0Y1c6lChgvaANMtkn0HCC4dMw2iDtEbb1RgG7QyZpg85ZEBuOMYdyLyxYgUUTVYsC3yqLUgphwGpk8Ba6X1vAetAmaV9NFcxhT2vSwuPKJHtqQypgN8mgt6CshWBZtE3aWVEBo2511uJD5izdhv4FViDnKRFx91sM1o/eWp7nCkFgM+QurKUgNdAg9s4Ega2QCx+nAGyJ2LsSBFYnF5ZSAOYSe+tBYNvkwmIKwIo05AsC+0IudFIA5hB7W0FgNPeQ02iAyHM8Az3XfOTJEXsPkgCbJ/N+0AinDGbqVTzPDqu64AbInF9Vncdpzd/DtAG4MzRdoeruXQMfu244ZXdPN+glQ55MJxzdoJdVQ6qGQTetC26VzDGtGgS3DQfB3cKFCoLjPrZ0A3eVjFtXOY9VWPo6ayncJhmzoAI2lEBqICzcBEsNDNiczFGFE7WCd+S6p2lIv6nA3WY1tBNhE6Z3WWVlzAK4syxh+kBXittJCG4LQzya4m5GTXH7FSVEAfxYQnD09zfQKd1lpFcxlpE4nLYyUlDhL6lvrqK7VDvnU6qdN1Sq7QRXNVVcL7FvzkRxPeh7N94OseHTttDEAnysSSBTDSw/OjSwNLA5pYTeaxCjl6PoeE6CLoPug56ALtrWSyVbjva7bDNqR/W0cTSJCUeyHrFJzMMwzuq2vnyHtr4DfE0/43axiqmIstxsbQezoxHzf09wyvQXgOhQqYfCgwMAAAAASUVORK5CYII=">\n                </div>\n                <span class="load-text">\u6B63\u5728\u52A0\u8F7D</span></div>\n            </div>\n',
     noDataHtml: '\n            <div class="s-loading-frame bottom-no-more">\n                <span>\u771F\u7684\u62C9\u4E0D\u51FA\u65B0\u4E1C\u897F\u4E86~</span>\n            </div>\n'
 });

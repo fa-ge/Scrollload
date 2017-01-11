@@ -16,31 +16,31 @@ noData dom结构
 
 @-webkit-keyframes loadingRotate {
     0% {
-        -webkit-transform: rotate(0deg) translateZ(0);
-                transform: rotate(0deg) translateZ(0);
+        -webkit-transform: rotate(0deg);
+                transform: rotate(0deg);
     }
     50% {
-        -webkit-transform: rotate(180deg) translateZ(0);
-                transform: rotate(180deg) translateZ(0);
+        -webkit-transform: rotate(180deg);
+                transform: rotate(180deg);
     }
     100% {
-        -webkit-transform: rotate(360deg) translateZ(0);
-                transform: rotate(360deg) translateZ(0);
+        -webkit-transform: rotate(360deg);
+                transform: rotate(360deg);
     }
 }
 
 @keyframes loadingRotate {
     0% {
-        -webkit-transform: rotate(0deg) translateZ(0);
-                transform: rotate(0deg) translateZ(0);
+        -webkit-transform: rotate(0deg);
+                transform: rotate(0deg);
     }
     50% {
-        -webkit-transform: rotate(180deg) translateZ(0);
-                transform: rotate(180deg) translateZ(0);
+        -webkit-transform: rotate(180deg);
+                transform: rotate(180deg);
     }
     100% {
-        -webkit-transform: rotate(360deg) translateZ(0);
-                transform: rotate(360deg) translateZ(0);
+        -webkit-transform: rotate(360deg);
+                transform: rotate(360deg);
     }
 }
 

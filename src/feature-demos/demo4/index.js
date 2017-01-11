@@ -91,7 +91,7 @@ const scrollload = new Scrollload(document.querySelector('.container'), function
 })
 
 scrollload.container.addEventListener('click', function (event) {
-    if (event.target.classList.contains('clickHandler')) {
+    if (event.target.className === 'clickHandler') {
         scrollload.solveException()
     }
 })

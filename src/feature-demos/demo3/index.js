@@ -67,6 +67,8 @@ const scrollload = new Scrollload(document.querySelector('.container'), function
     }, 500)
 },{
     window: document.querySelector('.window'),
+    useLocalScrollFix: true,
+    useScrollFix: true,
     loadingHtml: `
             <div class="s-loading-frame">
                 <div class="load-img-wrapper">
@@ -81,6 +83,4 @@ const scrollload = new Scrollload(document.querySelector('.container'), function
             </div>
 `,
 })
-
-
 

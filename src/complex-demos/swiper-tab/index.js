@@ -4,11 +4,8 @@ import Scrollload from '../../Scrollload'
 import './index.css'
 import '../../loading-demos/baidu-mobile/loading.css'
 
-
 import Swiper from 'swiper/dist/js/swiper.min'
 import 'swiper/dist/css/swiper.css'
-
-import ScrollFix from 'scrollfix'
 
 const data = [
     {
@@ -61,6 +58,7 @@ function getData() {
 `
     }).join('')
 }
+const wins = Array.from(document.querySelectorAll('.window'))
 const scrollloads = []
 Array.from(document.querySelectorAll('.container')).forEach((container, index) => {
     scrollloads.push(new Scrollload(container, function(sl){
@@ -74,7 +72,9 @@ Array.from(document.querySelectorAll('.container')).forEach((container, index) =
             }
         }, 500)
     }, {
-        window: document.querySelectorAll('.window')[index],
+        window: wins[index],
+        useLocalScrollFix: true,
+        useScrollFix: true,
         loadingHtml: `
             <div class="s-loading-frame">
                 <div class="load-img-wrapper">
@@ -97,20 +97,10 @@ Array.from(document.querySelectorAll('.container')).forEach((container, index) =
  * 我用这个插件主要是很多人比较熟悉这个插件
  *
  */
-var mySwiper = new Swiper('.swiper-container', {
+const mySwiper = new Swiper('.swiper-container', {
     onSlideChangeStart: function (swiper) {
         scrollloads.forEach((scrollload, index) => {
             index === swiper.activeIndex ? scrollload.unLock() : scrollload.lock()
         })
     }
 })
-
-const swiperContainerHeight = document.querySelector('.swiper-container').clientHeight
-document.querySelectorAll('.window').forEach((win) => {
-    //我之所以不在css中设置高度100%，是因为ios有一个诡异的bug。如果父容器设置了高度，那么该容器如果设置了百分比高度将不能局部滚动。用calc中带百分比计算的也不行。
-    //真的。。太他妈诡异了
-    win.style.height = swiperContainerHeight + 'px'
-    //ScrollFix主要也是为了修一个bug，在ios中局部滚动滑到顶端瞬间上滑是会有bug的
-    new ScrollFix(win)
-})
-

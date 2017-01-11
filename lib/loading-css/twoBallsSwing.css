@@ -1,4 +1,4 @@
-/**
+        /**
 <div class="two-balls-swing">
     <div class="two-balls-swing-circle"></div>
     <div class="two-balls-swing-circle"></div>
@@ -7,55 +7,67 @@
 
 @-webkit-keyframes two-balls-swing-anim1 {
     0% {
-        left: -26px;
+        -webkit-transform: translate3d(0px, 0px, 0px);
+                transform: translate3d(0px, 0px, 0px);
     }
     50% {
-        left: 10px;
+        -webkit-transform: translate3d(36px, 0px, 0px);
+                transform: translate3d(36px, 0px, 0px);
     }
     100% {
-        left: -26px;
+        -webkit-transform: translate3d(0px, 0px, 0px);
+                transform: translate3d(0px, 0px, 0px);
     }
 }
 
 @keyframes two-balls-swing-anim1 {
     0% {
-        left: -26px;
+        -webkit-transform: translate3d(0px, 0px, 0px);
+                transform: translate3d(0px, 0px, 0px);
     }
     50% {
-        left: 10px;
+        -webkit-transform: translate3d(36px, 0px, 0px);
+                transform: translate3d(36px, 0px, 0px);
     }
     100% {
-        left: -26px;
+        -webkit-transform: translate3d(0px, 0px, 0px);
+                transform: translate3d(0px, 0px, 0px);
     }
 }
 
 @-webkit-keyframes two-balls-swing-anim2 {
     0% {
-        left: 10px;
+        -webkit-transform: translate3d(0px, 0px, 0px);
+                transform: translate3d(0px, 0px, 0px);
     }
 
     50% {
         z-index: 1;
-        left: -26px;
+        -webkit-transform: translate3d(-36px, 0px, 0px);
+                transform: translate3d(-36px, 0px, 0px);
     }
     100% {
         left: 10px;
-        z-index: 10;
+        -webkit-transform: translate3d(0px, 0px, 0px);
+                transform: translate3d(0px, 0px, 0px);
     }
 }
 
 @keyframes two-balls-swing-anim2 {
     0% {
-        left: 10px;
+        -webkit-transform: translate3d(0px, 0px, 0px);
+                transform: translate3d(0px, 0px, 0px);
     }
 
     50% {
         z-index: 1;
-        left: -26px;
+        -webkit-transform: translate3d(-36px, 0px, 0px);
+                transform: translate3d(-36px, 0px, 0px);
     }
     100% {
         left: 10px;
-        z-index: 10;
+        -webkit-transform: translate3d(0px, 0px, 0px);
+                transform: translate3d(0px, 0px, 0px);
     }
 }
 
