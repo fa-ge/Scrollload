@@ -34,12 +34,13 @@
     "rimraf": "^2.5.4",
     "sass-loader": "^4.1.1",
     "style-loader": "^0.13.1",
+    "swiper": "^3.4.1",
     "webpack": "^2.2.0-rc.3",
     "webpack-dev-server": "^1.16.2"
   },
   "dependencies": {
-    "scrollfix": "0.0.2",
-    "swiper": "^3.4.1"
+    "localscrollfix": "^1.0.0",
+    "scrollfix": "0.0.2"
   },
   "repository": {
     "type": "git",
