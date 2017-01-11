@@ -1,8 +1,14 @@
 import './requestAnimationFrame.js'
 import assign from './assign.js'
+import LocalScrollFix from 'localscrollfix/src/LocalScrollFix'
+import ScrollFix from 'scrollfix'
 
 function throwIfArgumentsMissing(n) {
     throw new Error(`2 arguments required, but only ${n} present.`)
+}
+
+function isIos() {
+    return /iphone/i.test(window.navigator.userAgent)
 }
 
 export default class Scrollload {
@@ -23,10 +29,18 @@ export default class Scrollload {
         this.windowHeight = window.innerHeight
 
         this.createBottomDom()
-        if (this.win !== window && this._options.isLocalScrollBugFix) {
-            this.localScrollBugFix()
+
+        //修复ios局部滚动的bug
+        if (this.win !== window && isIos()) {
+            if (this._options.useLocalScrollFix) {
+                this.localScrollFix = new LocalScrollFix(this.win)
+            }
+            if (this._options.useScrollFix) {
+                new ScrollFix(this.win)
+            }
         } else {
-            this._options.isLocalScrollBugFix = false
+            this._options.useLocalScrollFix = false
+            this._options.useScrollFix = false
         }
 
         this.scrollListener = this.scrollListener.bind(this)
@@ -35,18 +49,8 @@ export default class Scrollload {
     }
 
     createBottomDom() {
-        this.container.insertAdjacentHTML('beforeend', `<div class="scrollload-bottom">${this._options.loadingHtml || '<div style="text-align: center;font-size: 14px;line-height: 50px; position: relative;">加载中...</div>'}</div>`)
+        this.container.insertAdjacentHTML('beforeend', `<div class="scrollload-bottom">${this._options.loadingHtml || '<div style="text-align: center;font-size: 14px;line-height: 50px;">加载中...</div>'}</div>`)
         this.bottomDom = this.container.querySelector('.scrollload-bottom')
-    }
-
-    createFixDom() {
-        this.container.insertAdjacentHTML('beforeend', `<div class="scrollload-fixDom" style="height: 0;"></div>`)
-        this.fixDom = this.container.querySelector('.scrollload-fixDom')
-    }
-
-    removeFixDom() {
-        this.container.removeChild(this.fixDom)
-        this.fixDom = null
     }
 
     showNoDataDom() {
@@ -115,21 +119,26 @@ export default class Scrollload {
 
     unLock() {
         this.isLock = false
+
         if (this.hasMore) {
             this.scrollListener()
         }
-        if (this.fixDom) {
-            this.localScrollBugFix()
+
+        if (this._options.useLocalScrollFix) {
+            this.localScrollFix.update()
         }
     }
 
     noData() {
         this.lock()
+
         this.hasMore = false
         this.showNoDataDom()
-        if (this.fixDom) {
-            this.removeFixDom()
+
+        if (this._options.useLocalScrollFix && !this.localScrollFix.isArrived) {
+            this.localScrollFix.arrived()
         }
+
         this.detachScrollListener()
     }
 
@@ -140,11 +149,14 @@ export default class Scrollload {
         } else {
             this.createBottomDom()
         }
+
         this.isLock = false
         this.hasMore = true
-        if (this._options.isLocalScrollBugFix) {
-            this.localScrollBugFix()
+
+        if (this._options.useLocalScrollFix) {
+            this.localScrollFix = new LocalScrollFix(this.win)
         }
+
         this.attachScrollListener()
     }
 
@@ -161,35 +173,6 @@ export default class Scrollload {
         }
     }
 
-
-    /**
-     * 当局部滚动时候视窗内的数据高度不足视窗高度的时候补齐数据高度使之比容器高度大2px，从而修复ios一些诡异的bug
-     */
-    localScrollBugFix() {
-        const mt = this.computerFixDomMarginTop()
-        if (mt >= 0) {
-            if (!this.fixDom) {
-                this.createFixDom()
-            }
-            this.fixDom.style.marginTop = `${mt + 2}px`
-        } else if (this.fixDom) {
-            this.removeFixDom()
-        }
-    }
-
-    /**
-     * 计算fixDom所需要的marginTop值
-     * @returns {number}
-     */
-    computerFixDomMarginTop() {
-        const {bottomDom, win} = this
-
-        const bdBottom = bottomDom.getBoundingClientRect().bottom
-        const bdMarginBottom = window.getComputedStyle(bottomDom, null).marginBottom
-        const winBottom = win.getBoundingClientRect().bottom
-        const {paddingBottom: winPaddingBottom, borderBottomWidth: winBorderBottomWidth}= window.getComputedStyle(win, null)
-        return winBottom - parseFloat(winPaddingBottom) - parseFloat(winBorderBottomWidth) - parseFloat(bdMarginBottom) - bdBottom
-    }
     setOptions(options) {
         assign(this._options, options)
     }
@@ -204,7 +187,8 @@ Scrollload.prototype.defaults = {
     threshold: 10,
     loadingHtml: '',
     window: window,
-    isLocalScrollBugFix: false,
+    useLocalScrollFix: false,
+    useScrollFix: false,
     noDataHtml: '<div style="text-align: center;font-size: 14px;line-height: 50px;">没有更多数据了</div>',
     exceptionHtml: '<div style="text-align: center;font-size: 14px;line-height: 50px;">出现异常</div>'
 }
