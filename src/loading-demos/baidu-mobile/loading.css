@@ -16,13 +16,13 @@ noData dom结构
 
 @keyframes loadingRotate {
     0% {
-        transform: rotate(0deg) translateZ(0);
+        transform: rotate(0deg);
     }
     50% {
-        transform: rotate(180deg) translateZ(0);
+        transform: rotate(180deg);
     }
     100% {
-        transform: rotate(360deg) translateZ(0);
+        transform: rotate(360deg);
     }
 }
 
