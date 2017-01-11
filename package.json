@@ -43,10 +43,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/fa-ge/scrollload.git"
+    "url": "git+https://github.com/fa-ge/Scrollload.git"
   },
   "bugs": {
-    "url": "https://github.com/fa-ge/scrollload/issues"
+    "url": "https://github.com/fa-ge/Scrollload/issues"
   },
-  "homepage": "https://github.com/fa-ge/scrollload#readme"
+  "homepage": "https://github.com/fa-ge/Scrollload#readme"
 }
