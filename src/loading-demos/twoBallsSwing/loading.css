@@ -7,28 +7,28 @@
 
 @keyframes two-balls-swing-anim1 {
     0% {
-        transform: translateX(0px);
+        transform: translate3d(0px, 0px, 0px);
     }
     50% {
-        transform: translateX(36px);
+        transform: translate3d(36px, 0px, 0px);
     }
     100% {
-        transform: translateX(0px);
+        transform: translate3d(0px, 0px, 0px);
     }
 }
 
 @keyframes two-balls-swing-anim2 {
     0% {
-        transform: translateX(0px);
+        transform: translate3d(0px, 0px, 0px);
     }
 
     50% {
         z-index: 1;
-        transform: translateX(-36px);
+        transform: translate3d(-36px, 0px, 0px);
     }
     100% {
         left: 10px;
-        transform: translateX(0px);
+        transform: translate3d(0px, 0px, 0px);
     }
 }
 
