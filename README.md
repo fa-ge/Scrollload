@@ -21,6 +21,8 @@ Scrollload是一个无依赖，体积极小（压缩+gzip后不到2k），可配
 
 ***[左右滑动tab并且滚动加载](https://fa-ge.github.io/Scrollload/dist/complex-demos/swiper-tab/index.html)***——复杂示例
 
+***[ios下用局部滚动，其他全局滚动](https://fa-ge.github.io/Scrollload/dist/complex-demos/best-practice/index.html)***——最佳实践
+
 [异常处理](https://fa-ge.github.io/Scrollload/dist/feature-demos/demo4/index.html)
 
 [点击刷新重新加载](https://fa-ge.github.io/Scrollload/dist/feature-demos/demo5/index.html)
