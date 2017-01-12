@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 73);
+/******/ 	return __webpack_require__(__webpack_require__.s = 74);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -1454,7 +1454,8 @@ if (!Date.now) Date.now = function () {
 /* 70 */,
 /* 71 */,
 /* 72 */,
-/* 73 */
+/* 73 */,
+/* 74 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1508,12 +1509,6 @@ function getData() {
 var count = 0;
 var scrollload = new __WEBPACK_IMPORTED_MODULE_1__Scrollload__["a" /* default */](document.querySelector('.container'), function (sl) {
     setTimeout(function () {
-        if (count === 2) {
-            count++;
-            sl.throwException();
-            return;
-        }
-
         if (count++ < 5) {
             document.querySelector('.list').insertAdjacentHTML('beforeend', getData());
             sl.unLock();
@@ -1522,15 +1517,11 @@ var scrollload = new __WEBPACK_IMPORTED_MODULE_1__Scrollload__["a" /* default */
         }
     }, 500);
 }, {
+    window: document.querySelector('.window'),
+    useLocalScrollFix: true,
+    useScrollFix: true,
     loadingHtml: '\n            <div class="s-loading-frame">\n                <div class="load-img-wrapper">\n                    <img class="load-ing-img" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADYAAAA2CAYAAACMRWrdAAADXElEQVRo3u2az2sTQRTHE2njwULbbQsmngv+CLb+A4Iglh7ceGoPvVmtBExrRETUghU8p/WP8Og1p5JetGhsReul+h8IRvtDjUVc38AbeDw26+xmZne2ePhCaHdm3md/vHnz3st4npc5jMocWrALC16qFSfYcdAUqAaqg7ZBLdAvVAv/VsdrpnCMlWAOqAJ6CfoD8kJKjHmBczg2gOXxru9FgOmkPZwznwRYDvQQtO9jmHjd1kCPQFdARdAgjsnh7yL+T1zTwDF8nu+gRRwTC9goqOljyBvQXNhXibzKN3AOv3lHTYO5oB228CbokkbnI+Z6z9bYwbWNgF0D/SaL/QRVQUcMeNYe0C1cQ64n1r6uG6zM7uBH0HgM+9Q4rkXXLusCc9mTeg0aiXETHsE16ZNzuwUTH+0umVTsU30JRBh9uLa0Y1c6lChgvaANMtkn0HCC4dMw2iDtEbb1RgG7QyZpg85ZEBuOMYdyLyxYgUUTVYsC3yqLUgphwGpk8Ba6X1vAetAmaV9NFcxhT2vSwuPKJHtqQypgN8mgt6CshWBZtE3aWVEBo2511uJD5izdhv4FViDnKRFx91sM1o/eWp7nCkFgM+QurKUgNdAg9s4Ega2QCx+nAGyJ2LsSBFYnF5ZSAOYSe+tBYNvkwmIKwIo05AsC+0IudFIA5hB7W0FgNPeQ02iAyHM8Az3XfOTJEXsPkgCbJ/N+0AinDGbqVTzPDqu64AbInF9Vncdpzd/DtAG4MzRdoeruXQMfu244ZXdPN+glQ55MJxzdoJdVQ6qGQTetC26VzDGtGgS3DQfB3cKFCoLjPrZ0A3eVjFtXOY9VWPo6ayncJhmzoAI2lEBqICzcBEsNDNiczFGFE7WCd+S6p2lIv6nA3WY1tBNhE6Z3WWVlzAK4syxh+kBXittJCG4LQzya4m5GTXH7FSVEAfxYQnD09zfQKd1lpFcxlpE4nLYyUlDhL6lvrqK7VDvnU6qdN1Sq7QRXNVVcL7FvzkRxPeh7N94OseHTttDEAnysSSBTDSw/OjSwNLA5pYTeaxCjl6PoeE6CLoPug56ALtrWSyVbjva7bDNqR/W0cTSJCUeyHrFJzMMwzuq2vnyHtr4DfE0/43axiqmIstxsbQezoxHzf09wyvQXgOhQqYfCgwMAAAAASUVORK5CYII=">\n                </div>\n                <span class="load-text">\u6B63\u5728\u52A0\u8F7D</span></div>\n            </div>\n',
-    noDataHtml: '\n            <div class="s-loading-frame bottom-no-more">\n                <span>\u771F\u7684\u62C9\u4E0D\u51FA\u65B0\u4E1C\u897F\u4E86~</span>\n            </div>\n',
-    exceptionHtml: '\n    <div style="text-align: center;line-height: 50px;font-size: 14px;">\u51FA\u73B0\u5F02\u5E38\uFF0C\u70B9\u51FB\u6062\u590D\u5F02\u5E38\uFF1A<a class="clickHandler" style="color: red;font-size: 16px">\u70B9\u6211</a></div>\n'
-});
-
-scrollload.container.addEventListener('click', function (event) {
-    if (event.target.className === 'clickHandler') {
-        scrollload.solveException();
-    }
+    noDataHtml: '\n            <div class="s-loading-frame bottom-no-more">\n                <span>\u771F\u7684\u62C9\u4E0D\u51FA\u65B0\u4E1C\u897F\u4E86~</span>\n            </div>\n'
 });
 
 /***/ }
