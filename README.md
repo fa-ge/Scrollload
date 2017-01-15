@@ -1,11 +1,16 @@
 ### 初衷
-如今移动端站点越来越多，滚动到底部加载数据的需求应该非常的常见，即使现在很多pc站点也会有这样的需求，比如百度首页就有。但是我却一直没找到特别好用的插件，基本上的插件都依赖于jquery。我想要的很简单，方便好用可定制体积又小功能又强大的插件。
+如今移动端站点越来越多，滚动到底部加载数据的需求应该非常的常见，即使现在很多pc站点也会有这样的需求，比如百度首页就有。虽然简单的完成这么一个功能非常方便，但是滚动往往会成为性能的瓶颈，处理不好滚动很有可能会不流畅。既然很多页面和项目都需要，当然最需要有一个复用性高的插件。但是我却一直没找到特别好用的插件，有些需要依赖jquery，但貌似编写这样的插件时jquery并没有带来任何的便利。
 
 ### Scrollload.js介绍
-Scrollload是一个无依赖，体积极小（压缩+gzip后不到2k），可配置性高(可以自定义加载时候动画，加载完后的dom，提前加载的距离)，功能强大（能做到指定容器内的滚动，多tab的滚动,异常处理，刷新重新加载），性能好（在滚动的时候做了一些性能优化，如缓存window的高度，函数节流），兼容性好(修了ios局部滚动的多个bug,见[ios局部滚动的坑及解决方案](https://zhuanlan.zhihu.com/p/24837233))的js插件。
+Scrollload是一个无依赖，体积极小（压缩+gzip后不到3k），可配置性高(可以自定义加载时候动画，加载完后的dom，提前加载的距离)，可扩展性强大（很方便做到指定容器内的滚动，多tab的滚动,异常处理，刷新重新加载等），性能好（在滚动的时候做了一些性能优化，如缓存window的高度，函数节流）的js插件。源码地址: https://github.com/fa-ge/Scrollload
+
+### 解决的痛点
+
+1. 无依赖，配置简单，有多套滚动加载效果可选(需要单独引入对应的css,当然也有默认效果)
+2. 在ios中，全局滚动会有很多不好的体验，我认为是可以用局部滚动来替代全局的。局部滚动也会有几个坑，但都是可解决的，也就是说全局滚动的坑目前还很难解决。该插件内置局部滚动坑的解决方案，方便使用局部滚动替代全局滚动且无副作用。具体见[ios局部滚动的坑及解决方案](https://zhuanlan.zhihu.com/p/24837233)。
 
 ### 兼容性
-不支持ie8及以下浏览器，其他都没有问题。如果你发现哪些浏览器上有问题，请一定要联系我。
+不支持ie8及以下浏览器。
 
 ### 示例
 
@@ -36,7 +41,7 @@ Scrollload是一个无依赖，体积极小（压缩+gzip后不到2k），可配
 全局滚动：滚动条在body或者body父级元素或者window上  
 局部滚动：滚动条在body里的子孙元素上。  
 由于浏览器兼容性原因，全局滚动都应该在window上绑定滚动事件。而局部滚动则是在产生滚动条那个元素上绑定滚动事件就可以了。之后我会把产生滚动条的元素统称为视窗。  
-核心逻辑其实就是判断是否滚动到底部。这个底部指的是列表底部的那个加载中动画div的元素的顶部，之后我都会叫他底部DOM。   
+核心逻辑其实就是判断底部DOM是否滚动到底部。这个底部DOM指的是列表底部的那个加载中动画div的元素，之后我都会叫他底部DOM。   
 ```javascript
 
     function isBottom() {
@@ -48,9 +53,9 @@ Scrollload是一个无依赖，体积极小（压缩+gzip后不到2k），可配
         if (win === window) {
             winHeight = windowHeight
         } else {
-            const winRect = win.getBoundingClientRect()
-            winHeight = winRect.height
-            bottomDomTop = bottomDomTop - winRect.top
+            const {height, top} = win.getBoundingClientRect()
+            winHeight = height
+            bottomDomTop = bottomDomTop - top
         }
         //threshold指的是提前加载的距离
         return bottomDomTop - winHeight <= this.options.threshold
@@ -65,7 +70,7 @@ npm install Scrollload --save
 ```
 
 ### 使用
-如果你没有用模块管理，直接从window对象下取Scrollload对象也是可以的，打包后的js放在lib目录下，可以直接用script标签引入  
+如果你没有用模块管理， 	直接从window对象下取Scrollload对象也是可以的，打包后的js放在lib目录下，可以直接用script标签引入  
 同时支持模块引入  
 
 ```javascript
