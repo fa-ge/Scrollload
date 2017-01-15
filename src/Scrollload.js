@@ -1,6 +1,6 @@
 import './requestAnimationFrame.js'
 import assign from './assign.js'
-import LocalScrollFix from 'localscrollfix/src/LocalScrollFix'
+import LocalScrollFix from 'localscrollFix'
 import ScrollFix from 'scrollfix'
 
 function throwIfArgumentsMissing(n) {
@@ -29,8 +29,20 @@ export default class Scrollload {
         this.windowHeight = window.innerHeight
 
         this.createBottomDom()
+        this.fixLocalScroll()
 
-        //修复ios局部滚动的bug
+        this.scrollListener = this.scrollListener.bind(this)
+        this.resizeListener = this.resizeListener.bind(this)
+        this.attachScrollListener()
+    }
+
+    createBottomDom() {
+        this.container.insertAdjacentHTML('beforeend', `<div class="scrollload-bottom">${this._options.loadingHtml || '<div style="text-align: center;font-size: 14px;line-height: 50px;">加载中...</div>'}</div>`)
+        this.bottomDom = this.container.querySelector('.scrollload-bottom')
+    }
+
+    //修复ios局部滚动的bug
+    fixLocalScroll() {
         if (this.win !== window && isIos()) {
             if (this._options.useLocalScrollFix) {
                 this.localScrollFix = new LocalScrollFix(this.win)
@@ -42,15 +54,6 @@ export default class Scrollload {
             this._options.useLocalScrollFix = false
             this._options.useScrollFix = false
         }
-
-        this.scrollListener = this.scrollListener.bind(this)
-        this.resizeListener = this.resizeListener.bind(this)
-        this.attachScrollListener()
-    }
-
-    createBottomDom() {
-        this.container.insertAdjacentHTML('beforeend', `<div class="scrollload-bottom">${this._options.loadingHtml || '<div style="text-align: center;font-size: 14px;line-height: 50px;">加载中...</div>'}</div>`)
-        this.bottomDom = this.container.querySelector('.scrollload-bottom')
     }
 
     showNoDataDom() {
@@ -119,11 +122,9 @@ export default class Scrollload {
 
     unLock() {
         this.isLock = false
-
         if (this.hasMore) {
             this.scrollListener()
         }
-
         if (this._options.useLocalScrollFix) {
             this.localScrollFix.update()
         }
