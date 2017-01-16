@@ -11,6 +11,10 @@ function isIos() {
     return /iphone/i.test(window.navigator.userAgent)
 }
 
+function generateHtml(str) {
+    return `<div style="text-align: center;font-size: 14px;line-height: 50px;">${str}</div>`
+}
+
 export default class Scrollload {
     constructor(container = throwIfArgumentsMissing(0), loadMoreFn = throwIfArgumentsMissing(1), options = {}) {
         if (!(container instanceof HTMLElement)) {
@@ -36,11 +40,6 @@ export default class Scrollload {
         this.attachScrollListener()
     }
 
-    createBottomDom() {
-        this.container.insertAdjacentHTML('beforeend', `<div class="scrollload-bottom">${this._options.loadingHtml || '<div style="text-align: center;font-size: 14px;line-height: 50px;">加载中...</div>'}</div>`)
-        this.bottomDom = this.container.querySelector('.scrollload-bottom')
-    }
-
     //修复ios局部滚动的bug
     fixLocalScroll() {
         if (this.win !== window && isIos()) {
@@ -54,6 +53,11 @@ export default class Scrollload {
             this._options.useLocalScrollFix = false
             this._options.useScrollFix = false
         }
+    }
+
+    createBottomDom() {
+        this.container.insertAdjacentHTML('beforeend', `<div class="scrollload-bottom">${this._options.loadingHtml}</div>`)
+        this.bottomDom = this.container.querySelector('.scrollload-bottom')
     }
 
     showNoDataDom() {
@@ -186,12 +190,12 @@ export default class Scrollload {
 Scrollload.prototype.defaults = {
     isInitLock: false,
     threshold: 10,
-    loadingHtml: '',
     window: window,
     useLocalScrollFix: false,
     useScrollFix: false,
-    noDataHtml: '<div style="text-align: center;font-size: 14px;line-height: 50px;">没有更多数据了</div>',
-    exceptionHtml: '<div style="text-align: center;font-size: 14px;line-height: 50px;">出现异常</div>'
+    loadingHtml: generateHtml('加载中...'),
+    noDataHtml: generateHtml('没有更多数据了'),
+    exceptionHtml: generateHtml('出现异常')
 }
 
 Scrollload.setGlobalOptions = (options) => {
