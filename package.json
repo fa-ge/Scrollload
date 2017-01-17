@@ -1,6 +1,6 @@
 {
   "name": "scrollload",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "description": "scroll load more data 滚动加载更多的数据",
   "main": "lib/Scrollload.js",
   "scripts": {
@@ -36,7 +36,7 @@
     "sass-loader": "^4.1.1",
     "style-loader": "^0.13.1",
     "swiper": "^3.4.1",
-    "webpack": "^2.2.0-rc.3",
+    "webpack": "^2.2.0-rc.7",
     "webpack-dev-server": "^1.16.2"
   },
   "dependencies": {
