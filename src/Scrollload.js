@@ -16,6 +16,17 @@ function generateHtml(str) {
 }
 
 export default class Scrollload {
+    static defaults = {
+        isInitLock: false,
+        threshold: 10,
+        window: window,
+        useLocalScrollFix: false,
+        useScrollFix: false,
+        loadingHtml: generateHtml('加载中...'),
+        noDataHtml: generateHtml('没有更多数据了'),
+        exceptionHtml: generateHtml('出现异常')
+    }
+
     constructor(container = throwIfArgumentsMissing(0), loadMoreFn = throwIfArgumentsMissing(1), options = {}) {
         if (!(container instanceof HTMLElement)) {
             throw new Error('parameter 1 must be a HTMLElement instance!')
@@ -26,7 +37,7 @@ export default class Scrollload {
 
         this.container = container
         this.loadMoreFn = loadMoreFn
-        this._options = assign({}, this.defaults, options)
+        this._options = assign({}, Scrollload.defaults, options)
         this.isLock = this._options.isInitLock
         this.hasMore = true
         this.win = this._options.window
@@ -185,21 +196,10 @@ export default class Scrollload {
     getOptions() {
         return this._options
     }
-}
 
-Scrollload.prototype.defaults = {
-    isInitLock: false,
-    threshold: 10,
-    window: window,
-    useLocalScrollFix: false,
-    useScrollFix: false,
-    loadingHtml: generateHtml('加载中...'),
-    noDataHtml: generateHtml('没有更多数据了'),
-    exceptionHtml: generateHtml('出现异常')
-}
-
-Scrollload.setGlobalOptions = (options) => {
-    assign(Scrollload.prototype.defaults, options)
+    static setGlobalOptions(options) {
+        assign(Scrollload.defaults, options)
+    }
 }
 
 window.Scrollload = Scrollload
