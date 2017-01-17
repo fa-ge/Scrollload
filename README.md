@@ -66,7 +66,7 @@ Scrollload是一个无依赖，体积极小（压缩+gzip后不到3k），可配
 
 ### 安装
 ```javascript
-npm install Scrollload --save
+npm install scrollload --save
 ```
 
 ### 使用
