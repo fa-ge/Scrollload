@@ -1,6 +1,6 @@
 import './requestAnimationFrame.js'
 import assign from './assign.js'
-import LocalScrollFix from 'localscrollFix'
+import LocalScrollFix from 'localscrollfix/src/LocalScrollFix'
 import ScrollFix from 'scrollfix'
 
 function throwIfArgumentsMissing(n) {
