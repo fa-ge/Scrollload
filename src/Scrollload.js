@@ -1,5 +1,9 @@
-import './requestAnimationFrame.js'
-import assign from './assign.js'
+/**
+ *  author: fa-ge
+ *  github: https://github.com/fa-ge/Scrollload
+ */
+import throttle from './underscore.throttle'
+import assign from './assign'
 import LocalScrollFix from 'localscrollfix/src/LocalScrollFix'
 import ScrollFix from 'scrollfix'
 
@@ -48,6 +52,11 @@ export default class Scrollload {
 
         this.scrollListener = this.scrollListener.bind(this)
         this.resizeListener = this.resizeListener.bind(this)
+
+        //对滚动和resize的监听函数设置节流
+        this.scrollListenerWrapThrottle = throttle(this.scrollListener, 50)
+        this.resizeListenerWrapThrottle = throttle(this.resizeListener, 50)
+
         this.attachScrollListener()
     }
 
@@ -83,17 +92,16 @@ export default class Scrollload {
         this.bottomDom.innerHTML = this._options.exceptionHtml
     }
 
-    scrollListener() {
-        requestAnimationFrame(() => {
-            if (this.isLock) {
-                return
-            }
 
-            if (this.isBottom()) {
-                this.isLock = true
-                this.loadMoreFn.call(this, this)
-            }
-        })
+    scrollListener() {
+        if (this.isLock) {
+            return
+        }
+
+        if (this.isBottom()) {
+            this.isLock = true
+            this.loadMoreFn.call(this, this)
+        }
     }
 
     isBottom() {
@@ -121,14 +129,14 @@ export default class Scrollload {
     }
 
     attachScrollListener() {
-        this.win.addEventListener('scroll', this.scrollListener)
-        this.win.addEventListener('resize', this.resizeListener)
+        this.win.addEventListener('scroll', this.scrollListenerWrapThrottle)
+        this.win.addEventListener('resize', this.resizeListenerWrapThrottle)
         this.scrollListener()
     }
 
     detachScrollListener() {
-        this.win.removeEventListener('scroll', this.scrollListener)
-        this.win.removeEventListener('resize', this.resizeListener)
+        this.win.removeEventListener('scroll', this.scrollListenerWrapThrottle)
+        this.win.removeEventListener('resize', this.resizeListenerWrapThrottle)
     }
 
     lock() {
