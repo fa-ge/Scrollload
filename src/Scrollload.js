@@ -4,7 +4,7 @@
  */
 import throttle from './underscore.throttle'
 import assign from './assign'
-import LocalScrollFix from 'localscrollfix/src/LocalScrollFix'
+import LocalScrollFix from 'localscrollfix'
 import ScrollFix from 'scrollfix'
 
 function throwIfArgumentsMissing(n) {
