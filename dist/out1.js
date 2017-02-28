@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 71);
+/******/ 	return __webpack_require__(__webpack_require__.s = 73);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -468,41 +468,47 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 
 
-function throwIfArgumentsMissing(n) {
-    throw new Error('2 arguments required, but only ' + n + ' present.');
-}
-
 function isIos() {
     return (/iphone/i.test(window.navigator.userAgent)
     );
 }
 
 function generateHtml(str) {
-    return '<div style="text-align: center;font-size: 14px;line-height: 50px;">' + str + '</div>';
+    return '<div style="text-align: center;font-size: 12px;line-height: 50px;">' + str + '</div>';
 }
+
+function setStyles(els, cssObj) {
+    if ('transform' in cssObj) {
+        cssObj['webkitTransform'] = cssObj['transform'];
+    }
+    if ('transition' in cssObj) {
+        cssObj['webkitTransition'] = cssObj['transition'];
+    }
+    els.forEach(function (el) {
+        return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__assign__["a" /* default */])(el.style, cssObj);
+    });
+}
+
+function noop() {}
 
 var Scrollload = function () {
     function Scrollload() {
-        var container = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : throwIfArgumentsMissing(0);
-        var loadMoreFn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : throwIfArgumentsMissing(1);
-        var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+        var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
         _classCallCheck(this, Scrollload);
 
-        if (!(container instanceof HTMLElement)) {
-            throw new Error('parameter 1 must be a HTMLElement instance!');
-        }
-        if (typeof loadMoreFn !== 'function') {
-            throw new Error('parameter 2 must be a function!');
-        }
-
-        this.container = container;
-        this.loadMoreFn = loadMoreFn;
         this._options = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__assign__["a" /* default */])({}, Scrollload.defaults, options);
+        var container = this._options.container;
+        this.container = container;
+        if (!(container instanceof HTMLElement)) {
+            throw new Error('container must be a HTMLElement instance!');
+        }
         this.isLock = this._options.isInitLock;
-        this.hasMore = true;
         this.win = this._options.window;
+        this.isGlobalScroll = this.win === window;
         this.windowHeight = window.innerHeight;
+        // 是否有更多数据了
+        this.hasMore = true;
 
         this.createBottomDom();
         this.fixLocalScroll();
@@ -515,6 +521,28 @@ var Scrollload = function () {
         this.resizeListenerWrapThrottle = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__underscore_throttle__["a" /* default */])(this.resizeListener, 50);
 
         this.attachScrollListener();
+
+        if (this._options.enablePullRefresh) {
+            this.contentDom = container.querySelector('.' + this._options.contentClass);
+            this.createTopDom();
+            // 开始滑动时候的pageY
+            this.startPageY = 0;
+            // 滑动时的前一个pageY
+            this.prePageY = 0;
+            // 内容是否在滑动中
+            this.isMoving = false;
+            // 是否是向下滑动
+            this.isMovingDown = true;
+            // 是否在刷新中
+            this.isRefreshing = false;
+            // 是否有执行touchStart函数, 刷新中不允许去滑动内容
+            this.enterTouchStart = false;
+            // 滑动的距离
+            this.distance = 0;
+
+            this.container.style.overflow = 'hidden';
+            this.attachTouchListener();
+        }
     }
 
     //修复ios局部滚动的bug
@@ -542,6 +570,26 @@ var Scrollload = function () {
             this.bottomDom = this.container.querySelector('.scrollload-bottom');
         }
     }, {
+        key: 'createTopDom',
+        value: function createTopDom() {
+            var _options = this._options,
+                notEnoughRefreshPortHtml = _options.notEnoughRefreshPortHtml,
+                overRefreshPortHtml = _options.overRefreshPortHtml,
+                refreshingHtml = _options.refreshingHtml;
+
+            this.container.insertAdjacentHTML('afterbegin', '<div class="scrollload-top" style="position: relative;">\n                <div class="scrollload-top-content" style="position: absolute; left: 0; right: 0;">\n                    <div class="scrollload-notEnoughRefreshPort" style="display: block">' + notEnoughRefreshPortHtml + '</div>\n                    <div class="scrollload-overRefreshPort" style="display: none">' + overRefreshPortHtml + '</div>\n                    <div class="scrollload-refreshing" style="display: none">' + refreshingHtml + '</div>\n                </div>\n            </div>');
+
+            this.topDom = this.container.querySelector('.scrollload-top');
+            this.topContentDom = this.topDom.querySelector('.scrollload-top-content');
+
+            this.topDomHeight = this.topContentDom.clientHeight;
+            this.topDom.style.top = '-' + this.topDomHeight + 'px';
+
+            this.notEnoughRefreshPortDom = this.topContentDom.querySelector('.scrollload-notEnoughRefreshPort');
+            this.overRefreshPortDom = this.topContentDom.querySelector('.scrollload-overRefreshPort');
+            this.refreshingDom = this.topContentDom.querySelector('.scrollload-refreshing');
+        }
+    }, {
         key: 'showNoDataDom',
         value: function showNoDataDom() {
             this.bottomDom.innerHTML = this._options.noDataHtml;
@@ -557,6 +605,181 @@ var Scrollload = function () {
             this.bottomDom.innerHTML = this._options.exceptionHtml;
         }
     }, {
+        key: 'showNotEnoughRefreshPortDom',
+        value: function showNotEnoughRefreshPortDom() {
+            setStyles([this.overRefreshPortDom, this.refreshingDom], { display: 'none' });
+            setStyles([this.notEnoughRefreshPortDom], { display: 'block' });
+        }
+    }, {
+        key: 'showOverRefreshPortDom',
+        value: function showOverRefreshPortDom() {
+            setStyles([this.notEnoughRefreshPortDom, this.refreshingDom], { display: 'none' });
+            setStyles([this.overRefreshPortDom], { display: 'block' });
+        }
+    }, {
+        key: 'showRefreshingDom',
+        value: function showRefreshingDom() {
+            setStyles([this.notEnoughRefreshPortDom, this.overRefreshPortDom], { display: 'none' });
+            setStyles([this.refreshingDom], { display: 'block' });
+        }
+
+        // 计算向下滑动距离的函数
+
+    }, {
+        key: 'calMovingDistance',
+        value: function calMovingDistance(start, end) {
+            this.distance = this._options.calMovingDistance(start, end);
+        }
+    }, {
+        key: 'isTop',
+        value: function isTop() {
+            return this.isGlobalScroll ? window.pageYOffset <= 0 : this.win.scrollTop <= 0;
+        }
+
+        // 刷新完成后的处理
+
+    }, {
+        key: 'refreshComplete',
+        value: function refreshComplete() {
+            setStyles([this.topDom, this.contentDom, this.bottomDom], { transition: 'all 300ms', transform: 'translate3d(0, 0, 0)' });
+            this.isRefreshing = false;
+        }
+
+        // 内容在滑动中的处理
+
+    }, {
+        key: 'movingHandler',
+        value: function movingHandler() {
+            if (this.isArrivedRefreshPort()) {
+                this.arrivedRefreshPortHandler();
+            }
+
+            if (this.isOverRefreshPort()) {
+                this.overRefreshPortHandler();
+            } else {
+                this.notEnoughRefreshPortHandler();
+            }
+
+            var distance = Math.max(this.distance, 0);
+            if (distance === 0) {
+                this.isMoving = false;
+            }
+
+            setStyles([this.topDom, this.contentDom, this.bottomDom], { transform: 'translate3d(0, ' + distance + 'px, 0)' });
+
+            this._options.touchMove.call(this, this);
+        }
+
+        // 是否超过可刷新的位置
+
+    }, {
+        key: 'isOverRefreshPort',
+        value: function isOverRefreshPort() {
+            return this.distance >= this.topDomHeight;
+        }
+
+        // 触发下拉刷新
+
+    }, {
+        key: 'triggerPullResfresh',
+        value: function triggerPullResfresh() {
+            var cssObj = {
+                'transition': 'all 300ms'
+            };
+            this.showRefreshingDom();
+            this.isRefreshing = true;
+            cssObj['transform'] = 'translate3d(0, ' + this.topDomHeight + 'px, 0)';
+            this._options.pullRefresh.call(this, this);
+            setStyles([this.topDom, this.contentDom, this.bottomDom], cssObj);
+        }
+
+        // 超过可刷新位置后的监听函数
+
+    }, {
+        key: 'overRefreshPortHandler',
+        value: function overRefreshPortHandler() {
+            this._options.overRefreshPortHandler.call(this, this);
+        }
+
+        // 未超过可刷新位置前的监听函数
+
+    }, {
+        key: 'notEnoughRefreshPortHandler',
+        value: function notEnoughRefreshPortHandler() {
+            this._options.notEnoughRefreshPortHandler.call(this, this);
+        }
+
+        // 是否到达了可刷新的位置
+
+    }, {
+        key: 'isArrivedRefreshPort',
+        value: function isArrivedRefreshPort() {
+            var preDistance = this._options.calMovingDistance(this.startPageY, this.prePageY);
+            return this.distance >= this.topDomHeight && preDistance < this.topDomHeight || this.distance <= this.topDomHeight && preDistance > this.topDomHeight;
+        }
+
+        // 对到达了刷新的位置时的处理
+
+    }, {
+        key: 'arrivedRefreshPortHandler',
+        value: function arrivedRefreshPortHandler() {
+            if (this.isMovingDown) {
+                this.showOverRefreshPortDom();
+            } else {
+                this.showNotEnoughRefreshPortDom();
+            }
+
+            this._options.arrivedRefreshPortHandler.call(this, this);
+        }
+    }, {
+        key: 'touchStart',
+        value: function touchStart(event) {
+            this.enterTouchStart = true;
+            this.startPageY = this.prePageY = event.touches[0].pageY;
+            setStyles([this.topDom, this.contentDom, this.bottomDom], {
+                transform: 'translate3d(0, 0, 0)',
+                transition: 'none'
+            });
+            this.showNotEnoughRefreshPortDom();
+
+            this._options.touchStart.call(this, this);
+        }
+    }, {
+        key: 'touchMove',
+        value: function touchMove(event) {
+            var pageY = event.touches[0].pageY;
+            this.isMovingDown = pageY >= this.prePageY;
+
+            if (this.isMoving) {
+                this.calMovingDistance(this.startPageY, pageY);
+                this.movingHandler();
+
+                event.preventDefault();
+            } else if (this.isTop() && this.isMovingDown) {
+                // 如果滑动的时候此时在最高的位置并且是向下滑动的，那么就标记可以滑动
+                this.isMoving = true;
+
+                event.preventDefault();
+            }
+
+            this.prePageY = pageY;
+        }
+    }, {
+        key: 'touchEnd',
+        value: function touchEnd(event) {
+            this._options.touchEnd.call(this, this);
+
+            // 如果是可以刷新的位置
+            if (this.isOverRefreshPort()) {
+                this.triggerPullResfresh();
+            } else {
+                this.refreshComplete();
+            }
+
+            this.startPageY = this.prePageY = 0;
+            this.isMoving = false;
+        }
+    }, {
         key: 'scrollListener',
         value: function scrollListener() {
             if (this.isLock) {
@@ -565,7 +788,7 @@ var Scrollload = function () {
 
             if (this.isBottom()) {
                 this.isLock = true;
-                this.loadMoreFn.call(this, this);
+                this._options.loadMore.call(this, this);
             }
         }
     }, {
@@ -578,7 +801,7 @@ var Scrollload = function () {
             var bottomDomTop = bottomDom.getBoundingClientRect().top;
             var winHeight = void 0;
 
-            if (win === window) {
+            if (this.isGlobalScroll) {
                 winHeight = windowHeight;
             } else {
                 var _win$getBoundingClien = win.getBoundingClientRect(),
@@ -595,7 +818,7 @@ var Scrollload = function () {
         key: 'resizeListener',
         value: function resizeListener() {
             //更新缓存的windowHeight
-            if (this.win === window) {
+            if (this.isGlobalScroll) {
                 this.windowHeight = window.innerHeight;
             }
             this.scrollListener();
@@ -612,6 +835,30 @@ var Scrollload = function () {
         value: function detachScrollListener() {
             this.win.removeEventListener('scroll', this.scrollListenerWrapThrottle);
             this.win.removeEventListener('resize', this.resizeListenerWrapThrottle);
+        }
+    }, {
+        key: 'attachTouchListener',
+        value: function attachTouchListener() {
+            var _this = this;
+
+            this.container.addEventListener('touchstart', function (event) {
+                _this.enterTouchStart = false;
+                if (!_this.isRefreshing) {
+                    _this.touchStart(event);
+                }
+            });
+            this.container.addEventListener('touchmove', function (event) {
+                if (!_this.enterTouchStart) {
+                    return;
+                }
+                _this.touchMove(event);
+            });
+            this.container.addEventListener('touchend', function (event) {
+                if (!_this.isMoving) {
+                    return;
+                }
+                _this.touchEnd(event);
+            });
         }
     }, {
         key: 'lock',
@@ -646,12 +893,7 @@ var Scrollload = function () {
     }, {
         key: 'refreshData',
         value: function refreshData() {
-            //为了同时兼容<div><ul><li></li></ul></div>和<ul><li></li></ul>的写法
-            if (this.container.querySelector('.scrollload-bottom')) {
-                this.showLoadingDom();
-            } else {
-                this.createBottomDom();
-            }
+            this.showLoadingDom();
 
             this.isLock = false;
             this.hasMore = true;
@@ -698,14 +940,55 @@ var Scrollload = function () {
 }();
 
 Scrollload.defaults = {
+    // 内容的类名
+    contentClass: 'scrollload-content',
+
+    // 初始化的时候是否锁定，锁定的话则不会去加载更多
     isInitLock: false,
+    // 阀值
     threshold: 10,
+    // 视窗
     window: window,
+    // 修复局部滚动的两个坑
     useLocalScrollFix: false,
     useScrollFix: false,
+
+    // 底部加载中的html
     loadingHtml: generateHtml('加载中...'),
+    // 底部没有更多数据的html
     noDataHtml: generateHtml('没有更多数据了'),
-    exceptionHtml: generateHtml('出现异常')
+    // 底部出现异常的html
+    exceptionHtml: generateHtml('出现异常'),
+    // 加载更多的回调
+    loadMore: noop,
+
+    // 是否开启下拉刷新
+    enablePullRefresh: false,
+    // 顶部下拉刷新的html
+    notEnoughRefreshPortHtml: generateHtml('下拉刷新'),
+    // 顶部松开刷新的html
+    overRefreshPortHtml: generateHtml('松开刷新'),
+    // 顶部正在刷新的html
+    refreshingHtml: generateHtml('正在刷新'),
+    // 下拉刷新的回调
+    pullRefresh: noop,
+    // 到达刷新点的回调(包括向上和向下，可以通过isMovingDown判断方向)
+    arrivedRefreshPortHandler: noop,
+    // 开始滑动的回调
+    touchStart: noop,
+    // 滑动时的回调
+    touchMove: noop,
+    // 滑动中松开手指的回调
+    touchEnd: noop,
+    // 超过可刷新位置后的监听函数
+    overRefreshPortHandler: noop,
+    // 未超过可刷新位置前的监听函数
+    notEnoughRefreshPortHandler: noop,
+
+    // 计算下拉的阻力函数
+    calMovingDistance: function calMovingDistance(start, end) {
+        return (end - start) / 3;
+    }
 };
 /* harmony default export */ __webpack_exports__["a"] = Scrollload;
 
@@ -1544,20 +1827,20 @@ var assign = function assign(target, varArgs) {
 };;
 
 /***/ }),
-/* 58 */
+/* 58 */,
+/* 59 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
-/* 59 */,
-/* 60 */
+/* 60 */,
+/* 61 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
-/* 61 */,
 /* 62 */,
 /* 63 */,
 /* 64 */,
@@ -1565,7 +1848,9 @@ var assign = function assign(target, varArgs) {
 /* 66 */,
 /* 67 */,
 /* 68 */,
-/* 69 */
+/* 69 */,
+/* 70 */,
+/* 71 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /**
@@ -1590,8 +1875,8 @@ a.setWrapperTransition(e,b),0!==e&&(a.onTransitionStart(),a.wrapper.transitionEn
 
 
 /***/ }),
-/* 70 */,
-/* 71 */
+/* 72 */,
+/* 73 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1599,13 +1884,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_core_js_fn_array_from__ = __webpack_require__(27);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_core_js_fn_array_from___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_core_js_fn_array_from__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Scrollload__ = __webpack_require__(28);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__index_css__ = __webpack_require__(60);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__index_css__ = __webpack_require__(61);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__index_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__index_css__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__loading_demos_baidu_mobile_loading_css__ = __webpack_require__(29);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__loading_demos_baidu_mobile_loading_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__loading_demos_baidu_mobile_loading_css__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_swiper_dist_js_swiper_min__ = __webpack_require__(69);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_swiper_dist_js_swiper_min__ = __webpack_require__(71);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_swiper_dist_js_swiper_min___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_swiper_dist_js_swiper_min__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_swiper_dist_css_swiper_css__ = __webpack_require__(58);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_swiper_dist_css_swiper_css__ = __webpack_require__(59);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_swiper_dist_css_swiper_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_swiper_dist_css_swiper_css__);
 
 

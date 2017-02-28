@@ -40,6 +40,7 @@
     "webpack-dev-server": "^1.16.2"
   },
   "dependencies": {
+    "hidpi-canvas": "^1.0.10",
     "localscrollfix": "^1.0.0",
     "scrollfix": "0.0.2"
   },
