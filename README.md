@@ -176,25 +176,28 @@ touchEnd: noop,
 // 超过可刷新位置后的监听函数
 overRefreshPortHandler: noop,
 // 未超过可刷新位置前的监听函数
-notEnoughRefreshPortHandler
+notEnoughRefreshPortHandler: noop,
 
 // 计算下拉的阻力函数
 calMovingDistance(start, end) {
     return (end - start) / 3
-}
+},
+// 实例化完后的回调
+initedHandler: noop
 ```
 
 
-### API // todo
+### API 
 
 ##### 方法
 
-* lock(): 锁定后不会调用loadMoreFn
+* lock(): 锁定后不会调用loadMore方法
 * unLock(): 每次滚动到底部都会锁定，所以你在loadMoreFn方法中需要解锁，下次滚动到底部才能继续调用loadMoreFn
-* noData(): 当你的数据全部加载完后调用这个方法，将显示没有更多数据的div，你也可以配置这个div，用noDataHtml配置参数
+* noMoreData(): 当你的数据全部加载完后调用这个方法，将显示没有更多数据的div，你也可以配置这个div，用noMoreDataHtml配置参数
 * refreshData(): 当你调用完noData方法后，如果你想刷新当前的数据重新加载就要调用这个方法
 * throwException(): 出现异常需要调用这个方法，会在底部DOM中出现相应的样式
 * solveException(): 当你的异常问题解决后需要调用这个方法可以继续加载数据
+* refreshComplete(): 下拉刷新的时候你去请求完数据后需要调用这个函数通知我。我就可以把正在刷新的状态改成刷新完成。
 * getOptions(): 获取配置
 * setOptions(obj): 修改配置。obj和new Scrollload()的第二个参数一样的格式。
 * setGlobalOptions(obj): 全局配置，一次配置多次时候。调用这个方法和之前的方法不一样。之前的都需要对象实例化后才能调用。这个方法直接Scrollload构造函数上调用。Scrollload.setGlobalOptions()。接受的参数和setOptions方法一样
@@ -203,9 +206,13 @@ calMovingDistance(start, end) {
 
 - bottomDom: 底部DOM，包裹着加载中动画和没有更多数据的dom对象
 - isLock: 是否为锁定状态
-- hasMore: 是否还有更多数据，默认为true，调用noData方法后为false
+- hasMoreData: 是否还有更多数据，默认为true，调用noData方法后为false
 - container: 你传进来的container 
-- win: 视窗对象
+- content: 你传进来的content
+- win: 你传进来的window
+- isMovingDown: 下拉刷新的时候你滑动的方向
+- isRefreshing: 下拉刷新的时候你是否在刷新中
+- distance: 下拉刷新的时候你滑动的dom移动的距离，不是你手指移动的距离。这两者的关系可以通过calMovingDistance计算
 
 ### 交流
 如果你有好的加载更多动画的效果，可以在loading-demos文件夹下写一些自己的demo，loading的css必须是loading.css，并在头部加入loadingHtml的dom结构。[参考](https://github.com/fa-ge/Scrollload/blob/master/lib/loading-css/baidu-mobile.css),然后提一个pr给我。  
