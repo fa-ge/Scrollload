@@ -11,7 +11,7 @@ import '../../loading-demos/baidu-mobile/baiduMobile'
 import $ from 'jquery'
 
 function getData(data) {
-    return data.data.map(item => `
+    return data.data.sort(function(a,b){ return Math.random() > 0.5 ? -1 : 1;}).map(item => `
         <li>
             <div class="info">
                 <img class="image" src="${item.image}">
@@ -23,9 +23,8 @@ function getData(data) {
             </div>
             <a class="btn" href="http://m.dolapocket.com/" target="_blank">开始</a>
         </li>
-`).join('')
+    `).join('')
 }
-
 const wins = document.querySelectorAll('.window')
 const pages = [1, 1, 1]
 const scrollloads = []
@@ -43,7 +42,7 @@ Array.prototype.slice.call(document.querySelectorAll('.scrollload-container')).f
 
             $.ajax({
                 type: 'GET',
-                url: `https://raw.githubusercontent.com/fa-ge/Scrollload/master/gamelist.json?page=${pages[index]++}`,
+                url: `https://fa-ge.github.io/Scrollload/gamelist.json?page=${pages[index]++}`,
                 dataType: 'json',
                 success: function(data){
                     $(sl.contentDom).append(getData(data))
@@ -61,7 +60,7 @@ Array.prototype.slice.call(document.querySelectorAll('.scrollload-container')).f
         pullRefresh: function (sl) {
             $.ajax({
                 type: 'GET',
-                url: `https://raw.githubusercontent.com/fa-ge/Scrollload/master/gamelist.json?page=${Math.floor(Math.random() * 100)}`,
+                url: `https://fa-ge.github.io/Scrollload/gamelist.json?page=${Math.floor(Math.random() * 100)}`,
                 dataType: 'json',
                 success: function(data){
                     $(sl.contentDom).prepend(getData(data))

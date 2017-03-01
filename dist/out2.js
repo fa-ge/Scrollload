@@ -11465,7 +11465,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 function getData(data) {
-    return data.data.map(function (item) {
+    return data.data.sort(function (a, b) {
+        return Math.random() > 0.5 ? -1 : 1;
+    }).map(function (item) {
         return '\n        <li>\n            <div class="info">\n                <img class="image" src="' + item.image + '">\n                <div class="desc">\n                    <p>' + item.name + '</p>\n                    <span>' + item.label + '</span>\n                    <p>' + item.desc + '</p>\n                </div>\n            </div>\n            <a class="btn" href="http://m.dolapocket.com/" target="_blank">\u5F00\u59CB</a>\n        </li>\n    ';
     }).join('');
 }
@@ -11483,7 +11485,7 @@ Array.prototype.slice.call(document.querySelectorAll('.scrollload-container')).f
 
             __WEBPACK_IMPORTED_MODULE_2_jquery___default.a.ajax({
                 type: 'GET',
-                url: 'https://raw.githubusercontent.com/fa-ge/Scrollload/master/gamelist.json?page=' + pages[index]++,
+                url: 'https://fa-ge.github.io/Scrollload/gamelist.json?page=' + pages[index]++,
                 dataType: 'json',
                 success: function success(data) {
                     __WEBPACK_IMPORTED_MODULE_2_jquery___default()(sl.contentDom).append(getData(data));
@@ -11501,7 +11503,7 @@ Array.prototype.slice.call(document.querySelectorAll('.scrollload-container')).f
         pullRefresh: function pullRefresh(sl) {
             __WEBPACK_IMPORTED_MODULE_2_jquery___default.a.ajax({
                 type: 'GET',
-                url: 'https://raw.githubusercontent.com/fa-ge/Scrollload/master/gamelist.json?page=' + Math.floor(Math.random() * 100),
+                url: 'https://fa-ge.github.io/Scrollload/gamelist.json?page=' + Math.floor(Math.random() * 100),
                 dataType: 'json',
                 success: function success(data) {
                     __WEBPACK_IMPORTED_MODULE_2_jquery___default()(sl.contentDom).prepend(getData(data));

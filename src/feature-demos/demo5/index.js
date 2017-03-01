@@ -7,7 +7,7 @@ import '../../loading-demos/baidu-mobile/baiduMobile'
 import $ from 'jquery'
 
 function getData(data) {
-    return data.data.map(item => `
+    return data.data.sort(function(a,b){ return Math.random() > 0.5 ? -1 : 1;}).map(item => `
         <li>
             <div class="info">
                 <img class="image" src="${item.image}">
@@ -34,7 +34,7 @@ const scrollload = new Scrollload({
 
         $.ajax({
             type: 'GET',
-            url: `https://raw.githubusercontent.com/fa-ge/Scrollload/master/gamelist.json?page=${page++}`,
+            url: `https://fa-ge.github.io/Scrollload/gamelist.json?page=${page++}`,
             dataType: 'json',
             success: function(data){
                 $(sl.contentDom).append(getData(data))
@@ -52,7 +52,7 @@ const scrollload = new Scrollload({
     pullRefresh: function (sl) {
         $.ajax({
             type: 'GET',
-            url: `https://raw.githubusercontent.com/fa-ge/Scrollload/master/gamelist.json?page=${Math.floor(Math.random() * 100)}`,
+            url: `https://fa-ge.github.io/Scrollload/gamelist.json?page=${Math.floor(Math.random() * 100)}`,
             dataType: 'json',
             success: function(data){
                 $(sl.contentDom).prepend(getData(data))

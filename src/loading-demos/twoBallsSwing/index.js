@@ -5,9 +5,8 @@ import './loading.css'
 import $ from 'jquery'
 
 
-
 function getData(data) {
-    return data.data.map(item => `
+    return data.data.sort(function(a,b){ return Math.random() > 0.5 ? -1 : 1;}).map(item => `
         <li>
             <div class="info">
                 <img class="image" src="${item.image}">
@@ -19,9 +18,8 @@ function getData(data) {
             </div>
             <a class="btn" href="http://m.dolapocket.com/" target="_blank">开始</a>
         </li>
-`).join('')
+    `).join('')
 }
-
 
 let page = 1
 new Scrollload({
@@ -36,7 +34,7 @@ new Scrollload({
         // 如果你不是用jquery，可以看看原生的insertAdjacentHTML方法来替代append
         $.ajax({
             type: 'GET',
-            url: `https://raw.githubusercontent.com/fa-ge/Scrollload/master/gamelist.json?page=${page++}`,
+            url: `https://fa-ge.github.io/Scrollload/gamelist.json?page=${page++}`,
             dataType: 'json',
             success: function(data){
                 // contentDom其实就是你的scrollload-content类的dom
@@ -63,7 +61,7 @@ new Scrollload({
     pullRefresh: function (sl) {
         $.ajax({
             type: 'GET',
-            url: `https://raw.githubusercontent.com/fa-ge/Scrollload/master/gamelist.json?page=${Math.floor(Math.random() * 100)}`,
+            url: `https://fa-ge.github.io/Scrollload/gamelist.json?page=${Math.floor(Math.random() * 100)}`,
             dataType: 'json',
             success: function(data){
                 $(sl.contentDom).prepend(getData(data))
