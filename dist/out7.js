@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 23);
+/******/ 	return __webpack_require__(__webpack_require__.s = 27);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -10881,62 +10881,8 @@ Scrollload.defaults = {
 window.Scrollload = Scrollload;
 
 /***/ }),
-/* 2 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 3 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_hidpi_canvas_dist_hidpi_canvas__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_hidpi_canvas_dist_hidpi_canvas___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_hidpi_canvas_dist_hidpi_canvas__);
-//解决canvas绘图模糊的问题
-
-
-if (window.Scrollload === undefined) {
-    throw new Error('请在引入Scrollload库之后引入该js文件');
-}
-
-function generateLoadingHtml(str) {
-    return '\n            <div class="s-loading-frame">\n                <div class="load-img-wrapper">\n                    <img class="load-ing-img" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADYAAAA2CAYAAACMRWrdAAADXElEQVRo3u2az2sTQRTHE2njwULbbQsmngv+CLb+A4Iglh7ceGoPvVmtBExrRETUghU8p/WP8Og1p5JetGhsReul+h8IRvtDjUVc38AbeDw26+xmZne2ePhCaHdm3md/vHnz3st4npc5jMocWrALC16qFSfYcdAUqAaqg7ZBLdAvVAv/VsdrpnCMlWAOqAJ6CfoD8kJKjHmBczg2gOXxru9FgOmkPZwznwRYDvQQtO9jmHjd1kCPQFdARdAgjsnh7yL+T1zTwDF8nu+gRRwTC9goqOljyBvQXNhXibzKN3AOv3lHTYO5oB228CbokkbnI+Z6z9bYwbWNgF0D/SaL/QRVQUcMeNYe0C1cQ64n1r6uG6zM7uBH0HgM+9Q4rkXXLusCc9mTeg0aiXETHsE16ZNzuwUTH+0umVTsU30JRBh9uLa0Y1c6lChgvaANMtkn0HCC4dMw2iDtEbb1RgG7QyZpg85ZEBuOMYdyLyxYgUUTVYsC3yqLUgphwGpk8Ba6X1vAetAmaV9NFcxhT2vSwuPKJHtqQypgN8mgt6CshWBZtE3aWVEBo2511uJD5izdhv4FViDnKRFx91sM1o/eWp7nCkFgM+QurKUgNdAg9s4Ega2QCx+nAGyJ2LsSBFYnF5ZSAOYSe+tBYNvkwmIKwIo05AsC+0IudFIA5hB7W0FgNPeQ02iAyHM8Az3XfOTJEXsPkgCbJ/N+0AinDGbqVTzPDqu64AbInF9Vncdpzd/DtAG4MzRdoeruXQMfu244ZXdPN+glQ55MJxzdoJdVQ6qGQTetC26VzDGtGgS3DQfB3cKFCoLjPrZ0A3eVjFtXOY9VWPo6ayncJhmzoAI2lEBqICzcBEsNDNiczFGFE7WCd+S6p2lIv6nA3WY1tBNhE6Z3WWVlzAK4syxh+kBXittJCG4LQzya4m5GTXH7FSVEAfxYQnD09zfQKd1lpFcxlpE4nLYyUlDhL6lvrqK7VDvnU6qdN1Sq7QRXNVVcL7FvzkRxPeh7N94OseHTttDEAnysSSBTDSw/OjSwNLA5pYTeaxCjl6PoeE6CLoPug56ALtrWSyVbjva7bDNqR/W0cTSJCUeyHrFJzMMwzuq2vnyHtr4DfE0/43axiqmIstxsbQezoxHzf09wyvQXgOhQqYfCgwMAAAAASUVORK5CYII=">\n                </div>\n                <span class="load-text">' + str + '</span></div>\n            </div>\n    ';
-}
-window.Scrollload.setGlobalOptions({
-    loadingHtml: generateLoadingHtml('正在加载'),
-    noMoreDataHtml: '\n            <div class="s-loading-frame bottom-no-more">\n                <span>\u771F\u7684\u62C9\u4E0D\u51FA\u65B0\u4E1C\u897F\u4E86~</span>\n            </div>\n',
-    refreshingHtml: generateLoadingHtml('正在刷新'),
-    notEnoughRefreshPortHtml: '<div class="s-loading-moving"><canvas class="s-loading-canvas1" width="45" height="50"></canvas>\u4E0B\u62C9\u5237\u65B0</div>',
-    notEnoughRefreshPortHandler: function notEnoughRefreshPortHandler(sl) {
-        effect(sl.ctx1, sl.canvas1, sl.distance / sl.topDomHeight);
-    },
-    overRefreshPortHtml: '<div class="s-loading-moving"><canvas class="s-loading-canvas2" width="45" height="50"></canvas>\u677E\u5F00\u5237\u65B0</div>',
-    overRefreshPortHandler: function overRefreshPortHandler(sl) {
-        effect(sl.ctx2, sl.canvas2, 1);
-    },
-    initedHandler: function initedHandler(sl) {
-        sl.canvas1 = sl.container.querySelector('.s-loading-canvas1');
-        sl.ctx1 = sl.canvas1.getContext('2d');
-
-        sl.canvas2 = sl.container.querySelector('.s-loading-canvas2');
-        sl.ctx2 = sl.canvas2.getContext('2d');
-    }
-});
-
-function effect(ctx, canvas, prop) {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.beginPath();
-    ctx.strokeStyle = '#4270ff';
-    ctx.arc(25, 25, 8, 0.35 * Math.PI, (2 * Math.min(prop, 0.8) + 0.6) * Math.PI);
-    if (prop > 0.8) {
-        ctx.moveTo(31, 29.5);
-        ctx.lineTo(31 + 20 * (prop - 0.8), 29 + 20 * (prop - 0.8));
-    }
-    ctx.stroke();
-}
-
-/***/ }),
+/* 2 */,
+/* 3 */,
 /* 4 */
 /***/ (function(module, exports) {
 
@@ -11256,209 +11202,47 @@ var assign = function assign(target, varArgs) {
 };;
 
 /***/ }),
-/* 8 */
-/***/ (function(module, exports) {
-
-/**
- * HiDPI Canvas Polyfill (1.0.10)
- *
- * Author: Jonathan D. Johnson (http://jondavidjohn.com)
- * Homepage: https://github.com/jondavidjohn/hidpi-canvas-polyfill
- * Issue Tracker: https://github.com/jondavidjohn/hidpi-canvas-polyfill/issues
- * License: Apache-2.0
-*/
-(function(prototype) {
-
-	var pixelRatio = (function() {
-			var canvas = document.createElement('canvas'),
-					context = canvas.getContext('2d'),
-					backingStore = context.backingStorePixelRatio ||
-						context.webkitBackingStorePixelRatio ||
-						context.mozBackingStorePixelRatio ||
-						context.msBackingStorePixelRatio ||
-						context.oBackingStorePixelRatio ||
-						context.backingStorePixelRatio || 1;
-
-			return (window.devicePixelRatio || 1) / backingStore;
-		})(),
-
-		forEach = function(obj, func) {
-			for (var p in obj) {
-				if (obj.hasOwnProperty(p)) {
-					func(obj[p], p);
-				}
-			}
-		},
-
-		ratioArgs = {
-			'fillRect': 'all',
-			'clearRect': 'all',
-			'strokeRect': 'all',
-			'moveTo': 'all',
-			'lineTo': 'all',
-			'arc': [0,1,2],
-			'arcTo': 'all',
-			'bezierCurveTo': 'all',
-			'isPointinPath': 'all',
-			'isPointinStroke': 'all',
-			'quadraticCurveTo': 'all',
-			'rect': 'all',
-			'translate': 'all',
-			'createRadialGradient': 'all',
-			'createLinearGradient': 'all'
-		};
-
-	if (pixelRatio === 1) return;
-
-	forEach(ratioArgs, function(value, key) {
-		prototype[key] = (function(_super) {
-			return function() {
-				var i, len,
-					args = Array.prototype.slice.call(arguments);
-
-				if (value === 'all') {
-					args = args.map(function(a) {
-						return a * pixelRatio;
-					});
-				}
-				else if (Array.isArray(value)) {
-					for (i = 0, len = value.length; i < len; i++) {
-						args[value[i]] *= pixelRatio;
-					}
-				}
-
-				return _super.apply(this, args);
-			};
-		})(prototype[key]);
-	});
-
-	 // Stroke lineWidth adjustment
-	prototype.stroke = (function(_super) {
-		return function() {
-			this.lineWidth *= pixelRatio;
-			_super.apply(this, arguments);
-			this.lineWidth /= pixelRatio;
-		};
-	})(prototype.stroke);
-
-	// Text
-	//
-	prototype.fillText = (function(_super) {
-		return function() {
-			var args = Array.prototype.slice.call(arguments);
-
-			args[1] *= pixelRatio; // x
-			args[2] *= pixelRatio; // y
-
-			this.font = this.font.replace(
-				/(\d+)(px|em|rem|pt)/g,
-				function(w, m, u) {
-					return (m * pixelRatio) + u;
-				}
-			);
-
-			_super.apply(this, args);
-
-			this.font = this.font.replace(
-				/(\d+)(px|em|rem|pt)/g,
-				function(w, m, u) {
-					return (m / pixelRatio) + u;
-				}
-			);
-		};
-	})(prototype.fillText);
-
-	prototype.strokeText = (function(_super) {
-		return function() {
-			var args = Array.prototype.slice.call(arguments);
-
-			args[1] *= pixelRatio; // x
-			args[2] *= pixelRatio; // y
-
-			this.font = this.font.replace(
-				/(\d+)(px|em|rem|pt)/g,
-				function(w, m, u) {
-					return (m * pixelRatio) + u;
-				}
-			);
-
-			_super.apply(this, args);
-
-			this.font = this.font.replace(
-				/(\d+)(px|em|rem|pt)/g,
-				function(w, m, u) {
-					return (m / pixelRatio) + u;
-				}
-			);
-		};
-	})(prototype.strokeText);
-})(CanvasRenderingContext2D.prototype);
-;(function(prototype) {
-	prototype.getContext = (function(_super) {
-		return function(type) {
-			var backingStore, ratio,
-				context = _super.call(this, type);
-
-			if (type === '2d') {
-
-				backingStore = context.backingStorePixelRatio ||
-							context.webkitBackingStorePixelRatio ||
-							context.mozBackingStorePixelRatio ||
-							context.msBackingStorePixelRatio ||
-							context.oBackingStorePixelRatio ||
-							context.backingStorePixelRatio || 1;
-
-				ratio = (window.devicePixelRatio || 1) / backingStore;
-
-				if (ratio > 1) {
-					this.style.height = this.height + 'px';
-					this.style.width = this.width + 'px';
-					this.width *= ratio;
-					this.height *= ratio;
-				}
-			}
-
-			return context;
-		};
-	})(prototype.getContext);
-})(HTMLCanvasElement.prototype);
-
-
-/***/ }),
+/* 8 */,
 /* 9 */,
 /* 10 */,
 /* 11 */,
 /* 12 */,
-/* 13 */
+/* 13 */,
+/* 14 */,
+/* 15 */,
+/* 16 */,
+/* 17 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
-/* 14 */,
-/* 15 */,
-/* 16 */,
-/* 17 */,
-/* 18 */,
+/* 18 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
 /* 19 */,
 /* 20 */,
 /* 21 */,
 /* 22 */,
-/* 23 */
+/* 23 */,
+/* 24 */,
+/* 25 */,
+/* 26 */,
+/* 27 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Scrollload__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__index_css__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__index_css__ = __webpack_require__(17);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__index_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__index_css__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__loading_demos_baidu_mobile_loading_css__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__loading_demos_baidu_mobile_loading_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__loading_demos_baidu_mobile_loading_css__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__loading_demos_baidu_mobile_baiduMobile__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_jquery__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_jquery__);
-
-
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__loading_css__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__loading_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__loading_css__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_jquery__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_jquery__);
 
 
 
@@ -11467,46 +11251,49 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 function getData(data) {
     return data.data.map(function (item) {
-        return '\n        <li>\n            <div class="info">\n                <img class="image" src="' + item.image + '">\n                <div class="desc">\n                    <p>' + item.name + '</p>\n                    <span>' + item.label + '</span>\n                    <p>' + item.desc + '</p>\n                </div>\n            </div>\n            <a class="btn" href="http://m.dolapocket.com/" target="_blank">\u5F00\u59CB</a>\n        </li>\n    ';
+        return '\n        <li>\n            <div class="info">\n                <img class="image" src="' + item.image + '">\n                <div class="desc">\n                    <p>' + item.name + '</p>\n                    <span>' + item.label + '</span>\n                    <p>' + item.desc + '</p>\n                </div>\n            </div>\n            <a class="btn" href="http://m.dolapocket.com/" target="_blank">\u5F00\u59CB</a>\n        </li>\n';
     }).join('');
 }
 
 var page = 1;
-var window = document.querySelector('.window');
 new __WEBPACK_IMPORTED_MODULE_0__Scrollload__["a" /* default */]({
-    window: window,
-    useLocalScrollFix: true,
-    useScrollFix: true,
     loadMore: function loadMore(sl) {
+        // 没用数据的时候需要调用noMoreData
         if (page === 6) {
             sl.noMoreData();
             return;
         }
 
-        __WEBPACK_IMPORTED_MODULE_4_jquery___default.a.ajax({
+        // 我这里用jquery的不是因为需要jquery，只是jquery的语法看起来比较简单。大家都认识。
+        // 如果你不是用jquery，可以看看原生的insertAdjacentHTML方法来替代append
+        __WEBPACK_IMPORTED_MODULE_3_jquery___default.a.ajax({
             type: 'GET',
             url: 'http://rap.taobao.org/mockjsdata/14522/getgamelist?page=' + page++,
             dataType: 'json',
             success: function success(data) {
-                __WEBPACK_IMPORTED_MODULE_4_jquery___default()(sl.contentDom).append(getData(data));
+                // contentDom其实就是你的scrollload-content类的dom
+                __WEBPACK_IMPORTED_MODULE_3_jquery___default()(sl.contentDom).append(getData(data));
 
+                // 处理完业务逻辑后必须要调用unlock
                 sl.unLock();
             },
             error: function error(xhr, type) {
+                // 加载出错，需要执行该方法。这样底部DOM会出现出现异常的样式。
                 sl.throwException();
             }
         });
     },
+    loadingHtml: '\n            <div class="two-balls-swing">\n                <div class="two-balls-swing-circle"></div>\n                <div class="two-balls-swing-circle"></div>\n            </div>\n',
 
     // 你也可以关闭下拉刷新
     enablePullRefresh: true,
     pullRefresh: function pullRefresh(sl) {
-        __WEBPACK_IMPORTED_MODULE_4_jquery___default.a.ajax({
+        __WEBPACK_IMPORTED_MODULE_3_jquery___default.a.ajax({
             type: 'GET',
             url: 'http://rap.taobao.org/mockjsdata/14522/getgamelist?page=1',
             dataType: 'json',
             success: function success(data) {
-                __WEBPACK_IMPORTED_MODULE_4_jquery___default()(sl.contentDom).prepend(getData(data));
+                __WEBPACK_IMPORTED_MODULE_3_jquery___default()(sl.contentDom).prepend(getData(data));
 
                 // 处理完业务逻辑后必须要调用refreshComplete
                 sl.refreshComplete();
