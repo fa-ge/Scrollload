@@ -35,7 +35,7 @@ Array.prototype.slice.call(document.querySelectorAll('.scrollload-container')).f
 
             $.ajax({
                 type: 'GET',
-                url: `http://rap.taobao.org/mockjsdata/14522/getgamelist?page=${pages[index]++}`,
+                url: `https://raw.githubusercontent.com/fa-ge/Scrollload/master/gamelist.json?page=${pages[index]++}`,
                 dataType: 'json',
                 success: function(data){
                     $(sl.contentDom).append(getData(data))
@@ -53,7 +53,7 @@ Array.prototype.slice.call(document.querySelectorAll('.scrollload-container')).f
         pullRefresh: function (sl) {
             $.ajax({
                 type: 'GET',
-                url: `http://rap.taobao.org/mockjsdata/14522/getgamelist?page=1`,
+                url: `https://raw.githubusercontent.com/fa-ge/Scrollload/master/gamelist.json?page=${Math.floor(Math.random() * 100)}`,
                 dataType: 'json',
                 success: function(data){
                     $(sl.contentDom).prepend(getData(data))

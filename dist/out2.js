@@ -11483,7 +11483,7 @@ Array.prototype.slice.call(document.querySelectorAll('.scrollload-container')).f
 
             __WEBPACK_IMPORTED_MODULE_2_jquery___default.a.ajax({
                 type: 'GET',
-                url: 'http://rap.taobao.org/mockjsdata/14522/getgamelist?page=' + pages[index]++,
+                url: 'https://raw.githubusercontent.com/fa-ge/Scrollload/master/gamelist.json?page=' + pages[index]++,
                 dataType: 'json',
                 success: function success(data) {
                     __WEBPACK_IMPORTED_MODULE_2_jquery___default()(sl.contentDom).append(getData(data));
@@ -11501,7 +11501,7 @@ Array.prototype.slice.call(document.querySelectorAll('.scrollload-container')).f
         pullRefresh: function pullRefresh(sl) {
             __WEBPACK_IMPORTED_MODULE_2_jquery___default.a.ajax({
                 type: 'GET',
-                url: 'http://rap.taobao.org/mockjsdata/14522/getgamelist?page=1',
+                url: 'https://raw.githubusercontent.com/fa-ge/Scrollload/master/gamelist.json?page=' + Math.floor(Math.random() * 100),
                 dataType: 'json',
                 success: function success(data) {
                     __WEBPACK_IMPORTED_MODULE_2_jquery___default()(sl.contentDom).prepend(getData(data));
