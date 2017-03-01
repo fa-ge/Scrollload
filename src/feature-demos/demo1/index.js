@@ -1,45 +1,10 @@
-import 'core-js/fn/array/from'
-
 import Scrollload from '../../Scrollload'
 import './index.css'
+import $ from 'jquery'
 
-const data = [
-    {
-        image: 'http://imagesrcdola.b0.upaiyun.com/0/20141222121421_798.jpg',
-        name: '画圆圈',
-        label: '创意游戏',
-        desc: '动手画个圆，你行吗？'
-    },
-    {
-        image: 'http://imagesrcdola.b0.upaiyun.com/0/20150611143728_164.png',
-        name: '英雄难过棍子关',
-        label: '创意游戏',
-        desc: '动手画个圆，你行吗？'
-    },
-    {
-        image: 'http://imagesrcdola.b0.upaiyun.com/0/20150403115426_276.jpg',
-        name: '胸口碎大石',
-        label: '创意游戏',
-        desc: '动手画个圆，你行吗？'
-    },
-    {
-        image: 'http://imagesrcdola.b0.upaiyun.com/0/20150611160815_643.jpg',
-        name: '酒后别开车',
-        label: '创意游戏',
-        desc: '动手画个圆，你行吗？'
-    },
-    {
-        image: 'http://imagesrcdola.b0.upaiyun.com/0/20150715225730_758.jpg',
-        name: '是男人就去优衣库',
-        label: '创意游戏',
-        desc: '动手画个圆，你行吗？'
-    }
-]
 
-function getData() {
-    return Array.from(new Array(5)).map(() => {
-        let item = data[Math.floor(Math.random() * 5)]
-        return `
+function getData(data) {
+    return data.data.map(item => `
         <li>
             <div class="info">
                 <img class="image" src="${item.image}">
@@ -51,19 +16,50 @@ function getData() {
             </div>
             <a class="btn" href="http://m.dolapocket.com/" target="_blank">开始</a>
         </li>
-`
-    }).join('')
+`).join('')
 }
 
-let count = 0
-const scrollload = new Scrollload(document.querySelector('.container'), function (sl) {
-    setTimeout(() => {
-        if (count++ < 5) {
-            //如果你有用jquery，那么可以用$('.list').append(getData())
-            document.querySelector('.list').insertAdjacentHTML('beforeend', getData())
-            sl.unLock()
-        } else {
-            sl.noData()
+let page = 1
+new Scrollload({
+    loadMore: function(sl) {
+        // 没用数据的时候需要调用noMoreData
+        if (page === 6) {
+            sl.noMoreData()
+            return
         }
-    }, 500)
+
+        // 我这里用jquery的不是因为需要jquery，只是jquery的语法看起来比较简单。大家都认识。
+        // 如果你不是用jquery，可以看看原生的insertAdjacentHTML方法来替代append
+        $.ajax({
+            type: 'GET',
+            url: `http://rap.taobao.org/mockjsdata/14522/getgamelist?page=${page++}`,
+            dataType: 'json',
+            success: function(data){
+                // contentDom其实就是你的scrollload-content类的dom
+                $(sl.contentDom).append(getData(data))
+
+                // 处理完业务逻辑后必须要调用unlock
+                sl.unLock()
+            },
+            error: function(xhr, type){
+                // 加载出错，需要执行该方法。这样底部DOM会出现出现异常的样式。
+                sl.throwException()
+            }
+        })
+    },
+    // 你也可以关闭下拉刷新
+    enablePullRefresh: true,
+    pullRefresh: function (sl) {
+        $.ajax({
+            type: 'GET',
+            url: `http://rap.taobao.org/mockjsdata/14522/getgamelist?page=1`,
+            dataType: 'json',
+            success: function(data){
+                $(sl.contentDom).prepend(getData(data))
+
+                // 处理完业务逻辑后必须要调用refreshComplete
+                sl.refreshComplete()
+            }
+        })
+    }
 })

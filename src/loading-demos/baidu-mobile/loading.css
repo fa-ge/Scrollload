@@ -16,13 +16,13 @@ noData dom结构
 
 @keyframes loadingRotate {
     0% {
-        transform: rotate(0deg);
+        transform: rotate(0deg) translateZ(0);
     }
     50% {
-        transform: rotate(180deg);
+        transform: rotate(180deg) translateZ(0);
     }
     100% {
-        transform: rotate(360deg);
+        transform: rotate(360deg) translateZ(0);
     }
 }
 
@@ -57,4 +57,12 @@ noData dom结构
 .s-loading-frame.bottom-no-more {
     font-size: 12px;
     color: #666;
+}
+
+.s-loading-moving {
+    color: #666;
+    font-size: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

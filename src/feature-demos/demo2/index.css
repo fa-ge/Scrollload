@@ -45,10 +45,10 @@ h1 {
     text-align: center;
 }
 
-.container {
+.scrollload-container {
     display: none;
 }
-.list li {
+.scrollload-content li {
     height: 84px;
     display: flex;
     justify-content: space-between;

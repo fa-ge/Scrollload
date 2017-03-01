@@ -42,7 +42,7 @@ h1 {
     top: 0;
     line-height: 50px;
 }
-.list li {
+.scrollload-content li {
     height: 84px;
     display: flex;
     justify-content: space-between;

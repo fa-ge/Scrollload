@@ -8,7 +8,7 @@ import LocalScrollFix from 'localscrollfix'
 import ScrollFix from 'scrollfix'
 
 function isIos() {
-    return /iphone/i.test(window.navigator.userAgent)
+    return true || /iphone/i.test(window.navigator.userAgent)
 }
 
 function generateHtml(str) {
@@ -22,16 +22,19 @@ function setStyles(els, cssObj) {
     if ('transition' in cssObj) {
         cssObj['webkitTransition'] = cssObj['transition']
     }
-    els.forEach(el => assign(el.style, cssObj))
+    els.forEach(el => el && assign(el.style, cssObj))
+}
+
+function setClipTop(el, top) {
+    el.style.clip = `rect(${top}px 1000px 1000px 0)`
 }
 
 function noop() {}
 
 export default class Scrollload {
     static defaults = {
-        // 内容的类名
-        contentClass: 'scrollload-content',
-
+        // 是否开启加载更多
+        enableLoadMore: true,
         // 初始化的时候是否锁定，锁定的话则不会去加载更多
         isInitLock: false,
         // 阀值
@@ -45,7 +48,7 @@ export default class Scrollload {
         // 底部加载中的html
         loadingHtml: generateHtml('加载中...'),
         // 底部没有更多数据的html
-        noDataHtml: generateHtml('没有更多数据了'),
+        noMoreDataHtml: generateHtml('没有更多数据了'),
         // 底部出现异常的html
         exceptionHtml: generateHtml('出现异常'),
         // 加载更多的回调
@@ -77,37 +80,47 @@ export default class Scrollload {
         // 计算下拉的阻力函数
         calMovingDistance(start, end) {
             return (end - start) / 3
-        }
+        },
+
+        // 实例化完后的回调
+        initedHandler: noop
     }
 
     constructor(options = {}) {
         this._options = assign({}, Scrollload.defaults, options)
-        const container = this._options.container
+        const container = this._options.container || document.querySelector('.scrollload-container')
         this.container = container
         if (! (container instanceof HTMLElement)) {
             throw new Error('container must be a HTMLElement instance!');
         }
-        this.isLock = this._options.isInitLock
+
         this.win = this._options.window
         this.isGlobalScroll = this.win === window
-        this.windowHeight = window.innerHeight
-        // 是否有更多数据了
-        this.hasMore = true
 
-        this.createBottomDom()
-        this.fixLocalScroll()
+        this.contentDom = this._options.content || this.container.querySelector('.scrollload-content')
+        if (! (this.contentDom instanceof HTMLElement)) {
+            throw new Error('content must be a HTMLElement instance!');
+        }
 
-        this.scrollListener = this.scrollListener.bind(this)
-        this.resizeListener = this.resizeListener.bind(this)
+        if (this._options.enableLoadMore) {
+            this.windowHeight = window.innerHeight
+            this.isLock = this._options.isInitLock
+            // 是否有更多数据了
+            this.hasMoreData = true
 
-        //对滚动和resize的监听函数设置节流
-        this.scrollListenerWrapThrottle = throttle(this.scrollListener, 50)
-        this.resizeListenerWrapThrottle = throttle(this.resizeListener, 50)
+            this.createBottomDom()
 
-        this.attachScrollListener()
+            this.scrollListener = this.scrollListener.bind(this)
+            this.resizeListener = this.resizeListener.bind(this)
+
+            //对滚动和resize的监听函数设置节流
+            this.scrollListenerWrapThrottle = throttle(this.scrollListener, 50)
+            this.resizeListenerWrapThrottle = throttle(this.resizeListener, 50)
+
+            this.attachScrollListener()
+        }
 
         if (this._options.enablePullRefresh) {
-            this.contentDom = container.querySelector(`.${this._options.contentClass}`)
             this.createTopDom()
             // 开始滑动时候的pageY
             this.startPageY = 0
@@ -124,9 +137,13 @@ export default class Scrollload {
             // 滑动的距离
             this.distance = 0
 
-            this.container.style.overflow = 'hidden'
             this.attachTouchListener()
         }
+
+        this.fixLocalScroll()
+
+        this._options.initedHandler.call(this, this)
+
     }
 
     //修复ios局部滚动的bug
@@ -165,14 +182,15 @@ export default class Scrollload {
 
         this.topDomHeight = this.topContentDom.clientHeight
         this.topDom.style.top = `-${this.topDomHeight}px`
+        this.topContentDom.style.clip = `rect(1000px 1000px 1000px 0)`
 
         this.notEnoughRefreshPortDom = this.topContentDom.querySelector('.scrollload-notEnoughRefreshPort')
         this.overRefreshPortDom = this.topContentDom.querySelector('.scrollload-overRefreshPort')
         this.refreshingDom = this.topContentDom.querySelector('.scrollload-refreshing')
     }
 
-    showNoDataDom() {
-        this.bottomDom.innerHTML = this._options.noDataHtml
+    showNoMoreDataDom() {
+        this.bottomDom.innerHTML = this._options.noMoreDataHtml
     }
 
     showLoadingDom() {
@@ -204,12 +222,14 @@ export default class Scrollload {
     }
 
     isTop() {
-        return this.isGlobalScroll ? window.pageYOffset <= 0 : this.win.scrollTop <= 0
+        return this.isGlobalScroll ? window.pageYOffset <= 0 : this.win.scrollTop <= 1
     }
 
     // 刷新完成后的处理
     refreshComplete() {
         setStyles([this.topDom, this.contentDom, this.bottomDom], {transition: 'all 300ms', transform: 'translate3d(0, 0, 0)'})
+        setStyles([this.topContentDom], {transition: 'all 300ms'})
+        setClipTop(this.topContentDom, this.topDomHeight)
         this.isRefreshing = false
     }
 
@@ -232,6 +252,7 @@ export default class Scrollload {
 
         setStyles([this.topDom, this.contentDom, this.bottomDom], {transform: `translate3d(0, ${distance}px, 0)`})
 
+        setClipTop(this.topContentDom, this.topDomHeight - distance)
         this._options.touchMove.call(this, this)
     }
 
@@ -242,14 +263,13 @@ export default class Scrollload {
 
     // 触发下拉刷新
     triggerPullResfresh() {
-        const cssObj = {
-            'transition': 'all 300ms',
-        }
         this.showRefreshingDom()
         this.isRefreshing = true
-        cssObj['transform'] = `translate3d(0, ${this.topDomHeight}px, 0)`
         this._options.pullRefresh.call(this, this)
-        setStyles([this.topDom, this.contentDom, this.bottomDom], cssObj)
+        setStyles([this.topDom, this.contentDom, this.bottomDom], {
+            transition: 'all 300ms',
+            transform: `translate3d(0, ${this.topDomHeight}px, 0)`
+        })
     }
 
     // 超过可刷新位置后的监听函数
@@ -280,12 +300,24 @@ export default class Scrollload {
     }
 
     touchStart(event) {
+        // 如果在刷新中，不允许触摸
+        if (this.isRefreshing) {
+            return
+        }
+
+        // 多tab切换的时候可能实例化可能为隐藏的情况
+        if (this.topDomHeight === 0) {
+            this.topDomHeight = this.topContentDom.clientHeight
+            this.topDom.style.top = `-${this.topDomHeight}px`
+        }
+
         this.enterTouchStart = true
         this.startPageY = this.prePageY = event.touches[0].pageY
         setStyles([this.topDom, this.contentDom, this.bottomDom], {
             transform: 'translate3d(0, 0, 0)',
             transition: 'none'
         })
+        setStyles([this.topContentDom], {transition: 'none'})
         this.showNotEnoughRefreshPortDom()
 
         this._options.touchStart.call(this, this)
@@ -293,6 +325,11 @@ export default class Scrollload {
 
 
     touchMove(event) {
+        // 如果没进入到touchStart中，那就直接退出
+        if (!this.enterTouchStart) {
+            return
+        }
+
         const pageY = event.touches[0].pageY
         this.isMovingDown = pageY >= this.prePageY
 
@@ -312,6 +349,11 @@ export default class Scrollload {
     }
 
     touchEnd(event) {
+        // 如果此时不在滑动中，就就直接退出
+        if (!this.isMoving) {
+            return
+        }
+
         this._options.touchEnd.call(this, this)
 
         // 如果是可以刷新的位置
@@ -336,6 +378,7 @@ export default class Scrollload {
         }
     }
 
+    // 是否滚动到底部
     isBottom() {
         const {win, bottomDom, windowHeight} = this
         let bottomDomTop = bottomDom.getBoundingClientRect().top
@@ -374,20 +417,12 @@ export default class Scrollload {
     attachTouchListener() {
         this.container.addEventListener('touchstart', event => {
             this.enterTouchStart = false
-            if (!this.isRefreshing) {
-                this.touchStart(event)
-            }
+            this.touchStart(event)
         })
         this.container.addEventListener('touchmove', event => {
-            if (!this.enterTouchStart) {
-                return
-            }
             this.touchMove(event)
         })
         this.container.addEventListener('touchend', event => {
-            if (!this.isMoving) {
-                return
-            }
             this.touchEnd(event)
         })
     }
@@ -398,7 +433,7 @@ export default class Scrollload {
 
     unLock() {
         this.isLock = false
-        if (this.hasMore) {
+        if (this.hasMoreData) {
             this.scrollListener()
         }
         if (this._options.useLocalScrollFix) {
@@ -406,11 +441,11 @@ export default class Scrollload {
         }
     }
 
-    noData() {
+    noMoreData() {
         this.lock()
 
-        this.hasMore = false
-        this.showNoDataDom()
+        this.hasMoreData = false
+        this.showNoMoreDataDom()
 
         if (this._options.useLocalScrollFix && !this.localScrollFix.isArrived) {
             this.localScrollFix.arrived()
@@ -423,7 +458,7 @@ export default class Scrollload {
         this.showLoadingDom()
 
         this.isLock = false
-        this.hasMore = true
+        this.hasMoreData = true
 
         if (this._options.useLocalScrollFix) {
             this.localScrollFix = new LocalScrollFix(this.win)
@@ -437,11 +472,11 @@ export default class Scrollload {
     }
 
     solveException() {
-        if (this.hasMore) {
+        if (this.hasMoreData) {
             this.showLoadingDom()
             this.unLock()
         } else {
-            this.showNoDataDom()
+            this.showNoMoreDataDom()
         }
     }
 
@@ -450,7 +485,7 @@ export default class Scrollload {
     }
 
     getOptions() {
-        return this._options
+        return assign({}, this._options)
     }
 
     static setGlobalOptions(options) {

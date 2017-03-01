@@ -11,12 +11,14 @@ let config
 if (args.env === 'lib') {
     config = {
         entry: {
-            Scrollload: './src/Scrollload.js'
+            Scrollload: './src/Scrollload.js',
+            baiduMobile: './src/loading-demos/baidu-mobile/baiduMobile.js'
+
         },
         output: {
             path: './lib',
             filename: '[name].js',
-            library: 'Scrollload.js',
+            library: '[name].js',
             libraryTarget: 'umd'
         },
         module: {
@@ -34,8 +36,12 @@ if (args.env === 'lib') {
                     ],
                 }
             ],
-        }
+        },
+        plugins: [
+            new webpack.optimize.UglifyJsPlugin()
+        ]
     }
+
 } else {
     config = {
         entry: {},

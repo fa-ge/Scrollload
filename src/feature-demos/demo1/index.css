@@ -39,7 +39,7 @@ h1 {
     margin-bottom: 20px;
 }
 
-.list li {
+.scrollload-content li {
     height: 84px;
     display: flex;
     justify-content: space-between;

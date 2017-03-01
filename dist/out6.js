@@ -508,7 +508,7 @@ var Scrollload = function () {
         this.isGlobalScroll = this.win === window;
         this.windowHeight = window.innerHeight;
         // 是否有更多数据了
-        this.hasMore = true;
+        this.hasMoreData = true;
 
         this.createBottomDom();
         this.fixLocalScroll();
@@ -869,7 +869,7 @@ var Scrollload = function () {
         key: 'unLock',
         value: function unLock() {
             this.isLock = false;
-            if (this.hasMore) {
+            if (this.hasMoreData) {
                 this.scrollListener();
             }
             if (this._options.useLocalScrollFix) {
@@ -881,7 +881,7 @@ var Scrollload = function () {
         value: function noData() {
             this.lock();
 
-            this.hasMore = false;
+            this.hasMoreData = false;
             this.showNoDataDom();
 
             if (this._options.useLocalScrollFix && !this.localScrollFix.isArrived) {
@@ -896,7 +896,7 @@ var Scrollload = function () {
             this.showLoadingDom();
 
             this.isLock = false;
-            this.hasMore = true;
+            this.hasMoreData = true;
 
             if (this._options.useLocalScrollFix) {
                 this.localScrollFix = new __WEBPACK_IMPORTED_MODULE_2_localscrollfix___default.a(this.win);
@@ -912,7 +912,7 @@ var Scrollload = function () {
     }, {
         key: 'solveException',
         value: function solveException() {
-            if (this.hasMore) {
+            if (this.hasMoreData) {
                 this.showLoadingDom();
                 this.unLock();
             } else {
