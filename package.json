@@ -1,6 +1,6 @@
 {
   "name": "scrollload",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "scroll load more data 滚动加载更多的数据",
   "main": "lib/Scrollload.js",
   "scripts": {
