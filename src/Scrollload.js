@@ -307,7 +307,6 @@ export default class Scrollload {
             this.topDomHeight = this.topContentDom.clientHeight
             this.topDom.style.top = `-${this.topDomHeight}px`
         }
-        console.log(this.topDomHeight)
 
         this.enterTouchStart = true
         this.startPageY = this.prePageY = event.touches[0].pageY
@@ -320,7 +319,6 @@ export default class Scrollload {
 
         this._options.touchStart.call(this, this)
     }
-
 
     touchMove(event) {
         // 如果没进入到touchStart中，那就直接退出

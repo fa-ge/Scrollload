@@ -10640,7 +10640,6 @@ var Scrollload = function () {
                 this.topDomHeight = this.topContentDom.clientHeight;
                 this.topDom.style.top = '-' + this.topDomHeight + 'px';
             }
-            console.log(this.topDomHeight);
 
             this.enterTouchStart = true;
             this.startPageY = this.prePageY = event.touches[0].pageY;
