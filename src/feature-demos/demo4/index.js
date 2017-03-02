@@ -1,9 +1,6 @@
 import Scrollload from '../../Scrollload'
 import './index.css'
 
-import '../../loading-demos/baidu-mobile/loading.css'
-import '../../loading-demos/baidu-mobile/baiduMobile'
-
 import $ from 'jquery'
 
 function getData(data) {

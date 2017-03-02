@@ -63,11 +63,44 @@
 /******/ 	__webpack_require__.p = "";
 
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 22);
+/******/ 	return __webpack_require__(__webpack_require__.s = 23);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+
+var assign = function assign(target, varArgs) {
+    // .length of function is 2
+    if (target == null) {
+        // TypeError if undefined or null
+        throw new TypeError('Cannot convert undefined or null to object');
+    }
+
+    var to = Object(target);
+
+    for (var index = 1; index < arguments.length; index++) {
+        var nextSource = arguments[index];
+
+        if (nextSource != null) {
+            // Skip over if undefined or null
+            for (var nextKey in nextSource) {
+                // Avoid bugs when hasOwnProperty is shadowed
+                if (Object.prototype.hasOwnProperty.call(nextSource, nextKey)) {
+                    to[nextKey] = nextSource[nextKey];
+                }
+            }
+        }
+    }
+    return to;
+};
+
+/* harmony default export */ __webpack_exports__["a"] = assign;
+
+/***/ }),
+/* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -10294,16 +10327,17 @@ return jQuery;
 
 
 /***/ }),
-/* 1 */
+/* 2 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__underscore_throttle__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__assign__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_localscrollfix__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__underscore_throttle__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__assign__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_localscrollfix__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_localscrollfix___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_localscrollfix__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_scrollfix__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_scrollfix__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_scrollfix___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_scrollfix__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__defaultSkin__ = __webpack_require__(5);
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -10317,12 +10351,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 
 
+
 function isIos() {
     return true || /iphone/i.test(window.navigator.userAgent);
-}
-
-function generateHtml(str) {
-    return '<div style="text-align: center;font-size: 12px;line-height: 50px;">' + str + '</div>';
 }
 
 function setStyles(els, cssObj) {
@@ -10609,6 +10640,7 @@ var Scrollload = function () {
                 this.topDomHeight = this.topContentDom.clientHeight;
                 this.topDom.style.top = '-' + this.topDomHeight + 'px';
             }
+            console.log(this.topDomHeight);
 
             this.enterTouchStart = true;
             this.startPageY = this.prePageY = event.touches[0].pageY;
@@ -10835,22 +10867,22 @@ Scrollload.defaults = {
     useScrollFix: false,
 
     // 底部加载中的html
-    loadingHtml: generateHtml('加载中...'),
+    loadingHtml: '',
     // 底部没有更多数据的html
-    noMoreDataHtml: generateHtml('没有更多数据了'),
+    noMoreDataHtml: '',
     // 底部出现异常的html
-    exceptionHtml: generateHtml('出现异常'),
+    exceptionHtml: '',
     // 加载更多的回调
     loadMore: noop,
 
     // 是否开启下拉刷新
     enablePullRefresh: false,
     // 顶部下拉刷新的html
-    notEnoughRefreshPortHtml: generateHtml('下拉刷新'),
+    notEnoughRefreshPortHtml: '',
     // 顶部松开刷新的html
-    overRefreshPortHtml: generateHtml('松开刷新'),
+    overRefreshPortHtml: '',
     // 顶部正在刷新的html
-    refreshingHtml: generateHtml('正在刷新'),
+    refreshingHtml: '',
     // 下拉刷新的回调
     pullRefresh: noop,
     // 到达刷新点的回调(包括向上和向下，可以通过isMovingDown判断方向)
@@ -10875,69 +10907,16 @@ Scrollload.defaults = {
     // 实例化完后的回调
     initedHandler: noop
 };
+Scrollload.setStyles = setStyles;
 /* harmony default export */ __webpack_exports__["a"] = Scrollload;
 
+
+Scrollload.setGlobalOptions(__WEBPACK_IMPORTED_MODULE_4__defaultSkin__["a" /* default */]);
 
 window.Scrollload = Scrollload;
 
 /***/ }),
-/* 2 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
 /* 3 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_hidpi_canvas_dist_hidpi_canvas__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_hidpi_canvas_dist_hidpi_canvas___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_hidpi_canvas_dist_hidpi_canvas__);
-//解决canvas绘图模糊的问题
-
-
-if (window.Scrollload === undefined) {
-    throw new Error('请在引入Scrollload库之后引入该js文件');
-}
-
-function generateLoadingHtml(str) {
-    return '\n            <div class="s-loading-frame">\n                <div class="load-img-wrapper">\n                    <img class="load-ing-img" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADYAAAA2CAYAAACMRWrdAAADXElEQVRo3u2az2sTQRTHE2njwULbbQsmngv+CLb+A4Iglh7ceGoPvVmtBExrRETUghU8p/WP8Og1p5JetGhsReul+h8IRvtDjUVc38AbeDw26+xmZne2ePhCaHdm3md/vHnz3st4npc5jMocWrALC16qFSfYcdAUqAaqg7ZBLdAvVAv/VsdrpnCMlWAOqAJ6CfoD8kJKjHmBczg2gOXxru9FgOmkPZwznwRYDvQQtO9jmHjd1kCPQFdARdAgjsnh7yL+T1zTwDF8nu+gRRwTC9goqOljyBvQXNhXibzKN3AOv3lHTYO5oB228CbokkbnI+Z6z9bYwbWNgF0D/SaL/QRVQUcMeNYe0C1cQ64n1r6uG6zM7uBH0HgM+9Q4rkXXLusCc9mTeg0aiXETHsE16ZNzuwUTH+0umVTsU30JRBh9uLa0Y1c6lChgvaANMtkn0HCC4dMw2iDtEbb1RgG7QyZpg85ZEBuOMYdyLyxYgUUTVYsC3yqLUgphwGpk8Ba6X1vAetAmaV9NFcxhT2vSwuPKJHtqQypgN8mgt6CshWBZtE3aWVEBo2511uJD5izdhv4FViDnKRFx91sM1o/eWp7nCkFgM+QurKUgNdAg9s4Ega2QCx+nAGyJ2LsSBFYnF5ZSAOYSe+tBYNvkwmIKwIo05AsC+0IudFIA5hB7W0FgNPeQ02iAyHM8Az3XfOTJEXsPkgCbJ/N+0AinDGbqVTzPDqu64AbInF9Vncdpzd/DtAG4MzRdoeruXQMfu244ZXdPN+glQ55MJxzdoJdVQ6qGQTetC26VzDGtGgS3DQfB3cKFCoLjPrZ0A3eVjFtXOY9VWPo6ayncJhmzoAI2lEBqICzcBEsNDNiczFGFE7WCd+S6p2lIv6nA3WY1tBNhE6Z3WWVlzAK4syxh+kBXittJCG4LQzya4m5GTXH7FSVEAfxYQnD09zfQKd1lpFcxlpE4nLYyUlDhL6lvrqK7VDvnU6qdN1Sq7QRXNVVcL7FvzkRxPeh7N94OseHTttDEAnysSSBTDSw/OjSwNLA5pYTeaxCjl6PoeE6CLoPug56ALtrWSyVbjva7bDNqR/W0cTSJCUeyHrFJzMMwzuq2vnyHtr4DfE0/43axiqmIstxsbQezoxHzf09wyvQXgOhQqYfCgwMAAAAASUVORK5CYII=">\n                </div>\n                <span class="load-text">' + str + '</span></div>\n            </div>\n    ';
-}
-window.Scrollload.setGlobalOptions({
-    loadingHtml: generateLoadingHtml('正在加载'),
-    noMoreDataHtml: '\n            <div class="s-loading-frame bottom-no-more">\n                <span>\u771F\u7684\u62C9\u4E0D\u51FA\u65B0\u4E1C\u897F\u4E86~</span>\n            </div>\n',
-    refreshingHtml: generateLoadingHtml('正在刷新'),
-    notEnoughRefreshPortHtml: '<div class="s-loading-moving"><canvas class="s-loading-canvas1" width="45" height="50"></canvas>\u4E0B\u62C9\u5237\u65B0</div>',
-    notEnoughRefreshPortHandler: function notEnoughRefreshPortHandler(sl) {
-        effect(sl.ctx1, sl.canvas1, sl.distance / sl.topDomHeight);
-    },
-    overRefreshPortHtml: '<div class="s-loading-moving"><canvas class="s-loading-canvas2" width="45" height="50"></canvas>\u677E\u5F00\u5237\u65B0</div>',
-    overRefreshPortHandler: function overRefreshPortHandler(sl) {
-        effect(sl.ctx2, sl.canvas2, 1);
-    },
-    initedHandler: function initedHandler(sl) {
-        sl.canvas1 = sl.container.querySelector('.s-loading-canvas1');
-        sl.ctx1 = sl.canvas1.getContext('2d');
-
-        sl.canvas2 = sl.container.querySelector('.s-loading-canvas2');
-        sl.ctx2 = sl.canvas2.getContext('2d');
-    }
-});
-
-function effect(ctx, canvas, prop) {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.beginPath();
-    ctx.strokeStyle = '#4270ff';
-    ctx.arc(25, 25, 8, 0.35 * Math.PI, (2 * Math.min(prop, 0.8) + 0.6) * Math.PI);
-    if (prop > 0.8) {
-        ctx.moveTo(31, 29.5);
-        ctx.lineTo(31 + 20 * (prop - 0.8), 29 + 20 * (prop - 0.8));
-    }
-    ctx.stroke();
-}
-
-/***/ }),
-/* 4 */
 /***/ (function(module, exports) {
 
 /**
@@ -10992,7 +10971,7 @@ function effect(ctx, canvas, prop) {
 
 
 /***/ }),
-/* 5 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 (function webpackUniversalModuleDefinition(root, factory) {
@@ -11177,40 +11156,62 @@ window.LocalScrollFix = LocalScrollFix;
 });
 
 /***/ }),
-/* 6 */
+/* 5 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__assign__ = __webpack_require__(0);
 
-var assign = function assign(target, varArgs) {
-    // .length of function is 2
-    if (target == null) {
-        // TypeError if undefined or null
-        throw new TypeError('Cannot convert undefined or null to object');
+
+function generateHtml(str) {
+    return '<div style="text-align: center;font-size: 12px;line-height: 50px;">' + str + '</div>';
+}
+
+function setStyles(els, cssObj) {
+    if ('transform' in cssObj) {
+        cssObj['webkitTransform'] = cssObj['transform'];
     }
+    if ('transition' in cssObj) {
+        cssObj['webkitTransition'] = cssObj['transition'];
+    }
+    els.forEach(function (el) {
+        return el && __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__assign__["a" /* default */])(el.style, cssObj);
+    });
+}
 
-    var to = Object(target);
+var defaultMovingHtml = '\n    <div style="height: 50px;">\n        <svg class="scrollload-movingHtml" width="20px" height="30px" style="display: block;margin: 0 auto;transition: all 300ms;-webkit-transition: all 300ms;">\n            <line x1="10" y1="2" x2="10" y2="25" stroke="#666" stroke-width="2" />\n            <polyline points="3 17 10 25 17 17" fill="none" stroke="#666" stroke-width="2"/>\n        </svg>\n    </div>\n';
 
-    for (var index = 1; index < arguments.length; index++) {
-        var nextSource = arguments[index];
+var defaultLoadingHtml = '\n    <div style="display: -webkit-box;display: -ms-flexbox;display: flex;-webkit-box-align:center;-ms-flex-align:center;align-items:center;-webkit-box-pack: center;-ms-flex-pack: center;justify-content: center; height: 50px;">\n        <svg  width=\'24px\' height=\'24px\' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid" class="uil-default"><rect x="0" y="0" width="100" height="100" fill="none" class="bk"></rect><rect  x=\'46.5\' y=\'40\' width=\'7\' height=\'20\' rx=\'5\' ry=\'5\' fill=\'#333\' transform=\'rotate(0 50 50) translate(0 -30)\'>  <animate attributeName=\'opacity\' from=\'1\' to=\'0\' dur=\'1s\' begin=\'0s\' repeatCount=\'indefinite\'/></rect><rect  x=\'46.5\' y=\'40\' width=\'7\' height=\'20\' rx=\'5\' ry=\'5\' fill=\'#333\' transform=\'rotate(30 50 50) translate(0 -30)\'>  <animate attributeName=\'opacity\' from=\'1\' to=\'0\' dur=\'1s\' begin=\'0.08333333333333333s\' repeatCount=\'indefinite\'/></rect><rect  x=\'46.5\' y=\'40\' width=\'7\' height=\'20\' rx=\'5\' ry=\'5\' fill=\'#333\' transform=\'rotate(60 50 50) translate(0 -30)\'>  <animate attributeName=\'opacity\' from=\'1\' to=\'0\' dur=\'1s\' begin=\'0.16666666666666666s\' repeatCount=\'indefinite\'/></rect><rect  x=\'46.5\' y=\'40\' width=\'7\' height=\'20\' rx=\'5\' ry=\'5\' fill=\'#333\' transform=\'rotate(90 50 50) translate(0 -30)\'>  <animate attributeName=\'opacity\' from=\'1\' to=\'0\' dur=\'1s\' begin=\'0.25s\' repeatCount=\'indefinite\'/></rect><rect  x=\'46.5\' y=\'40\' width=\'7\' height=\'20\' rx=\'5\' ry=\'5\' fill=\'#333\' transform=\'rotate(120 50 50) translate(0 -30)\'>  <animate attributeName=\'opacity\' from=\'1\' to=\'0\' dur=\'1s\' begin=\'0.3333333333333333s\' repeatCount=\'indefinite\'/></rect><rect  x=\'46.5\' y=\'40\' width=\'7\' height=\'20\' rx=\'5\' ry=\'5\' fill=\'#333\' transform=\'rotate(150 50 50) translate(0 -30)\'>  <animate attributeName=\'opacity\' from=\'1\' to=\'0\' dur=\'1s\' begin=\'0.4166666666666667s\' repeatCount=\'indefinite\'/></rect><rect  x=\'46.5\' y=\'40\' width=\'7\' height=\'20\' rx=\'5\' ry=\'5\' fill=\'#333\' transform=\'rotate(180 50 50) translate(0 -30)\'>  <animate attributeName=\'opacity\' from=\'1\' to=\'0\' dur=\'1s\' begin=\'0.5s\' repeatCount=\'indefinite\'/></rect><rect  x=\'46.5\' y=\'40\' width=\'7\' height=\'20\' rx=\'5\' ry=\'5\' fill=\'#333\' transform=\'rotate(210 50 50) translate(0 -30)\'>  <animate attributeName=\'opacity\' from=\'1\' to=\'0\' dur=\'1s\' begin=\'0.5833333333333334s\' repeatCount=\'indefinite\'/></rect><rect  x=\'46.5\' y=\'40\' width=\'7\' height=\'20\' rx=\'5\' ry=\'5\' fill=\'#333\' transform=\'rotate(240 50 50) translate(0 -30)\'>  <animate attributeName=\'opacity\' from=\'1\' to=\'0\' dur=\'1s\' begin=\'0.6666666666666666s\' repeatCount=\'indefinite\'/></rect><rect  x=\'46.5\' y=\'40\' width=\'7\' height=\'20\' rx=\'5\' ry=\'5\' fill=\'#333\' transform=\'rotate(270 50 50) translate(0 -30)\'>  <animate attributeName=\'opacity\' from=\'1\' to=\'0\' dur=\'1s\' begin=\'0.75s\' repeatCount=\'indefinite\'/></rect><rect  x=\'46.5\' y=\'40\' width=\'7\' height=\'20\' rx=\'5\' ry=\'5\' fill=\'#333\' transform=\'rotate(300 50 50) translate(0 -30)\'>  <animate attributeName=\'opacity\' from=\'1\' to=\'0\' dur=\'1s\' begin=\'0.8333333333333334s\' repeatCount=\'indefinite\'/></rect><rect  x=\'46.5\' y=\'40\' width=\'7\' height=\'20\' rx=\'5\' ry=\'5\' fill=\'#333\' transform=\'rotate(330 50 50) translate(0 -30)\'>  <animate attributeName=\'opacity\' from=\'1\' to=\'0\' dur=\'1s\' begin=\'0.9166666666666666s\' repeatCount=\'indefinite\'/></rect></svg>\n    </div>\n';
+var defaultSkin = {
+    loadingHtml: defaultLoadingHtml,
+    noMoreDataHtml: generateHtml('没有更多数据了'),
+    exceptionHtml: generateHtml('出现异常'),
+    notEnoughRefreshPortHtml: defaultMovingHtml,
+    overRefreshPortHtml: defaultMovingHtml,
+    refreshingHtml: defaultLoadingHtml,
+    arrivedRefreshPortHandler: function arrivedRefreshPortHandler(sl) {
+        // 强制浏览器重绘
+        document.body.clientWidth;
 
-        if (nextSource != null) {
-            // Skip over if undefined or null
-            for (var nextKey in nextSource) {
-                // Avoid bugs when hasOwnProperty is shadowed
-                if (Object.prototype.hasOwnProperty.call(nextSource, nextKey)) {
-                    to[nextKey] = nextSource[nextKey];
-                }
-            }
+        var scrollloadMovingDom1 = sl.notEnoughRefreshPortDom.querySelector('.scrollload-movingHtml');
+        var scrollloadMovingDom2 = sl.overRefreshPortDom.querySelector('.scrollload-movingHtml');
+        if (sl.isMovingDown) {
+            setStyles([scrollloadMovingDom1, scrollloadMovingDom2], { transform: 'rotate(180deg)' });
+        } else {
+            setStyles([scrollloadMovingDom1, scrollloadMovingDom2], { transform: 'rotate(0deg)' });
         }
+    },
+    touchEnd: function touchEnd(sl) {
+        var scrollloadMovingDom1 = sl.notEnoughRefreshPortDom.querySelector('.scrollload-movingHtml');
+        var scrollloadMovingDom2 = sl.overRefreshPortDom.querySelector('.scrollload-movingHtml');
+        Scrollload.setStyles([scrollloadMovingDom1, scrollloadMovingDom2], { transform: 'rotate(0deg)' });
     }
-    return to;
 };
 
-/* harmony default export */ __webpack_exports__["a"] = assign;
+/* harmony default export */ __webpack_exports__["a"] = defaultSkin;
 
 /***/ }),
-/* 7 */
+/* 6 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -11256,185 +11257,18 @@ var assign = function assign(target, varArgs) {
 };;
 
 /***/ }),
-/* 8 */
-/***/ (function(module, exports) {
-
-/**
- * HiDPI Canvas Polyfill (1.0.10)
- *
- * Author: Jonathan D. Johnson (http://jondavidjohn.com)
- * Homepage: https://github.com/jondavidjohn/hidpi-canvas-polyfill
- * Issue Tracker: https://github.com/jondavidjohn/hidpi-canvas-polyfill/issues
- * License: Apache-2.0
-*/
-(function(prototype) {
-
-	var pixelRatio = (function() {
-			var canvas = document.createElement('canvas'),
-					context = canvas.getContext('2d'),
-					backingStore = context.backingStorePixelRatio ||
-						context.webkitBackingStorePixelRatio ||
-						context.mozBackingStorePixelRatio ||
-						context.msBackingStorePixelRatio ||
-						context.oBackingStorePixelRatio ||
-						context.backingStorePixelRatio || 1;
-
-			return (window.devicePixelRatio || 1) / backingStore;
-		})(),
-
-		forEach = function(obj, func) {
-			for (var p in obj) {
-				if (obj.hasOwnProperty(p)) {
-					func(obj[p], p);
-				}
-			}
-		},
-
-		ratioArgs = {
-			'fillRect': 'all',
-			'clearRect': 'all',
-			'strokeRect': 'all',
-			'moveTo': 'all',
-			'lineTo': 'all',
-			'arc': [0,1,2],
-			'arcTo': 'all',
-			'bezierCurveTo': 'all',
-			'isPointinPath': 'all',
-			'isPointinStroke': 'all',
-			'quadraticCurveTo': 'all',
-			'rect': 'all',
-			'translate': 'all',
-			'createRadialGradient': 'all',
-			'createLinearGradient': 'all'
-		};
-
-	if (pixelRatio === 1) return;
-
-	forEach(ratioArgs, function(value, key) {
-		prototype[key] = (function(_super) {
-			return function() {
-				var i, len,
-					args = Array.prototype.slice.call(arguments);
-
-				if (value === 'all') {
-					args = args.map(function(a) {
-						return a * pixelRatio;
-					});
-				}
-				else if (Array.isArray(value)) {
-					for (i = 0, len = value.length; i < len; i++) {
-						args[value[i]] *= pixelRatio;
-					}
-				}
-
-				return _super.apply(this, args);
-			};
-		})(prototype[key]);
-	});
-
-	 // Stroke lineWidth adjustment
-	prototype.stroke = (function(_super) {
-		return function() {
-			this.lineWidth *= pixelRatio;
-			_super.apply(this, arguments);
-			this.lineWidth /= pixelRatio;
-		};
-	})(prototype.stroke);
-
-	// Text
-	//
-	prototype.fillText = (function(_super) {
-		return function() {
-			var args = Array.prototype.slice.call(arguments);
-
-			args[1] *= pixelRatio; // x
-			args[2] *= pixelRatio; // y
-
-			this.font = this.font.replace(
-				/(\d+)(px|em|rem|pt)/g,
-				function(w, m, u) {
-					return (m * pixelRatio) + u;
-				}
-			);
-
-			_super.apply(this, args);
-
-			this.font = this.font.replace(
-				/(\d+)(px|em|rem|pt)/g,
-				function(w, m, u) {
-					return (m / pixelRatio) + u;
-				}
-			);
-		};
-	})(prototype.fillText);
-
-	prototype.strokeText = (function(_super) {
-		return function() {
-			var args = Array.prototype.slice.call(arguments);
-
-			args[1] *= pixelRatio; // x
-			args[2] *= pixelRatio; // y
-
-			this.font = this.font.replace(
-				/(\d+)(px|em|rem|pt)/g,
-				function(w, m, u) {
-					return (m * pixelRatio) + u;
-				}
-			);
-
-			_super.apply(this, args);
-
-			this.font = this.font.replace(
-				/(\d+)(px|em|rem|pt)/g,
-				function(w, m, u) {
-					return (m / pixelRatio) + u;
-				}
-			);
-		};
-	})(prototype.strokeText);
-})(CanvasRenderingContext2D.prototype);
-;(function(prototype) {
-	prototype.getContext = (function(_super) {
-		return function(type) {
-			var backingStore, ratio,
-				context = _super.call(this, type);
-
-			if (type === '2d') {
-
-				backingStore = context.backingStorePixelRatio ||
-							context.webkitBackingStorePixelRatio ||
-							context.mozBackingStorePixelRatio ||
-							context.msBackingStorePixelRatio ||
-							context.oBackingStorePixelRatio ||
-							context.backingStorePixelRatio || 1;
-
-				ratio = (window.devicePixelRatio || 1) / backingStore;
-
-				if (ratio > 1) {
-					this.style.height = this.height + 'px';
-					this.style.width = this.width + 'px';
-					this.width *= ratio;
-					this.height *= ratio;
-				}
-			}
-
-			return context;
-		};
-	})(prototype.getContext);
-})(HTMLCanvasElement.prototype);
-
-
-/***/ }),
+/* 7 */,
+/* 8 */,
 /* 9 */,
 /* 10 */,
 /* 11 */,
-/* 12 */
+/* 12 */,
+/* 13 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
-/* 13 */,
 /* 14 */,
 /* 15 */,
 /* 16 */,
@@ -11443,22 +11277,17 @@ var assign = function assign(target, varArgs) {
 /* 19 */,
 /* 20 */,
 /* 21 */,
-/* 22 */
+/* 22 */,
+/* 23 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Scrollload__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__index_css__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Scrollload__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__index_css__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__index_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__index_css__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_jquery__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_jquery__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_jquery__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__loading_demos_baidu_mobile_loading_css__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__loading_demos_baidu_mobile_loading_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__loading_demos_baidu_mobile_loading_css__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__loading_demos_baidu_mobile_baiduMobile__ = __webpack_require__(3);
-
-
-
 
 
 

@@ -1,9 +1,6 @@
 import Scrollload from '../../Scrollload'
 import './index.css'
 
-import '../../loading-demos/baidu-mobile/loading.css'
-import '../../loading-demos/baidu-mobile/baiduMobile'
-
 import $ from 'jquery'
 
 function getData(data) {
@@ -63,7 +60,7 @@ const scrollload = new Scrollload({
         })
     },
     noMoreDataHtml: `
-            <div class="s-loading-frame bottom-no-more">
+            <div style="line-height: 50px;text-align: center;font-size: 12px">
                 <span>真的拉不出新东西了~</span><a class="clickHandler" style="color: red;font-size: 16px">点我重新刷新</a>
             </div>
 `,

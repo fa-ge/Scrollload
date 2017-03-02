@@ -3,9 +3,6 @@ import './index.css'
 
 import $ from 'jquery'
 
-import '../../loading-demos/baidu-mobile/loading.css'
-import '../../loading-demos/baidu-mobile/baiduMobile'
-
 function getData(data) {
     return data.data.sort(function(a,b){ return Math.random() > 0.5 ? -1 : 1;}).map(item => `
         <li>
