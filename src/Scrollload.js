@@ -6,13 +6,10 @@ import throttle from './underscore.throttle'
 import assign from './assign'
 import LocalScrollFix from 'localscrollfix'
 import ScrollFix from 'scrollfix'
+import defaultSkin from './defaultSkin'
 
 function isIos() {
     return true || /iphone/i.test(window.navigator.userAgent)
-}
-
-function generateHtml(str) {
-    return `<div style="text-align: center;font-size: 12px;line-height: 50px;">${str}</div>`
 }
 
 function setStyles(els, cssObj) {
@@ -46,22 +43,22 @@ export default class Scrollload {
         useScrollFix: false,
 
         // 底部加载中的html
-        loadingHtml: generateHtml('加载中...'),
+        loadingHtml: '',
         // 底部没有更多数据的html
-        noMoreDataHtml: generateHtml('没有更多数据了'),
+        noMoreDataHtml: '',
         // 底部出现异常的html
-        exceptionHtml: generateHtml('出现异常'),
+        exceptionHtml: '',
         // 加载更多的回调
         loadMore: noop,
 
         // 是否开启下拉刷新
         enablePullRefresh: false,
         // 顶部下拉刷新的html
-        notEnoughRefreshPortHtml: generateHtml('下拉刷新'),
+        notEnoughRefreshPortHtml: '',
         // 顶部松开刷新的html
-        overRefreshPortHtml: generateHtml('松开刷新'),
+        overRefreshPortHtml: '',
         // 顶部正在刷新的html
-        refreshingHtml: generateHtml('正在刷新'),
+        refreshingHtml: '',
         // 下拉刷新的回调
         pullRefresh: noop,
         // 到达刷新点的回调(包括向上和向下，可以通过isMovingDown判断方向)
@@ -310,6 +307,7 @@ export default class Scrollload {
             this.topDomHeight = this.topContentDom.clientHeight
             this.topDom.style.top = `-${this.topDomHeight}px`
         }
+        console.log(this.topDomHeight)
 
         this.enterTouchStart = true
         this.startPageY = this.prePageY = event.touches[0].pageY
@@ -492,6 +490,9 @@ export default class Scrollload {
         assign(Scrollload.defaults, options)
     }
 
+    static setStyles = setStyles
 }
+
+Scrollload.setGlobalOptions(defaultSkin)
 
 window.Scrollload = Scrollload
