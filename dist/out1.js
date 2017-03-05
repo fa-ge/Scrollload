@@ -10369,7 +10369,7 @@ function setStyles(els, cssObj) {
 }
 
 function setClipTop(el, top) {
-    el.style.clip = 'rect(' + top + 'px 1000px 1000px 0)';
+    el.style.clip = el.style.clip.replace(/\(([-0-9.e])+p/, '(' + top + 'p');
 }
 
 function noop() {}
@@ -10430,6 +10430,10 @@ var Scrollload = function () {
             // 滑动的距离
             this.distance = 0;
 
+            this.touchStart = this.touchStart.bind(this);
+            this.touchMove = this.touchMove.bind(this);
+            this.touchEnd = this.touchEnd.bind(this);
+
             this.attachTouchListener();
         }
 
@@ -10472,16 +10476,20 @@ var Scrollload = function () {
 
             this.container.insertAdjacentHTML('afterbegin', '<div class="scrollload-top" style="position: relative;">\n                <div class="scrollload-top-content" style="position: absolute; left: 0; right: 0;">\n                    <div class="scrollload-notEnoughRefreshPort" style="display: block">' + notEnoughRefreshPortHtml + '</div>\n                    <div class="scrollload-overRefreshPort" style="display: none">' + overRefreshPortHtml + '</div>\n                    <div class="scrollload-refreshing" style="display: none">' + refreshingHtml + '</div>\n                </div>\n            </div>');
 
-            this.topDom = this.container.querySelector('.scrollload-top');
-            this.topContentDom = this.topDom.querySelector('.scrollload-top-content');
+            var topDom = this.container.querySelector('.scrollload-top');
+            var topContentDom = topDom.querySelector('.scrollload-top-content');
+            this.notEnoughRefreshPortDom = topContentDom.querySelector('.scrollload-notEnoughRefreshPort');
+            this.overRefreshPortDom = topContentDom.querySelector('.scrollload-overRefreshPort');
+            this.refreshingDom = topContentDom.querySelector('.scrollload-refreshing');
+            var topDomHeight = topContentDom.clientHeight;
+            var topDomWidth = topContentDom.clientWidth;
 
-            this.topDomHeight = this.topContentDom.clientHeight;
-            this.topDom.style.top = '-' + this.topDomHeight + 'px';
-            this.topContentDom.style.clip = 'rect(1000px 1000px 1000px 0)';
+            topDom.style.top = '-' + topDomHeight + 'px';
+            topContentDom.style.clip = 'rect(' + topDomHeight + 'px ' + topDomWidth + 'px ' + topDomHeight + 'px 0)';
 
-            this.notEnoughRefreshPortDom = this.topContentDom.querySelector('.scrollload-notEnoughRefreshPort');
-            this.overRefreshPortDom = this.topContentDom.querySelector('.scrollload-overRefreshPort');
-            this.refreshingDom = this.topContentDom.querySelector('.scrollload-refreshing');
+            this.topDomHeight = topDomHeight;
+            this.topDom = topDom;
+            this.topContentDom = topContentDom;
         }
     }, {
         key: 'showNoMoreDataDom',
@@ -10562,8 +10570,8 @@ var Scrollload = function () {
             }
 
             setStyles([this.topDom, this.contentDom, this.bottomDom], { transform: 'translate3d(0, ' + distance + 'px, 0)' });
+            setClipTop(this.topContentDom, Math.max(this.topDomHeight - distance, 0));
 
-            setClipTop(this.topContentDom, this.topDomHeight - distance);
             this._options.touchMove.call(this, this);
         }
 
@@ -10630,6 +10638,7 @@ var Scrollload = function () {
     }, {
         key: 'touchStart',
         value: function touchStart(event) {
+            this.enterTouchStart = false;
             // 如果在刷新中，不允许触摸
             if (this.isRefreshing) {
                 return;
@@ -10643,11 +10652,9 @@ var Scrollload = function () {
 
             this.enterTouchStart = true;
             this.startPageY = this.prePageY = event.touches[0].pageY;
-            setStyles([this.topDom, this.contentDom, this.bottomDom], {
-                transform: 'translate3d(0, 0, 0)',
+            setStyles([this.topDom, this.contentDom, this.bottomDom, this.topContentDom], {
                 transition: 'none'
             });
-            setStyles([this.topContentDom], { transition: 'none' });
             this.showNotEnoughRefreshPortDom();
 
             this._options.touchStart.call(this, this);
@@ -10760,18 +10767,9 @@ var Scrollload = function () {
     }, {
         key: 'attachTouchListener',
         value: function attachTouchListener() {
-            var _this = this;
-
-            this.container.addEventListener('touchstart', function (event) {
-                _this.enterTouchStart = false;
-                _this.touchStart(event);
-            });
-            this.container.addEventListener('touchmove', function (event) {
-                _this.touchMove(event);
-            });
-            this.container.addEventListener('touchend', function (event) {
-                _this.touchEnd(event);
-            });
+            this.container.addEventListener('touchstart', this.touchStart);
+            this.container.addEventListener('touchmove', this.touchMove);
+            this.container.addEventListener('touchend', this.touchEnd);
         }
     }, {
         key: 'lock',
@@ -10906,7 +10904,6 @@ Scrollload.defaults = {
     // 实例化完后的回调
     initedHandler: noop
 };
-Scrollload.setStyles = setStyles;
 /* harmony default export */ __webpack_exports__["a"] = Scrollload;
 
 
@@ -11195,15 +11192,15 @@ var defaultSkin = {
         var scrollloadMovingDom1 = sl.notEnoughRefreshPortDom.querySelector('.scrollload-movingHtml');
         var scrollloadMovingDom2 = sl.overRefreshPortDom.querySelector('.scrollload-movingHtml');
         if (sl.isMovingDown) {
-            setStyles([scrollloadMovingDom1, scrollloadMovingDom2], { transform: 'rotate(180deg)' });
+            setStyles([scrollloadMovingDom1, scrollloadMovingDom2], { transform: 'rotate(180deg) translate3d(0,0,0)' });
         } else {
-            setStyles([scrollloadMovingDom1, scrollloadMovingDom2], { transform: 'rotate(0deg)' });
+            setStyles([scrollloadMovingDom1, scrollloadMovingDom2], { transform: 'rotate(0deg) translate3d(0,0,0)' });
         }
     },
     touchEnd: function touchEnd(sl) {
         var scrollloadMovingDom1 = sl.notEnoughRefreshPortDom.querySelector('.scrollload-movingHtml');
         var scrollloadMovingDom2 = sl.overRefreshPortDom.querySelector('.scrollload-movingHtml');
-        Scrollload.setStyles([scrollloadMovingDom1, scrollloadMovingDom2], { transform: 'rotate(0deg)' });
+        setStyles([scrollloadMovingDom1, scrollloadMovingDom2], { transform: 'rotate(0deg) translate3d(0,0,0)' });
     }
 };
 
