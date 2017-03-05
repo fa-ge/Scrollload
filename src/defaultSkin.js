@@ -50,7 +50,7 @@ const defaultSkin = {
     touchEnd(sl) {
         const scrollloadMovingDom1 = sl.notEnoughRefreshPortDom.querySelector('.scrollload-movingHtml')
         const scrollloadMovingDom2 = sl.overRefreshPortDom.querySelector('.scrollload-movingHtml')
-        Scrollload.setStyles([scrollloadMovingDom1, scrollloadMovingDom2], {transform: 'rotate(0deg) translate3d(0,0,0)'})
+        setStyles([scrollloadMovingDom1, scrollloadMovingDom2], {transform: 'rotate(0deg) translate3d(0,0,0)'})
     }
 }
 
