@@ -54,9 +54,9 @@ if (args.env === 'lib') {
             rules: [
                 {
                     test: /\.css$/,
-                    loader: extractCSS.extract({
-                        fallbackLoader: "style-loader",
-                        loader: [
+                    use: extractCSS.extract({
+                        fallback: "style-loader",
+                        use: [
                             {
                                 loader: 'css-loader',
                                 query: {
