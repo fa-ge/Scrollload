@@ -4,7 +4,6 @@ function generateHtml(str) {
     return `<div style="text-align: center;font-size: 12px;line-height: 50px;">${str}</div>`
 }
 
-
 function setStyles(els, cssObj) {
     if ('transform' in cssObj) {
         cssObj['webkitTransform'] = cssObj['transform']
@@ -43,15 +42,15 @@ const defaultSkin = {
         const scrollloadMovingDom1 = sl.notEnoughRefreshPortDom.querySelector('.scrollload-movingHtml')
         const scrollloadMovingDom2 = sl.overRefreshPortDom.querySelector('.scrollload-movingHtml')
         if (sl.isMovingDown) {
-            setStyles([scrollloadMovingDom1, scrollloadMovingDom2], {transform: 'rotate(180deg)'})
+            setStyles([scrollloadMovingDom1, scrollloadMovingDom2], {transform: 'rotate(180deg) translate3d(0,0,0)'})
         } else {
-            setStyles([scrollloadMovingDom1, scrollloadMovingDom2], {transform: 'rotate(0deg)'})
+            setStyles([scrollloadMovingDom1, scrollloadMovingDom2], {transform: 'rotate(0deg) translate3d(0,0,0)'})
         }
     },
     touchEnd(sl) {
         const scrollloadMovingDom1 = sl.notEnoughRefreshPortDom.querySelector('.scrollload-movingHtml')
         const scrollloadMovingDom2 = sl.overRefreshPortDom.querySelector('.scrollload-movingHtml')
-        Scrollload.setStyles([scrollloadMovingDom1, scrollloadMovingDom2], {transform: 'rotate(0deg)'})
+        setStyles([scrollloadMovingDom1, scrollloadMovingDom2], {transform: 'rotate(0deg) translate3d(0,0,0)'})
     }
 }
 

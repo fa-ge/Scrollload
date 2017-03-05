@@ -23,7 +23,7 @@ function setStyles(els, cssObj) {
 }
 
 function setClipTop(el, top) {
-    el.style.clip = `rect(${top}px 1000px 1000px 0)`
+    el.style.clip = el.style.clip.replace(/\(([-0-9.e])+p/, `(${top}p`)
 }
 
 function noop() {}
@@ -134,6 +134,10 @@ export default class Scrollload {
             // 滑动的距离
             this.distance = 0
 
+            this.touchStart = this.touchStart.bind(this)
+            this.touchMove = this.touchMove.bind(this)
+            this.touchEnd = this.touchEnd.bind(this)
+
             this.attachTouchListener()
         }
 
@@ -174,16 +178,20 @@ export default class Scrollload {
                 </div>
             </div>`)
 
-        this.topDom = this.container.querySelector('.scrollload-top')
-        this.topContentDom = this.topDom.querySelector('.scrollload-top-content')
+        const topDom = this.container.querySelector('.scrollload-top')
+        const topContentDom = topDom.querySelector('.scrollload-top-content')
+        this.notEnoughRefreshPortDom = topContentDom.querySelector('.scrollload-notEnoughRefreshPort')
+        this.overRefreshPortDom = topContentDom.querySelector('.scrollload-overRefreshPort')
+        this.refreshingDom = topContentDom.querySelector('.scrollload-refreshing')
+        const topDomHeight = topContentDom.clientHeight
+        const topDomWidth = topContentDom.clientWidth
 
-        this.topDomHeight = this.topContentDom.clientHeight
-        this.topDom.style.top = `-${this.topDomHeight}px`
-        this.topContentDom.style.clip = `rect(1000px 1000px 1000px 0)`
+        topDom.style.top = `-${topDomHeight}px`
+        topContentDom.style.clip = `rect(${topDomHeight}px ${topDomWidth}px ${topDomHeight}px 0)`
 
-        this.notEnoughRefreshPortDom = this.topContentDom.querySelector('.scrollload-notEnoughRefreshPort')
-        this.overRefreshPortDom = this.topContentDom.querySelector('.scrollload-overRefreshPort')
-        this.refreshingDom = this.topContentDom.querySelector('.scrollload-refreshing')
+        this.topDomHeight = topDomHeight
+        this.topDom = topDom
+        this.topContentDom = topContentDom
     }
 
     showNoMoreDataDom() {
@@ -248,8 +256,8 @@ export default class Scrollload {
         }
 
         setStyles([this.topDom, this.contentDom, this.bottomDom], {transform: `translate3d(0, ${distance}px, 0)`})
+        setClipTop(this.topContentDom, Math.max(this.topDomHeight - distance, 0))
 
-        setClipTop(this.topContentDom, this.topDomHeight - distance)
         this._options.touchMove.call(this, this)
     }
 
@@ -297,6 +305,7 @@ export default class Scrollload {
     }
 
     touchStart(event) {
+        this.enterTouchStart = false
         // 如果在刷新中，不允许触摸
         if (this.isRefreshing) {
             return
@@ -310,11 +319,9 @@ export default class Scrollload {
 
         this.enterTouchStart = true
         this.startPageY = this.prePageY = event.touches[0].pageY
-        setStyles([this.topDom, this.contentDom, this.bottomDom], {
-            transform: 'translate3d(0, 0, 0)',
+        setStyles([this.topDom, this.contentDom, this.bottomDom, this.topContentDom], {
             transition: 'none'
         })
-        setStyles([this.topContentDom], {transition: 'none'})
         this.showNotEnoughRefreshPortDom()
 
         this._options.touchStart.call(this, this)
@@ -411,16 +418,9 @@ export default class Scrollload {
     }
     
     attachTouchListener() {
-        this.container.addEventListener('touchstart', event => {
-            this.enterTouchStart = false
-            this.touchStart(event)
-        })
-        this.container.addEventListener('touchmove', event => {
-            this.touchMove(event)
-        })
-        this.container.addEventListener('touchend', event => {
-            this.touchEnd(event)
-        })
+        this.container.addEventListener('touchstart', this.touchStart)
+        this.container.addEventListener('touchmove', this.touchMove)
+        this.container.addEventListener('touchend', this.touchEnd)
     }
 
     lock() {
@@ -487,8 +487,6 @@ export default class Scrollload {
     static setGlobalOptions(options) {
         assign(Scrollload.defaults, options)
     }
-
-    static setStyles = setStyles
 }
 
 Scrollload.setGlobalOptions(defaultSkin)
