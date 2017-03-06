@@ -25,7 +25,7 @@ window.Scrollload.setGlobalOptions({
     refreshingHtml: generateLoadingHtml('正在刷新'),
     notEnoughRefreshPortHtml: `<div class="s-loading-moving"><canvas class="s-loading-canvas1" width="45" height="50"></canvas>下拉刷新</div>`,
     notEnoughRefreshPortHandler: function (sl) {
-        effect(sl.ctx1, sl.canvas1, sl.distance / sl.topDomHeight)
+        effect(sl.ctx1, sl.canvas1, sl.distance / sl.topContentDomHeight)
     },
     overRefreshPortHtml: `<div class="s-loading-moving"><canvas class="s-loading-canvas2" width="45" height="50"></canvas>松开刷新</div>`,
     overRefreshPortHandler: function (sl) {
