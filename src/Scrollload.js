@@ -22,14 +22,10 @@ function setStyles(els, cssObj) {
     els.forEach(el => el && assign(el.style, cssObj))
 }
 
-function setClipTop(el, top) {
-    el.style.clip = el.style.clip.replace(/\(([-0-9.e])+p/, `(${top}p`)
-}
-
 function noop() {}
 
 export default class Scrollload {
-    static defaults = {
+    static defaultOptions = {
         // 是否开启加载更多
         enableLoadMore: true,
         // 初始化的时候是否锁定，锁定的话则不会去加载更多
@@ -75,8 +71,8 @@ export default class Scrollload {
         notEnoughRefreshPortHandler: noop,
 
         // 计算下拉的阻力函数
-        calMovingDistance(start, end) {
-            return (end - start) / 3
+        calMovingDistance(distance) {
+            return distance / 3
         },
 
         // 实例化完后的回调
@@ -84,7 +80,7 @@ export default class Scrollload {
     }
 
     constructor(options = {}) {
-        this._options = assign({}, Scrollload.defaults, options)
+        this._options = assign({}, Scrollload.defaultOptions, options)
         const container = this._options.container || document.querySelector('.scrollload-container')
         this.container = container
         if (! (container instanceof HTMLElement)) {
@@ -129,10 +125,10 @@ export default class Scrollload {
             this.isMovingDown = true
             // 是否在刷新中
             this.isRefreshing = false
-            // 是否有执行touchStart函数, 刷新中不允许去滑动内容
-            this.enterTouchStart = false
             // 滑动的距离
             this.distance = 0
+            // 是否有执行touchStart函数, 刷新中不允许去滑动内容
+            this.enterTouchStart = false
 
             this.touchStart = this.touchStart.bind(this)
             this.touchMove = this.touchMove.bind(this)
@@ -183,13 +179,14 @@ export default class Scrollload {
         this.notEnoughRefreshPortDom = topContentDom.querySelector('.scrollload-notEnoughRefreshPort')
         this.overRefreshPortDom = topContentDom.querySelector('.scrollload-overRefreshPort')
         this.refreshingDom = topContentDom.querySelector('.scrollload-refreshing')
-        const topDomHeight = topContentDom.clientHeight
-        const topDomWidth = topContentDom.clientWidth
+        const topContentDomHeight = topContentDom.clientHeight
+        const topContentDomWidth = topContentDom.clientWidth
 
-        topDom.style.top = `-${topDomHeight}px`
-        topContentDom.style.clip = `rect(${topDomHeight}px ${topDomWidth}px ${topDomHeight}px 0)`
+        topDom.style.top = `-${topContentDomHeight}px`
+        topContentDom.style.clip = `rect(${topContentDomHeight}px ${topContentDomWidth}px ${topContentDomHeight}px 0)`
 
-        this.topDomHeight = topDomHeight
+        this.topContentDomHeight = topContentDomHeight
+        this.topContentDomWidth = topContentDomWidth
         this.topDom = topDom
         this.topContentDom = topContentDom
     }
@@ -222,8 +219,12 @@ export default class Scrollload {
     }
 
     // 计算向下滑动距离的函数
-    calMovingDistance(start, end) {
-        this.distance = this._options.calMovingDistance(start, end)
+    calMovingDistance(distance) {
+        this.distance = this._options.calMovingDistance(distance)
+    }
+
+    setTopDomClipTop(top) {
+        this.topContentDom.style.clip = `rect(${top}px ${this.topContentDomWidth}px ${this.topContentDomHeight}px 0)`
     }
 
     isTop() {
@@ -234,16 +235,18 @@ export default class Scrollload {
     refreshComplete() {
         setStyles([this.topDom, this.contentDom, this.bottomDom], {transition: 'all 300ms', transform: 'translate3d(0, 0, 0)'})
         setStyles([this.topContentDom], {transition: 'all 300ms'})
-        setClipTop(this.topContentDom, this.topDomHeight)
+        this.setTopDomClipTop(this.topContentDomHeight)
         this.isRefreshing = false
     }
 
     // 内容在滑动中的处理
     movingHandler() {
+        // 如果滑到了可以刷新的点，就做相应的处理。对向上滑动和向下滑动都需要做处理，显示不同的dom。
         if (this.isArrivedRefreshPort()) {
             this.arrivedRefreshPortHandler()
         }
 
+        // 是否超过可以刷新的点，做不同的处理。
         if (this.isOverRefreshPort()) {
             this.overRefreshPortHandler()
         } else {
@@ -256,25 +259,24 @@ export default class Scrollload {
         }
 
         setStyles([this.topDom, this.contentDom, this.bottomDom], {transform: `translate3d(0, ${distance}px, 0)`})
-        setClipTop(this.topContentDom, Math.max(this.topDomHeight - distance, 0))
-
-        this._options.touchMove.call(this, this)
+        // 最小值一定大于0其实是不想让repaint的区域变大，功能上没影响
+        this.setTopDomClipTop(Math.max(this.topContentDomHeight - distance, 0))
     }
 
     // 是否超过可刷新的位置
     isOverRefreshPort() {
-        return this.distance >= this.topDomHeight
+        return this.distance >= this.topContentDomHeight
     }
 
     // 触发下拉刷新
     triggerPullResfresh() {
         this.showRefreshingDom()
         this.isRefreshing = true
-        this._options.pullRefresh.call(this, this)
         setStyles([this.topDom, this.contentDom, this.bottomDom], {
             transition: 'all 300ms',
-            transform: `translate3d(0, ${this.topDomHeight}px, 0)`
+            transform: `translate3d(0, ${this.topContentDomHeight}px, 0)`
         })
+        this._options.pullRefresh.call(this, this)
     }
 
     // 超过可刷新位置后的监听函数
@@ -289,8 +291,8 @@ export default class Scrollload {
 
     // 是否到达了可刷新的位置
     isArrivedRefreshPort() {
-        const preDistance = this._options.calMovingDistance(this.startPageY, this.prePageY)
-        return (this.distance >= this.topDomHeight && preDistance < this.topDomHeight) || (this.distance <= this.topDomHeight && preDistance > this.topDomHeight)
+        const preDistance = this._options.calMovingDistance(this.prePageY - this.startPageY)
+        return (this.distance >= this.topContentDomHeight && preDistance < this.topContentDomHeight) || (this.distance <= this.topContentDomHeight && preDistance > this.topContentDomHeight)
     }
 
     // 对到达了刷新的位置时的处理
@@ -304,31 +306,40 @@ export default class Scrollload {
         this._options.arrivedRefreshPortHandler.call(this, this)
     }
 
+    attachTouchListener() {
+        this.container.addEventListener('touchstart', this.touchStart)
+        this.container.addEventListener('touchmove', this.touchMove)
+        this.container.addEventListener('touchend', this.touchEnd)
+    }
+
     touchStart(event) {
-        this.enterTouchStart = false
-        // 如果在刷新中，不允许触摸
+        // 初始化的时机：只要不是正在刷新都应该做初始化操作
         if (this.isRefreshing) {
+            this.enterTouchStart = false
             return
         }
-
-        // 多tab切换的时候可能实例化可能为隐藏的情况
-        if (this.topDomHeight === 0) {
-            this.topDomHeight = this.topContentDom.clientHeight
-            this.topDom.style.top = `-${this.topDomHeight}px`
-        }
-
+        // touchmove中通过判断这个值可以推断出touchstart中有没有做初始化
         this.enterTouchStart = true
+
         this.startPageY = this.prePageY = event.touches[0].pageY
+        // 在滑动的时候是不需要过渡动画的
         setStyles([this.topDom, this.contentDom, this.bottomDom, this.topContentDom], {
             transition: 'none'
         })
         this.showNotEnoughRefreshPortDom()
 
+        // 多tab切换的时候可能实例化可能为隐藏的情况
+        if (this.topContentDomHeight === 0) {
+            this.topContentDomHeight = this.topContentDom.clientHeight
+            this.topContentDomWidth = this.topContentDom.clientWidth
+            this.topDom.style.top = `-${this.topContentDomHeight}px`
+        }
+
         this._options.touchStart.call(this, this)
     }
 
     touchMove(event) {
-        // 如果没进入到touchStart中，那就直接退出
+        // 如果touchstart中没有做初始化，那么这里不应该执行下去了。
         if (!this.enterTouchStart) {
             return
         }
@@ -337,29 +348,34 @@ export default class Scrollload {
         this.isMovingDown = pageY >= this.prePageY
 
         if (this.isMoving) {
-            this.calMovingDistance(this.startPageY, pageY)
+            // 如果是在滑动中，计算出滑动的距离
+            this.calMovingDistance(pageY - this.startPageY)
             this.movingHandler()
 
+            // 阻止滚动
             event.preventDefault()
         } else if (this.isTop() && this.isMovingDown) {
-            // 如果滑动的时候此时在最高的位置并且是向下滑动的，那么就标记可以滑动
+            // 如果滑动的时候此时在最高的位置并且是向下滑动的，那么那些dom就可以滑动了。
             this.isMoving = true
 
+            // 阻止滚动
             event.preventDefault()
         }
+
+        this._options.touchMove.call(this, this)
 
         this.prePageY =  pageY
     }
 
     touchEnd(event) {
-        // 如果此时不在滑动中，就就直接退出
+        // 如果此时不在滑动中，就不用做一些重置的操作
         if (!this.isMoving) {
             return
         }
 
         this._options.touchEnd.call(this, this)
 
-        // 如果是可以刷新的位置
+        // 如果此时是可刷新的位置，那么触发刷新操作。否则直接触发刷新完成的操作
         if (this.isOverRefreshPort()) {
             this.triggerPullResfresh()
         } else {
@@ -415,12 +431,6 @@ export default class Scrollload {
     detachScrollListener() {
         this.win.removeEventListener('scroll', this.scrollListenerWrapThrottle)
         this.win.removeEventListener('resize', this.resizeListenerWrapThrottle)
-    }
-    
-    attachTouchListener() {
-        this.container.addEventListener('touchstart', this.touchStart)
-        this.container.addEventListener('touchmove', this.touchMove)
-        this.container.addEventListener('touchend', this.touchEnd)
     }
 
     lock() {
@@ -485,7 +495,7 @@ export default class Scrollload {
     }
 
     static setGlobalOptions(options) {
-        assign(Scrollload.defaults, options)
+        assign(Scrollload.defaultOptions, options)
     }
 }
 
