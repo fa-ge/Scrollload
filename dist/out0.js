@@ -11158,7 +11158,7 @@ function generateHtml(str) {
 
 var defaultMovingHtml = '\n    <div style="height: 50px;">\n        <svg class="scrollload-movingHtml" width="20px" height="30px" style="display: block;margin: 0 auto;transition: all 300ms;-webkit-transition: all 300ms;">\n            <line x1="10" y1="2" x2="10" y2="25" stroke="#666" stroke-width="2" />\n            <polyline points="3 17 10 25 17 17" fill="none" stroke="#666" stroke-width="2"/>\n        </svg>\n    </div>\n';
 
-var defaultLoadingHtml = '\n    <div style="height: 50px;">\n        <svg width=\'100%\' height=\'50px\' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid"><rect x="0" y="0" width="100" height="100" fill="none" class="bk"></rect><circle cx="10" cy="50" r="15" fill="#0462dc"><animate attributeName="cx" values="10;90;10" keyTimes="0;0.5;1" dur="1s" repeatCount="indefinite"></animate></circle><circle cx="90" cy="50" r="15" fill="#fc0284"><animate attributeName="cx" values="90;10;90" keyTimes="0;0.5;1" dur="1s" repeatCount="indefinite"></animate></circle></svg> \n   </div>\n';
+var defaultLoadingHtml = '\n    <div style="height: 50px;">\n        <svg width=\'100%\' height=\'50px\' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid"><rect x="0" y="0" width="100" height="100" fill="none" class="bk"></rect><circle cx="15" cy="50" r="15" fill="#0462dc"><animate attributeName="cx" values="15;85;15" keyTimes="0;0.5;1" dur="1s" repeatCount="indefinite"></animate></circle><circle cx="85" cy="50" r="15" fill="#fc0284"><animate attributeName="cx" values="85;15;85" keyTimes="0;0.5;1" dur="1s" repeatCount="indefinite"></animate></circle></svg> \n   </div>\n';
 
 var defaultSkin = {
     loadingHtml: defaultLoadingHtml,
