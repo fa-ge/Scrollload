@@ -1,0 +1,17 @@
+import assign from './assign'
+
+export function isIos() {
+    return true || /iphone/i.test(window.navigator.userAgent)
+}
+
+export function setStyles(els, cssObj) {
+    if ('transform' in cssObj) {
+        cssObj['webkitTransform'] = cssObj['transform']
+    }
+    if ('transition' in cssObj) {
+        cssObj['webkitTransition'] = cssObj['transition']
+    }
+    els.forEach(el => el && assign(el.style, cssObj))
+}
+
+export function noop() {}

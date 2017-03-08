@@ -6,23 +6,8 @@ import throttle from './underscore.throttle'
 import assign from './assign'
 import LocalScrollFix from 'localscrollfix'
 import ScrollFix from 'scrollfix'
+import {isIos, setStyles, noop} from './utils'
 import defaultSkin from './defaultSkin'
-
-function isIos() {
-    return true || /iphone/i.test(window.navigator.userAgent)
-}
-
-function setStyles(els, cssObj) {
-    if ('transform' in cssObj) {
-        cssObj['webkitTransform'] = cssObj['transform']
-    }
-    if ('transition' in cssObj) {
-        cssObj['webkitTransition'] = cssObj['transition']
-    }
-    els.forEach(el => el && assign(el.style, cssObj))
-}
-
-function noop() {}
 
 export default class Scrollload {
     static defaultOptions = {
@@ -502,3 +487,4 @@ export default class Scrollload {
 Scrollload.setGlobalOptions(defaultSkin)
 
 window.Scrollload = Scrollload
+
