@@ -11155,16 +11155,10 @@ return jQuery;
 function generateHtml(str) {
     return '<div style="text-align: center;font-size: 12px;line-height: 50px;">' + str + '</div>';
 }
-function addStyleNode(str) {
-    var cssText = '\n.scrollload-spinner {\n  width: 30px;\n  height: 30px;\n  position: relative;\n  margin: 10px auto;\n}\n\n.double-bounce1, .double-bounce2 {\n  width: 100%;\n  height: 100%;\n  border-radius: 50%;\n  background-color: #333;\n  opacity: 0.6;\n  position: absolute;\n  top: 0;\n  left: 0;\n  \n  -webkit-animation: sk-bounce 2.0s infinite ease-in-out;\n  animation: sk-bounce 2.0s infinite ease-in-out;\n}\n\n.double-bounce2 {\n  -webkit-animation-delay: -1.0s;\n  animation-delay: -1.0s;\n}\n\n@-webkit-keyframes sk-bounce {\n  0%, 100% { -webkit-transform: scale(0.0) }\n  50% { -webkit-transform: scale(1.0) }\n}\n\n@keyframes sk-bounce {\n  0%, 100% { \n    transform: scale(0.0);\n    -webkit-transform: scale(0.0);\n  } 50% { \n    transform: scale(1.0);\n    -webkit-transform: scale(1.0);\n  }\n}\n\n';
-    var styleNode = document.createElement('style');
-    styleNode.appendChild(document.createTextNode(cssText));
-    document.getElementsByTagName('head')[0].appendChild(styleNode);
-}
-addStyleNode();
+
 var defaultMovingHtml = '\n    <div style="height: 50px;">\n        <svg class="scrollload-movingHtml" width="20px" height="30px" style="display: block;margin: 0 auto;transition: all 300ms;-webkit-transition: all 300ms;">\n            <line x1="10" y1="2" x2="10" y2="25" stroke="#666" stroke-width="2" />\n            <polyline points="3 17 10 25 17 17" fill="none" stroke="#666" stroke-width="2"/>\n        </svg>\n    </div>\n';
 
-var defaultLoadingHtml = '\n    <div style="height: 50px;">\n        <div class="scrollload-spinner"><div class="double-bounce1"></div><div class="double-bounce2"></div></div>\n    </div>\n';
+var defaultLoadingHtml = '\n    <div style="height: 50px;">\n        <svg width=\'100%\' height=\'50px\' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid"><rect x="0" y="0" width="100" height="100" fill="none" class="bk"></rect><circle cx="10" cy="50" r="15" fill="#0462dc"><animate attributeName="cx" values="10;90;10" keyTimes="0;0.5;1" dur="1s" repeatCount="indefinite"></animate></circle><circle cx="90" cy="50" r="15" fill="#fc0284"><animate attributeName="cx" values="90;10;90" keyTimes="0;0.5;1" dur="1s" repeatCount="indefinite"></animate></circle></svg> \n   </div>\n';
 
 var defaultSkin = {
     loadingHtml: defaultLoadingHtml,
