@@ -63,11 +63,47 @@
 /******/ 	__webpack_require__.p = "";
 
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 23);
+/******/ 	return __webpack_require__(__webpack_require__.s = 25);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__assign__ = __webpack_require__(1);
+/* harmony export (immutable) */ __webpack_exports__["a"] = isIos;
+/* harmony export (immutable) */ __webpack_exports__["b"] = setStyles;
+/* harmony export (immutable) */ __webpack_exports__["d"] = addStyleNode;
+/* harmony export (immutable) */ __webpack_exports__["c"] = noop;
+
+
+function isIos() {
+    return true || /iphone/i.test(window.navigator.userAgent);
+}
+
+function setStyles(els, cssObj) {
+    if ('transform' in cssObj) {
+        cssObj['webkitTransform'] = cssObj['transform'];
+    }
+    if ('transition' in cssObj) {
+        cssObj['webkitTransition'] = cssObj['transition'];
+    }
+    els.forEach(function (el) {
+        return el && __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__assign__["a" /* default */])(el.style, cssObj);
+    });
+}
+
+function addStyleNode(cssText) {
+    var styleNode = document.createElement('style');
+    styleNode.appendChild(document.createTextNode(cssText));
+    document.getElementsByTagName('head')[0].appendChild(styleNode);
+}
+
+function noop() {}
+
+/***/ }),
+/* 1 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -100,47 +136,18 @@ var assign = function assign(target, varArgs) {
 /* harmony default export */ __webpack_exports__["a"] = assign;
 
 /***/ }),
-/* 1 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__assign__ = __webpack_require__(0);
-/* harmony export (immutable) */ __webpack_exports__["a"] = isIos;
-/* harmony export (immutable) */ __webpack_exports__["b"] = setStyles;
-/* harmony export (immutable) */ __webpack_exports__["c"] = noop;
-
-
-function isIos() {
-    return true || /iphone/i.test(window.navigator.userAgent);
-}
-
-function setStyles(els, cssObj) {
-    if ('transform' in cssObj) {
-        cssObj['webkitTransform'] = cssObj['transform'];
-    }
-    if ('transition' in cssObj) {
-        cssObj['webkitTransition'] = cssObj['transition'];
-    }
-    els.forEach(function (el) {
-        return el && __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__assign__["a" /* default */])(el.style, cssObj);
-    });
-}
-
-function noop() {}
-
-/***/ }),
 /* 2 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__underscore_throttle__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__assign__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_localscrollfix__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__underscore_throttle__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__assign__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_localscrollfix__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_localscrollfix___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_localscrollfix__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_scrollfix__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_scrollfix__ = __webpack_require__(9);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_scrollfix___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_scrollfix__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__utils__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__defaultSkin__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__utils__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__loading__ = __webpack_require__(6);
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -704,7 +711,7 @@ Scrollload.defaultOptions = {
 /* harmony default export */ __webpack_exports__["a"] = Scrollload;
 
 
-Scrollload.setGlobalOptions(__WEBPACK_IMPORTED_MODULE_5__defaultSkin__["a" /* default */]);
+Scrollload.setGlobalOptions(__WEBPACK_IMPORTED_MODULE_5__loading__["a" /* default */]);
 
 window.Scrollload = Scrollload;
 
@@ -10937,6 +10944,62 @@ return jQuery;
 
 /***/ }),
 /* 4 */
+/***/ (function(module, exports) {
+
+/*
+	MIT License http://www.opensource.org/licenses/mit-license.php
+	Author Tobias Koppers @sokra
+*/
+// css base code, injected by the css-loader
+module.exports = function() {
+	var list = [];
+
+	// return the list of modules as css string
+	list.toString = function toString() {
+		var result = [];
+		for(var i = 0; i < this.length; i++) {
+			var item = this[i];
+			if(item[2]) {
+				result.push("@media " + item[2] + "{" + item[1] + "}");
+			} else {
+				result.push(item[1]);
+			}
+		}
+		return result.join("");
+	};
+
+	// import a list of modules into the list
+	list.i = function(modules, mediaQuery) {
+		if(typeof modules === "string")
+			modules = [[null, modules, ""]];
+		var alreadyImportedModules = {};
+		for(var i = 0; i < this.length; i++) {
+			var id = this[i][0];
+			if(typeof id === "number")
+				alreadyImportedModules[id] = true;
+		}
+		for(i = 0; i < modules.length; i++) {
+			var item = modules[i];
+			// skip already imported module
+			// this implementation is not 100% perfect for weird media query combinations
+			//  when a module is imported multiple times with different media queries.
+			//  I hope this will never occur (Hey this way we have smaller bundles)
+			if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
+				if(mediaQuery && !item[2]) {
+					item[2] = mediaQuery;
+				} else if(mediaQuery) {
+					item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
+				}
+				list.push(item);
+			}
+		}
+	};
+	return list;
+};
+
+
+/***/ }),
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(module) {var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
@@ -11142,24 +11205,24 @@ return jQuery;
         }])
     );
 });
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(8)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(10)(module)))
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils__ = __webpack_require__(0);
 
+
+__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__utils__["d" /* addStyleNode */])(__webpack_require__(8)[0][1]);
 
 function generateHtml(str) {
     return '<div style="text-align: center;font-size: 12px;line-height: 50px;">' + str + '</div>';
 }
 
-var defaultMovingHtml = '\n    <div style="height: 50px;">\n        <svg class="scrollload-movingHtml" width="20px" height="30px" style="display: block;margin: 0 auto;transition: all 300ms;-webkit-transition: all 300ms;">\n            <line x1="10" y1="2" x2="10" y2="25" stroke="#666" stroke-width="2" />\n            <polyline points="3 17 10 25 17 17" fill="none" stroke="#666" stroke-width="2"/>\n        </svg>\n    </div>\n';
-
-var defaultLoadingHtml = '\n    <div style="height: 50px;">\n        <svg width=\'100%\' height=\'50px\' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid"><rect x="0" y="0" width="100" height="100" fill="none" class="bk"></rect><circle cx="15" cy="50" r="15" fill="#0462dc"><animate attributeName="cx" values="15;85;15" keyTimes="0;0.5;1" dur="1s" repeatCount="indefinite"></animate></circle><circle cx="85" cy="50" r="15" fill="#fc0284"><animate attributeName="cx" values="85;15;85" keyTimes="0;0.5;1" dur="1s" repeatCount="indefinite"></animate></circle></svg> \n   </div>\n';
-
+var defaultMovingHtml = '\n    <div style="height: 50px;">\n        <div class="sl-ld">\n            <div class="sl-ld-ball"></div>\n            <div class="sl-ld-ball"></div>\n        </div>\n   </div>\n';
+var defaultLoadingHtml = '\n    <div style="height: 50px;">\n        <div class="sl-ld">\n            <div class="sl-ld-ball sl-ld-ball-anim"></div>\n            <div class="sl-ld-ball sl-ld-ball-anim"></div>\n        </div>\n   </div>\n';
 var defaultSkin = {
     loadingHtml: defaultLoadingHtml,
     noMoreDataHtml: generateHtml('没有更多数据了'),
@@ -11167,29 +11230,25 @@ var defaultSkin = {
     notEnoughRefreshPortHtml: defaultMovingHtml,
     overRefreshPortHtml: defaultMovingHtml,
     refreshingHtml: defaultLoadingHtml,
-    arrivedRefreshPortHandler: function arrivedRefreshPortHandler(sl) {
-        // 强制浏览器重绘
-        document.body.clientWidth;
-
-        var scrollloadMovingDom1 = sl.notEnoughRefreshPortDom.querySelector('.scrollload-movingHtml');
-        var scrollloadMovingDom2 = sl.overRefreshPortDom.querySelector('.scrollload-movingHtml');
-        if (sl.isMovingDown) {
-            __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__utils__["b" /* setStyles */])([scrollloadMovingDom1, scrollloadMovingDom2], { transform: 'rotate(180deg) translate3d(0,0,0)' });
-        } else {
-            __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__utils__["b" /* setStyles */])([scrollloadMovingDom1, scrollloadMovingDom2], { transform: 'rotate(0deg) translate3d(0,0,0)' });
-        }
+    notEnoughRefreshPortHandler: function notEnoughRefreshPortHandler(sl) {
+        effect(sl.ball1, sl.ball2, sl.distance / sl.topContentDomHeight);
     },
-    touchEnd: function touchEnd(sl) {
-        var scrollloadMovingDom1 = sl.notEnoughRefreshPortDom.querySelector('.scrollload-movingHtml');
-        var scrollloadMovingDom2 = sl.overRefreshPortDom.querySelector('.scrollload-movingHtml');
-        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__utils__["b" /* setStyles */])([scrollloadMovingDom1, scrollloadMovingDom2], { transform: 'rotate(0deg) translate3d(0,0,0)' });
+    initedHandler: function initedHandler(sl) {
+        var balls = sl.container.querySelectorAll('.sl-ld-ball');
+        sl.ball1 = balls[0];
+        sl.ball2 = balls[1];
     }
 };
+
+function effect(ball1, ball2, prop) {
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__utils__["b" /* setStyles */])([ball1], { transform: 'translate3d(-' + 18 * prop + 'px, 0, 0)' });
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__utils__["b" /* setStyles */])([ball2], { transform: 'translate3d(' + 18 * prop + 'px, 0, 0)' });
+}
 
 /* harmony default export */ __webpack_exports__["a"] = defaultSkin;
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -11235,7 +11294,21 @@ var defaultSkin = {
 };;
 
 /***/ }),
-/* 7 */
+/* 8 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(4)();
+// imports
+
+
+// module
+exports.push([module.i, "@-webkit-keyframes sl-ld-ball-anim1{0%{z-index:1;-webkit-transform:translate3d(-18px,0,0);transform:translate3d(-18px,0,0)}50%{-webkit-transform:translate3d(18px,0,0);transform:translate3d(18px,0,0)}to{z-index:2;-webkit-transform:translate3d(-18px,0,0);transform:translate3d(-18px,0,0)}}@keyframes sl-ld-ball-anim1{0%{z-index:1;-webkit-transform:translate3d(-18px,0,0);transform:translate3d(-18px,0,0)}50%{-webkit-transform:translate3d(18px,0,0);transform:translate3d(18px,0,0)}to{z-index:2;-webkit-transform:translate3d(-18px,0,0);transform:translate3d(-18px,0,0)}}@-webkit-keyframes sl-ld-ball-anim2{0%{z-index:2;-webkit-transform:translate3d(18px,0,0);transform:translate3d(18px,0,0)}50%{-webkit-transform:translate3d(-18px,0,0);transform:translate3d(-18px,0,0)}to{z-index:1;-webkit-transform:translate3d(18px,0,0);transform:translate3d(18px,0,0)}}@keyframes sl-ld-ball-anim2{0%{z-index:2;-webkit-transform:translate3d(18px,0,0);transform:translate3d(18px,0,0)}50%{-webkit-transform:translate3d(-18px,0,0);transform:translate3d(-18px,0,0)}to{z-index:1;-webkit-transform:translate3d(18px,0,0);transform:translate3d(18px,0,0)}}.sl-ld{position:relative;width:0;margin:0 auto;height:50px}.sl-ld-ball{width:16px;height:16px;border-radius:50%;position:absolute;top:17px;left:-8px}.sl-ld-ball:first-of-type{-webkit-transform:translate3d(-18px,0,0);transform:translate3d(-18px,0,0);background:#0462dc;z-index:1}.sl-ld-ball:nth-of-type(2){-webkit-transform:translate3d(18px,0,0);transform:translate3d(18px,0,0);background:#fc0284;z-index:2}.sl-ld-ball-anim:first-of-type{-webkit-animation:sl-ld-ball-anim1 1.2s linear infinite;animation:sl-ld-ball-anim1 1.2s linear infinite}.sl-ld-ball-anim:nth-of-type(2){-webkit-animation:sl-ld-ball-anim2 1.2s linear infinite;animation:sl-ld-ball-anim2 1.2s linear infinite}", ""]);
+
+// exports
+
+
+/***/ }),
+/* 9 */
 /***/ (function(module, exports) {
 
 /**
@@ -11290,7 +11363,7 @@ var defaultSkin = {
 
 
 /***/ }),
-/* 8 */
+/* 10 */
 /***/ (function(module, exports) {
 
 module.exports = function(module) {
@@ -11318,244 +11391,20 @@ module.exports = function(module) {
 
 
 /***/ }),
-/* 9 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 10 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_hidpi_canvas_dist_hidpi_canvas__ = __webpack_require__(11);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_hidpi_canvas_dist_hidpi_canvas___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_hidpi_canvas_dist_hidpi_canvas__);
-//解决canvas绘图模糊的问题
-
-
-if (window.Scrollload === undefined) {
-    throw new Error('请在引入Scrollload库之后引入该js文件');
-}
-
-function generateLoadingHtml(str) {
-    return '\n            <div class="s-loading-frame">\n                <div class="load-img-wrapper">\n                    <img class="load-ing-img" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADYAAAA2CAYAAACMRWrdAAADXElEQVRo3u2az2sTQRTHE2njwULbbQsmngv+CLb+A4Iglh7ceGoPvVmtBExrRETUghU8p/WP8Og1p5JetGhsReul+h8IRvtDjUVc38AbeDw26+xmZne2ePhCaHdm3md/vHnz3st4npc5jMocWrALC16qFSfYcdAUqAaqg7ZBLdAvVAv/VsdrpnCMlWAOqAJ6CfoD8kJKjHmBczg2gOXxru9FgOmkPZwznwRYDvQQtO9jmHjd1kCPQFdARdAgjsnh7yL+T1zTwDF8nu+gRRwTC9goqOljyBvQXNhXibzKN3AOv3lHTYO5oB228CbokkbnI+Z6z9bYwbWNgF0D/SaL/QRVQUcMeNYe0C1cQ64n1r6uG6zM7uBH0HgM+9Q4rkXXLusCc9mTeg0aiXETHsE16ZNzuwUTH+0umVTsU30JRBh9uLa0Y1c6lChgvaANMtkn0HCC4dMw2iDtEbb1RgG7QyZpg85ZEBuOMYdyLyxYgUUTVYsC3yqLUgphwGpk8Ba6X1vAetAmaV9NFcxhT2vSwuPKJHtqQypgN8mgt6CshWBZtE3aWVEBo2511uJD5izdhv4FViDnKRFx91sM1o/eWp7nCkFgM+QurKUgNdAg9s4Ega2QCx+nAGyJ2LsSBFYnF5ZSAOYSe+tBYNvkwmIKwIo05AsC+0IudFIA5hB7W0FgNPeQ02iAyHM8Az3XfOTJEXsPkgCbJ/N+0AinDGbqVTzPDqu64AbInF9Vncdpzd/DtAG4MzRdoeruXQMfu244ZXdPN+glQ55MJxzdoJdVQ6qGQTetC26VzDGtGgS3DQfB3cKFCoLjPrZ0A3eVjFtXOY9VWPo6ayncJhmzoAI2lEBqICzcBEsNDNiczFGFE7WCd+S6p2lIv6nA3WY1tBNhE6Z3WWVlzAK4syxh+kBXittJCG4LQzya4m5GTXH7FSVEAfxYQnD09zfQKd1lpFcxlpE4nLYyUlDhL6lvrqK7VDvnU6qdN1Sq7QRXNVVcL7FvzkRxPeh7N94OseHTttDEAnysSSBTDSw/OjSwNLA5pYTeaxCjl6PoeE6CLoPug56ALtrWSyVbjva7bDNqR/W0cTSJCUeyHrFJzMMwzuq2vnyHtr4DfE0/43axiqmIstxsbQezoxHzf09wyvQXgOhQqYfCgwMAAAAASUVORK5CYII=">\n                </div>\n                <span class="load-text">' + str + '</span></div>\n            </div>\n    ';
-}
-window.Scrollload.setGlobalOptions({
-    loadingHtml: generateLoadingHtml('正在加载'),
-    noMoreDataHtml: '\n            <div class="s-loading-frame bottom-no-more">\n                <span>\u771F\u7684\u62C9\u4E0D\u51FA\u65B0\u4E1C\u897F\u4E86~</span>\n            </div>\n',
-    refreshingHtml: generateLoadingHtml('正在刷新'),
-    notEnoughRefreshPortHtml: '<div class="s-loading-moving"><canvas class="s-loading-canvas1" width="45" height="50"></canvas>\u4E0B\u62C9\u5237\u65B0</div>',
-    notEnoughRefreshPortHandler: function notEnoughRefreshPortHandler(sl) {
-        effect(sl.ctx1, sl.canvas1, sl.distance / sl.topContentDomHeight);
-    },
-    overRefreshPortHtml: '<div class="s-loading-moving"><canvas class="s-loading-canvas2" width="45" height="50"></canvas>\u677E\u5F00\u5237\u65B0</div>',
-    overRefreshPortHandler: function overRefreshPortHandler(sl) {
-        effect(sl.ctx2, sl.canvas2, 1);
-    },
-    initedHandler: function initedHandler(sl) {
-        sl.canvas1 = sl.container.querySelector('.s-loading-canvas1');
-        sl.ctx1 = sl.canvas1.getContext('2d');
-
-        sl.canvas2 = sl.container.querySelector('.s-loading-canvas2');
-        sl.ctx2 = sl.canvas2.getContext('2d');
-    }
-});
-
-function effect(ctx, canvas, prop) {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.beginPath();
-    ctx.strokeStyle = '#4270ff';
-    ctx.arc(25, 25, 8, 0.35 * Math.PI, (2 * Math.min(prop, 0.8) + 0.6) * Math.PI);
-    if (prop > 0.8) {
-        ctx.moveTo(31, 29.5);
-        ctx.lineTo(31 + 20 * (prop - 0.8), 29 + 20 * (prop - 0.8));
-    }
-    ctx.stroke();
-}
-
-/***/ }),
-/* 11 */
-/***/ (function(module, exports) {
-
-/**
- * HiDPI Canvas Polyfill (1.0.10)
- *
- * Author: Jonathan D. Johnson (http://jondavidjohn.com)
- * Homepage: https://github.com/jondavidjohn/hidpi-canvas-polyfill
- * Issue Tracker: https://github.com/jondavidjohn/hidpi-canvas-polyfill/issues
- * License: Apache-2.0
-*/
-(function(prototype) {
-
-	var pixelRatio = (function() {
-			var canvas = document.createElement('canvas'),
-					context = canvas.getContext('2d'),
-					backingStore = context.backingStorePixelRatio ||
-						context.webkitBackingStorePixelRatio ||
-						context.mozBackingStorePixelRatio ||
-						context.msBackingStorePixelRatio ||
-						context.oBackingStorePixelRatio ||
-						context.backingStorePixelRatio || 1;
-
-			return (window.devicePixelRatio || 1) / backingStore;
-		})(),
-
-		forEach = function(obj, func) {
-			for (var p in obj) {
-				if (obj.hasOwnProperty(p)) {
-					func(obj[p], p);
-				}
-			}
-		},
-
-		ratioArgs = {
-			'fillRect': 'all',
-			'clearRect': 'all',
-			'strokeRect': 'all',
-			'moveTo': 'all',
-			'lineTo': 'all',
-			'arc': [0,1,2],
-			'arcTo': 'all',
-			'bezierCurveTo': 'all',
-			'isPointinPath': 'all',
-			'isPointinStroke': 'all',
-			'quadraticCurveTo': 'all',
-			'rect': 'all',
-			'translate': 'all',
-			'createRadialGradient': 'all',
-			'createLinearGradient': 'all'
-		};
-
-	if (pixelRatio === 1) return;
-
-	forEach(ratioArgs, function(value, key) {
-		prototype[key] = (function(_super) {
-			return function() {
-				var i, len,
-					args = Array.prototype.slice.call(arguments);
-
-				if (value === 'all') {
-					args = args.map(function(a) {
-						return a * pixelRatio;
-					});
-				}
-				else if (Array.isArray(value)) {
-					for (i = 0, len = value.length; i < len; i++) {
-						args[value[i]] *= pixelRatio;
-					}
-				}
-
-				return _super.apply(this, args);
-			};
-		})(prototype[key]);
-	});
-
-	 // Stroke lineWidth adjustment
-	prototype.stroke = (function(_super) {
-		return function() {
-			this.lineWidth *= pixelRatio;
-			_super.apply(this, arguments);
-			this.lineWidth /= pixelRatio;
-		};
-	})(prototype.stroke);
-
-	// Text
-	//
-	prototype.fillText = (function(_super) {
-		return function() {
-			var args = Array.prototype.slice.call(arguments);
-
-			args[1] *= pixelRatio; // x
-			args[2] *= pixelRatio; // y
-
-			this.font = this.font.replace(
-				/(\d+)(px|em|rem|pt)/g,
-				function(w, m, u) {
-					return (m * pixelRatio) + u;
-				}
-			);
-
-			_super.apply(this, args);
-
-			this.font = this.font.replace(
-				/(\d+)(px|em|rem|pt)/g,
-				function(w, m, u) {
-					return (m / pixelRatio) + u;
-				}
-			);
-		};
-	})(prototype.fillText);
-
-	prototype.strokeText = (function(_super) {
-		return function() {
-			var args = Array.prototype.slice.call(arguments);
-
-			args[1] *= pixelRatio; // x
-			args[2] *= pixelRatio; // y
-
-			this.font = this.font.replace(
-				/(\d+)(px|em|rem|pt)/g,
-				function(w, m, u) {
-					return (m * pixelRatio) + u;
-				}
-			);
-
-			_super.apply(this, args);
-
-			this.font = this.font.replace(
-				/(\d+)(px|em|rem|pt)/g,
-				function(w, m, u) {
-					return (m / pixelRatio) + u;
-				}
-			);
-		};
-	})(prototype.strokeText);
-})(CanvasRenderingContext2D.prototype);
-;(function(prototype) {
-	prototype.getContext = (function(_super) {
-		return function(type) {
-			var backingStore, ratio,
-				context = _super.call(this, type);
-
-			if (type === '2d') {
-
-				backingStore = context.backingStorePixelRatio ||
-							context.webkitBackingStorePixelRatio ||
-							context.mozBackingStorePixelRatio ||
-							context.msBackingStorePixelRatio ||
-							context.oBackingStorePixelRatio ||
-							context.backingStorePixelRatio || 1;
-
-				ratio = (window.devicePixelRatio || 1) / backingStore;
-
-				if (ratio > 1) {
-					this.style.height = this.height + 'px';
-					this.style.width = this.width + 'px';
-					this.width *= ratio;
-					this.height *= ratio;
-				}
-			}
-
-			return context;
-		};
-	})(prototype.getContext);
-})(HTMLCanvasElement.prototype);
-
-
-/***/ }),
-/* 12 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
+/* 11 */,
+/* 12 */,
 /* 13 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
-/* 14 */,
+/* 14 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
 /* 15 */,
 /* 16 */,
 /* 17 */,
@@ -11588,27 +11437,22 @@ a.setWrapperTransition(e,b),0!==e&&(a.onTransitionStart(),a.wrapper.transitionEn
 
 
 /***/ }),
-/* 23 */
+/* 23 */,
+/* 24 */,
+/* 25 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Scrollload__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__index_css__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__index_css__ = __webpack_require__(14);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__index_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__index_css__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__loading_demos_baidu_mobile_loading_css__ = __webpack_require__(9);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__loading_demos_baidu_mobile_loading_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__loading_demos_baidu_mobile_loading_css__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_swiper_dist_js_swiper_min__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_swiper_dist_js_swiper_min___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_swiper_dist_js_swiper_min__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_swiper_dist_css_swiper_css__ = __webpack_require__(12);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_swiper_dist_css_swiper_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_swiper_dist_css_swiper_css__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__loading_demos_baidu_mobile_baiduMobile__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_jquery__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_jquery__);
-
-
-
-
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_swiper_dist_js_swiper_min__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_swiper_dist_js_swiper_min___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_swiper_dist_js_swiper_min__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_swiper_dist_css_swiper_css__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_swiper_dist_css_swiper_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_swiper_dist_css_swiper_css__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_jquery__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_jquery__);
 
 
 
@@ -11639,12 +11483,12 @@ Array.prototype.slice.call(document.querySelectorAll('.scrollload-container')).f
                 return;
             }
 
-            __WEBPACK_IMPORTED_MODULE_6_jquery___default.a.ajax({
+            __WEBPACK_IMPORTED_MODULE_4_jquery___default.a.ajax({
                 type: 'GET',
                 url: 'https://fa-ge.github.io/Scrollload/gamelist.json?page=' + pages[index]++,
                 dataType: 'json',
                 success: function success(data) {
-                    __WEBPACK_IMPORTED_MODULE_6_jquery___default()(sl.contentDom).append(getData(data));
+                    __WEBPACK_IMPORTED_MODULE_4_jquery___default()(sl.contentDom).append(getData(data));
 
                     sl.unLock();
                 },
@@ -11657,12 +11501,12 @@ Array.prototype.slice.call(document.querySelectorAll('.scrollload-container')).f
 
         enablePullRefresh: true,
         pullRefresh: function pullRefresh(sl) {
-            __WEBPACK_IMPORTED_MODULE_6_jquery___default.a.ajax({
+            __WEBPACK_IMPORTED_MODULE_4_jquery___default.a.ajax({
                 type: 'GET',
                 url: 'https://fa-ge.github.io/Scrollload/gamelist.json?page=' + Math.floor(Math.random() * 100),
                 dataType: 'json',
                 success: function success(data) {
-                    __WEBPACK_IMPORTED_MODULE_6_jquery___default()(sl.contentDom).prepend(getData(data));
+                    __WEBPACK_IMPORTED_MODULE_4_jquery___default()(sl.contentDom).prepend(getData(data));
 
                     // 处理完业务逻辑后必须要调用refreshComplete
                     sl.refreshComplete();
@@ -11676,7 +11520,7 @@ Array.prototype.slice.call(document.querySelectorAll('.scrollload-container')).f
  * 我用这个插件主要是很多人比较熟悉这个插件
  *
  */
-var mySwiper = new __WEBPACK_IMPORTED_MODULE_3_swiper_dist_js_swiper_min___default.a('.swiper-container', {
+var mySwiper = new __WEBPACK_IMPORTED_MODULE_2_swiper_dist_js_swiper_min___default.a('.swiper-container', {
     onSlideChangeStart: function onSlideChangeStart(swiper) {
         scrollloads.forEach(function (scrollload, index) {
             index === swiper.activeIndex ? scrollload.unLock() : scrollload.lock();

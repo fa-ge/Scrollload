@@ -1,8 +1,7 @@
 import Scrollload from '../../Scrollload'
 import './index.css'
 
-import './loading.css'
-import './baiduMobile'
+import './loading'
 
 import $ from 'jquery'
 
@@ -58,3 +57,4 @@ new Scrollload({
         })
     },
 })
+

@@ -1,7 +1,7 @@
 import Scrollload from '../../Scrollload'
 import './index.css'
-import './loading.css'
 
+import './loading'
 import $ from 'jquery'
 
 
@@ -49,12 +49,6 @@ new Scrollload({
             }
         })
     },
-    loadingHtml: `
-            <div class="two-balls-swing">
-                <div class="two-balls-swing-circle"></div>
-                <div class="two-balls-swing-circle"></div>
-            </div>
-`,
 
     // 你也可以关闭下拉刷新
     enablePullRefresh: true,

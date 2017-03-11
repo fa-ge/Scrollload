@@ -1,12 +1,12 @@
 {
   "name": "scrollload",
-  "version": "3.0.3",
+  "version": "3.1.0",
   "description": "scroll load more data 滚动加载更多的数据",
   "main": "lib/Scrollload.js",
   "scripts": {
     "start": "webpack-dev-server --env=dev --host 0.0.0.0",
     "dist": "rimraf dist/* & webpack --env=dist",
-    "lib": "rimraf lib/* & node processCss.js & webpack --env=lib",
+    "lib": "rimraf lib/* & webpack --env=lib",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
@@ -40,6 +40,7 @@
     "webpack-dev-server": "^1.16.2"
   },
   "dependencies": {
+    "camelcase": "^4.0.0",
     "hidpi-canvas": "^1.0.10",
     "jquery": "^3.1.1",
     "localscrollfix": "^1.0.0",

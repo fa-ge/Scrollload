@@ -1,9 +1,12 @@
 //解决canvas绘图模糊的问题
 import 'hidpi-canvas/dist/hidpi-canvas'
+import {addStyleNode} from '../../utils'
 
 if (window.Scrollload === undefined) {
     throw new Error('请在引入Scrollload库之后引入该js文件')
 }
+
+addStyleNode(require('./loading.css'))
 
 function generateLoadingHtml(str) {
     return `

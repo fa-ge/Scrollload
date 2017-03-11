@@ -1,12 +1,9 @@
 import Scrollload from '../../Scrollload'
 import './index.css'
-import '../../loading-demos/baidu-mobile/loading.css'
 
 import Swiper from 'swiper/dist/js/swiper.min'
 import 'swiper/dist/css/swiper.css'
 
-import '../../loading-demos/baidu-mobile/loading.css'
-import '../../loading-demos/baidu-mobile/baiduMobile'
 
 import $ from 'jquery'
 

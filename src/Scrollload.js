@@ -7,7 +7,7 @@ import assign from './assign'
 import LocalScrollFix from 'localscrollfix'
 import ScrollFix from 'scrollfix'
 import {isIos, setStyles, noop} from './utils'
-import defaultSkin from './defaultSkin'
+import loading from './loading'
 
 export default class Scrollload {
     static defaultOptions = {
@@ -484,7 +484,6 @@ export default class Scrollload {
     }
 }
 
-Scrollload.setGlobalOptions(defaultSkin)
+Scrollload.setGlobalOptions(loading)
 
 window.Scrollload = Scrollload
-

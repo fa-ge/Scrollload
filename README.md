@@ -20,9 +20,9 @@ Scrollload是一个无依赖，体积极小（压缩+gzip后不到3k），可配
 
 [无任何效果](https://fa-ge.github.io/Scrollload/dist/feature-demos/demo1/index.html)
 
-[有loading动画一(百度移动端包括下拉刷新)](https://fa-ge.github.io/Scrollload/dist/loading-demos/baidu-mobile/index.html)
+[有loading动画一(百度移动端包括下拉刷新)](https://fa-ge.github.io/Scrollload/dist/loading-demos/baidu-mobile-skin/index.html)
 
-[有loading动画二](https://fa-ge.github.io/Scrollload/dist/loading-demos/twoBallsSwing/index.html)
+[有loading动画二(传统)](https://fa-ge.github.io/Scrollload/dist/loading-demos/traditional-skin/index.html)
 
 [多个tab效果](https://fa-ge.github.io/Scrollload/dist/feature-demos/demo2/index.html)
 

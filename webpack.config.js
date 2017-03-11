@@ -3,6 +3,7 @@ const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const find = require('find')
+const camelcase = require('camelcase')
 
 const args = require('minimist')(process.argv.slice(2))
 const extractCSS = new ExtractTextPlugin('[name].css')
@@ -12,8 +13,6 @@ if (args.env === 'lib') {
     config = {
         entry: {
             Scrollload: './src/Scrollload.js',
-            baiduMobile: './src/loading-demos/baidu-mobile/baiduMobile.js'
-
         },
         output: {
             path: './lib',
@@ -23,6 +22,20 @@ if (args.env === 'lib') {
         },
         module: {
             rules: [
+                {
+                    test: /loading\.css$/,
+                    use: [
+                        {
+                            loader: 'css-loader',
+                            query: {
+                                minimize: true
+                            }
+                        },
+                        {
+                            loader: 'postcss-loader'
+                        }
+                    ]
+                },
                 {
                     test: /\.js$/,
                     use: [
@@ -38,10 +51,24 @@ if (args.env === 'lib') {
             ],
         },
         plugins: [
+            new webpack.LoaderOptionsPlugin({
+                options: {
+                    postcss: function () {
+                        return [
+                            require('autoprefixer')({
+                                browsers: ['> 1%', 'last 3 versions', 'iOS >= 6', 'android 4']
+                            })
+                        ];
+                    },
+                }
+            }),
             new webpack.optimize.UglifyJsPlugin()
         ]
     }
-
+    const filePaths = find.fileSync('loading.js', './src/loading-demos')
+    filePaths.forEach((filePath, index) => {
+        config.entry[camelcase(filePath.split('/')[2])] = `./${filePath}`
+    })
 } else {
     config = {
         entry: {},
@@ -53,7 +80,23 @@ if (args.env === 'lib') {
         module: {
             rules: [
                 {
-                    test: /\.css$/,
+                    test: /loading\.css$/,
+                    use: [
+                        {
+                            loader: 'css-loader',
+                            query: {
+                                minimize: true
+                            }
+                        },
+                        {
+                            loader: 'postcss-loader'
+                        }
+                    ]
+                },
+                {
+                    test(path) {
+                        return /\.css$/.test(path) && path.indexOf('loading.css') === -1
+                    },
                     use: extractCSS.extract({
                         fallback: "style-loader",
                         use: [
