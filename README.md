@@ -215,6 +215,6 @@ initedHandler: noop
 - distance: 下拉刷新的时候你滑动的dom移动的距离，不是你手指移动的距离。这两者的关系可以通过calMovingDistance计算
 
 ### 交流
-如果你有好的加载更多动画的效果，可以在loading-demos文件夹下写一些自己的demo，loading的css必须是loading.css，并在头部加入loadingHtml的dom结构。[参考](https://github.com/fa-ge/Scrollload/blob/master/lib/loading-css/baidu-mobile.css),然后提一个pr给我。  
+如果你有好的加载更多动画的效果，可以在loading-demos文件夹下写一些自己的demo,然后提一个pr给我。
 
 当然用的时候有什么建议都可以和我提，有什么不懂得也可以和我提。任何形式和我提都可以。
