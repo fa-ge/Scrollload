@@ -198,6 +198,7 @@ initedHandler: noop
 * throwException(): 出现异常需要调用这个方法，会在底部DOM中出现相应的样式
 * solveException(): 当你的异常问题解决后需要调用这个方法可以继续加载数据
 * refreshComplete(): 下拉刷新的时候你去请求完数据后需要调用这个函数通知我。我就可以把正在刷新的状态改成刷新完成。
+* triggerPullResfresh(): 主动触发下拉刷新。
 * getOptions(): 获取配置
 * setOptions(obj): 修改配置。obj和new Scrollload()的第二个参数一样的格式。
 * setGlobalOptions(obj): 全局配置，一次配置多次时候。调用这个方法和之前的方法不一样。之前的都需要对象实例化后才能调用。这个方法直接Scrollload构造函数上调用。Scrollload.setGlobalOptions()。接受的参数和setOptions方法一样
