@@ -14,7 +14,7 @@ export function setStyles(els, cssObj) {
     els.forEach(el => el && assign(el.style, cssObj))
 }
 
-export function addStyleNode(cssText){
+export function addStyleNode(cssText) {
     const styleNode = document.createElement('style')
     styleNode.appendChild(document.createTextNode(cssText))
     document.getElementsByTagName('head')[0].appendChild(styleNode)

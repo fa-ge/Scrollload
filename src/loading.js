@@ -1,4 +1,4 @@
-import {setStyles, addStyleNode} from './utils'
+import { setStyles, addStyleNode } from './utils'
 
 addStyleNode(require('./loading.css')[0][1])
 
@@ -29,20 +29,19 @@ const defaultSkin = {
     notEnoughRefreshPortHtml: defaultMovingHtml,
     overRefreshPortHtml: defaultMovingHtml,
     refreshingHtml: defaultLoadingHtml,
-    notEnoughRefreshPortHandler: function (sl) {
+    notEnoughRefreshPortHandler: function(sl) {
         effect(sl.ball1, sl.ball2, sl.distance / sl.topContentDomHeight)
     },
     initedHandler(sl) {
         const balls = sl.container.querySelectorAll('.sl-ld-ball')
         sl.ball1 = balls[0]
         sl.ball2 = balls[1]
-    }
+    },
 }
 
 function effect(ball1, ball2, prop) {
-    setStyles([ball1], {transform: `translate3d(-${18 * prop}px, 0, 0)`})
-    setStyles([ball2], {transform: `translate3d(${18 * prop}px, 0, 0)`})
+    setStyles([ball1], { transform: `translate3d(-${18 * prop}px, 0, 0)` })
+    setStyles([ball2], { transform: `translate3d(${18 * prop}px, 0, 0)` })
 }
 
 export default defaultSkin
-

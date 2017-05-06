@@ -2,9 +2,13 @@ import Scrollload from '../../Scrollload'
 import './index.css'
 import $ from 'jquery'
 
-
 function getData(data) {
-    return data.data.sort(function(a,b){ return Math.random() > 0.5 ? -1 : 1;}).map(item => `
+    return data.data
+        .sort(function(a, b) {
+            return Math.random() > 0.5 ? -1 : 1
+        })
+        .map(
+            item => `
         <li>
             <div class="info">
                 <img class="image" src="${item.image}">
@@ -16,7 +20,9 @@ function getData(data) {
             </div>
             <a class="btn" href="http://m.dolapocket.com/" target="_blank">开始</a>
         </li>
-    `).join('')
+    `
+        )
+        .join('')
 }
 let page = 1
 new Scrollload({
@@ -33,32 +39,32 @@ new Scrollload({
             type: 'GET',
             url: `https://fa-ge.github.io/Scrollload/gamelist.json?page=${page++}`,
             dataType: 'json',
-            success: function(data){
+            success: function(data) {
                 // contentDom其实就是你的scrollload-content类的dom
                 $(sl.contentDom).append(getData(data))
 
                 // 处理完业务逻辑后必须要调用unlock
                 sl.unLock()
             },
-            error: function(xhr, type){
+            error: function(xhr, type) {
                 // 加载出错，需要执行该方法。这样底部DOM会出现出现异常的样式。
                 sl.throwException()
-            }
+            },
         })
     },
     // 你也可以关闭下拉刷新
     enablePullRefresh: true,
-    pullRefresh: function (sl) {
+    pullRefresh: function(sl) {
         $.ajax({
             type: 'GET',
             url: `https://fa-ge.github.io/Scrollload/gamelist.json?page=${Math.floor(Math.random() * 100)}`,
             dataType: 'json',
-            success: function(data){
+            success: function(data) {
                 $(sl.contentDom).prepend(getData(data))
 
                 // 处理完业务逻辑后必须要调用refreshComplete
                 sl.refreshComplete()
-            }
+            },
         })
-    }
+    },
 })

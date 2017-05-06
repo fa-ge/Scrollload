@@ -1,4 +1,4 @@
-import {setStyles} from '../../utils'
+import { setStyles } from '../../utils'
 
 if (window.Scrollload === undefined) {
     throw new Error('请在引入Scrollload库之后引入该js文件')
@@ -30,14 +30,14 @@ window.Scrollload.setGlobalOptions({
         const scrollloadMovingDom1 = sl.notEnoughRefreshPortDom.querySelector('.scrollload-movingHtml')
         const scrollloadMovingDom2 = sl.overRefreshPortDom.querySelector('.scrollload-movingHtml')
         if (sl.isMovingDown) {
-            setStyles([scrollloadMovingDom1, scrollloadMovingDom2], {transform: 'rotate(180deg) translate3d(0,0,0)'})
+            setStyles([scrollloadMovingDom1, scrollloadMovingDom2], { transform: 'rotate(180deg) translate3d(0,0,0)' })
         } else {
-            setStyles([scrollloadMovingDom1, scrollloadMovingDom2], {transform: 'rotate(0deg) translate3d(0,0,0)'})
+            setStyles([scrollloadMovingDom1, scrollloadMovingDom2], { transform: 'rotate(0deg) translate3d(0,0,0)' })
         }
     },
     touchEnd(sl) {
         const scrollloadMovingDom1 = sl.notEnoughRefreshPortDom.querySelector('.scrollload-movingHtml')
         const scrollloadMovingDom2 = sl.overRefreshPortDom.querySelector('.scrollload-movingHtml')
-        setStyles([scrollloadMovingDom1, scrollloadMovingDom2], {transform: 'rotate(0deg) translate3d(0,0,0)'})
-    }
+        setStyles([scrollloadMovingDom1, scrollloadMovingDom2], { transform: 'rotate(0deg) translate3d(0,0,0)' })
+    },
 })

@@ -1,6 +1,6 @@
 //解决canvas绘图模糊的问题
 import 'hidpi-canvas/dist/hidpi-canvas'
-import {addStyleNode} from '../../utils'
+import { addStyleNode } from '../../utils'
 
 if (window.Scrollload === undefined) {
     throw new Error('请在引入Scrollload库之后引入该js文件')
@@ -27,11 +27,11 @@ window.Scrollload.setGlobalOptions({
 `,
     refreshingHtml: generateLoadingHtml('正在刷新'),
     notEnoughRefreshPortHtml: `<div class="s-loading-moving"><canvas class="s-loading-canvas1" width="45" height="50"></canvas>下拉刷新</div>`,
-    notEnoughRefreshPortHandler: function (sl) {
+    notEnoughRefreshPortHandler: function(sl) {
         effect(sl.ctx1, sl.canvas1, sl.distance / sl.topContentDomHeight)
     },
     overRefreshPortHtml: `<div class="s-loading-moving"><canvas class="s-loading-canvas2" width="45" height="50"></canvas>松开刷新</div>`,
-    overRefreshPortHandler: function (sl) {
+    overRefreshPortHandler: function(sl) {
         effect(sl.ctx2, sl.canvas2, 1)
     },
     initedHandler(sl) {
@@ -40,7 +40,7 @@ window.Scrollload.setGlobalOptions({
 
         sl.canvas2 = sl.container.querySelector('.s-loading-canvas2')
         sl.ctx2 = sl.canvas2.getContext('2d')
-    }
+    },
 })
 
 function effect(ctx, canvas, prop) {

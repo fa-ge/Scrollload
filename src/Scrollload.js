@@ -6,7 +6,7 @@ import throttle from './underscore.throttle'
 import assign from './assign'
 import LocalScrollFix from 'localscrollfix'
 import ScrollFix from 'scrollfix'
-import {isIos, setStyles, noop} from './utils'
+import { isIos, setStyles, noop } from './utils'
 import loading from './loading'
 
 export default class Scrollload {
@@ -61,23 +61,23 @@ export default class Scrollload {
         },
 
         // 实例化完后的回调
-        initedHandler: noop
+        initedHandler: noop,
     }
 
     constructor(options = {}) {
         this._options = assign({}, Scrollload.defaultOptions, options)
         const container = this._options.container || document.querySelector('.scrollload-container')
         this.container = container
-        if (! (container instanceof HTMLElement)) {
-            throw new Error('container must be a HTMLElement instance!');
+        if (!(container instanceof HTMLElement)) {
+            throw new Error('container must be a HTMLElement instance!')
         }
 
         this.win = this._options.window
         this.isGlobalScroll = this.win === window
 
         this.contentDom = this._options.content || this.container.querySelector('.scrollload-content')
-        if (! (this.contentDom instanceof HTMLElement)) {
-            throw new Error('content must be a HTMLElement instance!');
+        if (!(this.contentDom instanceof HTMLElement)) {
+            throw new Error('content must be a HTMLElement instance!')
         }
 
         if (this._options.enableLoadMore) {
@@ -125,7 +125,6 @@ export default class Scrollload {
         this.fixLocalScroll()
 
         this._options.initedHandler.call(this, this)
-
     }
 
     //修复ios局部滚动的bug
@@ -144,20 +143,25 @@ export default class Scrollload {
     }
 
     createBottomDom() {
-        this.container.insertAdjacentHTML('beforeend', `<div class="scrollload-bottom">${this._options.loadingHtml}</div>`)
+        this.container.insertAdjacentHTML(
+            'beforeend',
+            `<div class="scrollload-bottom">${this._options.loadingHtml}</div>`
+        )
         this.bottomDom = this.container.querySelector('.scrollload-bottom')
     }
 
     createTopDom() {
-        const {notEnoughRefreshPortHtml, overRefreshPortHtml, refreshingHtml} = this._options
-        this.container.insertAdjacentHTML('afterbegin',
+        const { notEnoughRefreshPortHtml, overRefreshPortHtml, refreshingHtml } = this._options
+        this.container.insertAdjacentHTML(
+            'afterbegin',
             `<div class="scrollload-top" style="position: relative;">
                 <div class="scrollload-top-content" style="position: absolute; left: 0; right: 0;">
                     <div class="scrollload-notEnoughRefreshPort" style="display: block">${notEnoughRefreshPortHtml}</div>
                     <div class="scrollload-overRefreshPort" style="display: none">${overRefreshPortHtml}</div>
                     <div class="scrollload-refreshing" style="display: none">${refreshingHtml}</div>
                 </div>
-            </div>`)
+            </div>`
+        )
 
         const topDom = this.container.querySelector('.scrollload-top')
         const topContentDom = topDom.querySelector('.scrollload-top-content')
@@ -189,18 +193,24 @@ export default class Scrollload {
     }
 
     showNotEnoughRefreshPortDom() {
-        setStyles([this.overRefreshPortDom, this.refreshingDom], {display: 'none'})
-        setStyles([this.notEnoughRefreshPortDom], {display: 'block'})
+        setStyles([this.overRefreshPortDom, this.refreshingDom], {
+            display: 'none',
+        })
+        setStyles([this.notEnoughRefreshPortDom], { display: 'block' })
     }
 
     showOverRefreshPortDom() {
-        setStyles([this.notEnoughRefreshPortDom, this.refreshingDom], {display: 'none'})
-        setStyles([this.overRefreshPortDom], {display: 'block'})
+        setStyles([this.notEnoughRefreshPortDom, this.refreshingDom], {
+            display: 'none',
+        })
+        setStyles([this.overRefreshPortDom], { display: 'block' })
     }
 
     showRefreshingDom() {
-        setStyles([this.notEnoughRefreshPortDom, this.overRefreshPortDom], {display: 'none'})
-        setStyles([this.refreshingDom], {display: 'block'})
+        setStyles([this.notEnoughRefreshPortDom, this.overRefreshPortDom], {
+            display: 'none',
+        })
+        setStyles([this.refreshingDom], { display: 'block' })
     }
 
     // 计算向下滑动距离的函数
@@ -218,8 +228,11 @@ export default class Scrollload {
 
     // 刷新完成后的处理
     refreshComplete() {
-        setStyles([this.topDom, this.contentDom, this.bottomDom], {transition: 'all 300ms', transform: 'translate3d(0, 0, 0)'})
-        setStyles([this.topContentDom], {transition: 'all 300ms'})
+        setStyles([this.topDom, this.contentDom, this.bottomDom], {
+            transition: 'all 300ms',
+            transform: 'translate3d(0, 0, 0)',
+        })
+        setStyles([this.topContentDom], { transition: 'all 300ms' })
         this.setTopDomClipTop(this.topContentDomHeight)
         this.isRefreshing = false
     }
@@ -243,7 +256,9 @@ export default class Scrollload {
             this.isMoving = false
         }
 
-        setStyles([this.topDom, this.contentDom, this.bottomDom], {transform: `translate3d(0, ${distance}px, 0)`})
+        setStyles([this.topDom, this.contentDom, this.bottomDom], {
+            transform: `translate3d(0, ${distance}px, 0)`,
+        })
         // 最小值一定大于0其实是不想让repaint的区域变大，功能上没影响
         this.setTopDomClipTop(Math.max(this.topContentDomHeight - distance, 0))
     }
@@ -259,7 +274,7 @@ export default class Scrollload {
         this.isRefreshing = true
         setStyles([this.topDom, this.contentDom, this.bottomDom], {
             transition: 'all 300ms',
-            transform: `translate3d(0, ${this.topContentDomHeight}px, 0)`
+            transform: `translate3d(0, ${this.topContentDomHeight}px, 0)`,
         })
         this._options.pullRefresh.call(this, this)
     }
@@ -277,7 +292,10 @@ export default class Scrollload {
     // 是否到达了可刷新的位置
     isArrivedRefreshPort() {
         const preDistance = this._options.calMovingDistance(this.prePageY - this.startPageY)
-        return (this.distance >= this.topContentDomHeight && preDistance < this.topContentDomHeight) || (this.distance <= this.topContentDomHeight && preDistance > this.topContentDomHeight)
+        return (
+            (this.distance >= this.topContentDomHeight && preDistance < this.topContentDomHeight) ||
+            (this.distance <= this.topContentDomHeight && preDistance > this.topContentDomHeight)
+        )
     }
 
     // 对到达了刷新的位置时的处理
@@ -309,7 +327,7 @@ export default class Scrollload {
         this.startPageY = this.prePageY = event.touches[0].pageY
         // 在滑动的时候是不需要过渡动画的
         setStyles([this.topDom, this.contentDom, this.bottomDom, this.topContentDom], {
-            transition: 'none'
+            transition: 'none',
         })
         this.showNotEnoughRefreshPortDom()
 
@@ -349,7 +367,7 @@ export default class Scrollload {
 
         this._options.touchMove.call(this, this)
 
-        this.prePageY =  pageY
+        this.prePageY = pageY
     }
 
     touchEnd(event) {
@@ -384,14 +402,14 @@ export default class Scrollload {
 
     // 是否滚动到底部
     isBottom() {
-        const {win, bottomDom, windowHeight} = this
+        const { win, bottomDom, windowHeight } = this
         let bottomDomTop = bottomDom.getBoundingClientRect().top
         let winHeight
 
         if (this.isGlobalScroll) {
             winHeight = windowHeight
         } else {
-            const {height, top} = win.getBoundingClientRect()
+            const { height, top } = win.getBoundingClientRect()
             winHeight = height
             bottomDomTop = bottomDomTop - top
         }

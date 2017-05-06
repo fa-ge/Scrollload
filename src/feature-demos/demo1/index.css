@@ -1,8 +1,9 @@
 * {
     margin: 0;
     padding: 0;
-    box-sizing:border-box;
+    box-sizing: border-box;
 }
+
 ul {
     list-style: none;
     font-size: 14px;
@@ -11,11 +12,13 @@ ul {
 .info {
     display: flex;
 }
+
 .image {
     width: 58px;
     height: 58px;
     border-radius: 5px;
 }
+
 .desc {
     display: flex;
     flex-direction: column;
@@ -23,6 +26,7 @@ ul {
     align-self: stretch;
     margin-left: 20px;
 }
+
 .btn {
     display: block;
     border: 1px solid #ff2741;
@@ -32,8 +36,8 @@ ul {
     padding: 4px 15px;
     text-decoration: none;
     font-size: 12px;
-
 }
+
 h1 {
     text-align: center;
     margin-bottom: 20px;

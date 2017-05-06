@@ -2,9 +2,11 @@
     0% {
         transform: rotate(0deg) translateZ(0);
     }
+
     50% {
         transform: rotate(180deg) translateZ(0);
     }
+
     100% {
         transform: rotate(360deg) translateZ(0);
     }
@@ -27,11 +29,13 @@
     margin-right: 6px;
 }
 
-.s-loading-frame .load-img-wrapper, .s-loading-frame .load-text {
+.s-loading-frame .load-img-wrapper,
+.s-loading-frame .load-text {
     display: inline-block;
     height: 18px;
     line-height: 18px;
 }
+
 .s-loading-frame img {
     width: 18px;
     height: 18px;
