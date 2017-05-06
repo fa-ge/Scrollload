@@ -1,9 +1,5 @@
 import assign from './assign'
 
-export function isIos() {
-    return true || /iphone/i.test(window.navigator.userAgent)
-}
-
 export function setStyles(els, cssObj) {
     if ('transform' in cssObj) {
         cssObj['webkitTransform'] = cssObj['transform']

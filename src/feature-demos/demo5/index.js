@@ -28,8 +28,6 @@ function getData(data) {
 
 let page = 1
 const scrollload = new Scrollload({
-    useLocalScrollFix: true,
-    useScrollFix: true,
     loadMore: function(sl) {
         if (page === 6) {
             sl.noMoreData()

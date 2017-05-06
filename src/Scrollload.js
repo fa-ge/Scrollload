@@ -2,11 +2,10 @@
  *  author: fa-ge
  *  github: https://github.com/fa-ge/Scrollload
  */
-import throttle from './underscore.throttle'
+import throttle from './underscore-throttle'
 import assign from './assign'
 import LocalScrollFix from 'localscrollfix'
-import ScrollFix from 'scrollfix'
-import { isIos, setStyles, noop } from './utils'
+import { setStyles, noop } from './utils'
 import loading from './loading'
 
 export default class Scrollload {
@@ -19,10 +18,8 @@ export default class Scrollload {
         threshold: 10,
         // 视窗
         window: window,
-        // 修复局部滚动的两个坑
+        // 修复局部滚动的坑
         useLocalScrollFix: false,
-        useScrollFix: false,
-
         // 底部加载中的html
         loadingHtml: '',
         // 底部没有更多数据的html
@@ -129,16 +126,8 @@ export default class Scrollload {
 
     //修复ios局部滚动的bug
     fixLocalScroll() {
-        if (this.win !== window && isIos()) {
-            if (this._options.useLocalScrollFix) {
-                this.localScrollFix = new LocalScrollFix(this.win)
-            }
-            if (this._options.useScrollFix) {
-                new ScrollFix(this.win)
-            }
-        } else {
-            this._options.useLocalScrollFix = false
-            this._options.useScrollFix = false
+        if (this._options.useLocalScrollFix) {
+            LocalScrollFix(this.win)
         }
     }
 
@@ -445,9 +434,6 @@ export default class Scrollload {
         if (this.hasMoreData) {
             this.scrollListener()
         }
-        if (this._options.useLocalScrollFix) {
-            this.localScrollFix.update()
-        }
     }
 
     noMoreData() {
@@ -455,10 +441,6 @@ export default class Scrollload {
 
         this.hasMoreData = false
         this.showNoMoreDataDom()
-
-        if (this._options.useLocalScrollFix && !this.localScrollFix.isArrived) {
-            this.localScrollFix.arrived()
-        }
 
         this.detachScrollListener()
     }
@@ -468,10 +450,6 @@ export default class Scrollload {
 
         this.isLock = false
         this.hasMoreData = true
-
-        if (this._options.useLocalScrollFix) {
-            this.localScrollFix = new LocalScrollFix(this.win)
-        }
 
         this.attachScrollListener()
     }

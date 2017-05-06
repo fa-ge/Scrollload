@@ -31,7 +31,6 @@ const window = document.querySelector('.window')
 new Scrollload({
     window: window,
     useLocalScrollFix: true,
-    useScrollFix: true,
     loadMore: function(sl) {
         if (page === 6) {
             sl.noMoreData()

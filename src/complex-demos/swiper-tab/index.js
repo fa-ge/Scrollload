@@ -36,7 +36,6 @@ Array.prototype.slice.call(document.querySelectorAll('.scrollload-container')).f
         new Scrollload({
             window: wins[index],
             useLocalScrollFix: true,
-            useScrollFix: true,
             container: container,
             loadMore: function(sl) {
                 if (pages[index] === 6) {

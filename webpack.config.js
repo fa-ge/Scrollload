@@ -15,10 +15,10 @@ if (args.env === 'lib') {
             Scrollload: './src/Scrollload.js',
         },
         output: {
-            path: './lib',
+            path: path.resolve(__dirname, './lib'),
             filename: '[name].js',
             library: '[name].js',
-            libraryTarget: 'umd'
+            libraryTarget: 'umd',
         },
         module: {
             rules: [
@@ -28,42 +28,39 @@ if (args.env === 'lib') {
                         {
                             loader: 'css-loader',
                             query: {
-                                minimize: true
-                            }
+                                minimize: true,
+                            },
                         },
                         {
-                            loader: 'postcss-loader'
-                        }
-                    ]
+                            loader: 'postcss-loader',
+                        },
+                    ],
                 },
                 {
                     test: /\.js$/,
                     use: [
                         {
                             loader: 'babel-loader',
-                        }
+                        },
                     ],
-                    include: [
-                        path.resolve(__dirname, 'src'),
-                        path.resolve(__dirname, 'node_modules/localscrollfix'),
-                    ],
-                }
+                    include: [path.resolve(__dirname, 'src'), path.resolve(__dirname, 'node_modules/localscrollfix')],
+                },
             ],
         },
         plugins: [
             new webpack.LoaderOptionsPlugin({
                 options: {
-                    postcss: function () {
+                    postcss: function() {
                         return [
                             require('autoprefixer')({
-                                browsers: ['> 1%', 'last 3 versions', 'iOS >= 6', 'android 4']
-                            })
-                        ];
+                                browsers: ['> 1%', 'last 3 versions', 'iOS >= 6', 'android 4'],
+                            }),
+                        ]
                     },
-                }
+                },
             }),
-            new webpack.optimize.UglifyJsPlugin()
-        ]
+            new webpack.optimize.UglifyJsPlugin(),
+        ],
     }
     const filePaths = find.fileSync('loading.js', './src/loading-demos')
     filePaths.forEach((filePath, index) => {
@@ -73,8 +70,8 @@ if (args.env === 'lib') {
     config = {
         entry: {},
         output: {
-            path: './dist',
-            filename: '[name].js'
+            path: path.resolve(__dirname, './dist'),
+            filename: '[name].js',
         },
         devtool: args.env === 'dist' ? '' : 'eval-source-map',
         module: {
@@ -85,31 +82,31 @@ if (args.env === 'lib') {
                         {
                             loader: 'css-loader',
                             query: {
-                                minimize: true
-                            }
+                                minimize: true,
+                            },
                         },
                         {
-                            loader: 'postcss-loader'
-                        }
-                    ]
+                            loader: 'postcss-loader',
+                        },
+                    ],
                 },
                 {
                     test(path) {
                         return /\.css$/.test(path) && path.indexOf('loading.css') === -1
                     },
                     use: extractCSS.extract({
-                        fallback: "style-loader",
+                        fallback: 'style-loader',
                         use: [
                             {
                                 loader: 'css-loader',
                                 query: {
-                                    minimize: true
-                                }
+                                    minimize: true,
+                                },
                             },
                             {
-                                loader: 'postcss-loader'
-                            }
-                        ]
+                                loader: 'postcss-loader',
+                            },
+                        ],
                     }),
                 },
                 {
@@ -117,44 +114,43 @@ if (args.env === 'lib') {
                     use: [
                         {
                             loader: 'babel-loader',
-                        }
+                        },
                     ],
-                    include: [
-                        path.resolve(__dirname, 'src'),
-                        path.resolve(__dirname, 'node_modules/localscrollfix'),
-                    ],
-                }
+                    include: [path.resolve(__dirname, 'src'), path.resolve(__dirname, 'node_modules/localscrollfix')],
+                },
             ],
         },
         plugins: [
             new webpack.LoaderOptionsPlugin({
                 options: {
-                    postcss: function () {
+                    postcss: function() {
                         return [
                             require('autoprefixer')({
-                                browsers: ['> 1%', 'last 3 versions', 'iOS >= 6', 'android 4']
-                            })
-                        ];
+                                browsers: ['> 1%', 'last 3 versions', 'iOS >= 6', 'android 4'],
+                            }),
+                        ]
                     },
-                }
+                },
             }),
-            extractCSS
+            extractCSS,
         ],
         devServer: {
             contentBase: './src',
-            port: 9000
+            port: 9000,
+            disableHostCheck: true,
         },
     }
     const filePaths = find.fileSync('index.js', './src')
     filePaths.forEach((filePath, index) => {
         config.entry[`out${index}`] = `./${filePath}`
-        config.plugins.push(new HtmlWebpackPlugin({
-            filename: filePath.replace(/js$/, 'html').replace('src/', ''),
-            template: filePath.replace(/js$/, 'html'),
-            chunks: [`out${index}`]
-        }))
+        config.plugins.push(
+            new HtmlWebpackPlugin({
+                filename: filePath.replace(/js$/, 'html').replace('src/', ''),
+                template: filePath.replace(/js$/, 'html'),
+                chunks: [`out${index}`],
+            })
+        )
     })
 }
-
 
 module.exports = config

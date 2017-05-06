@@ -60,3 +60,17 @@ h1 {
     overflow: auto;
     -webkit-overflow-scrolling: touch;
 }
+
+.window:before {
+    content: "";
+    width: 1px;
+    float: left;
+    height: calc(100% + 1px);
+    margin-left: -1px;
+}
+
+.window:after {
+    content: "";
+    width: 100%;
+    clear: both;
+}
