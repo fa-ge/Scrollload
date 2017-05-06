@@ -4,7 +4,7 @@
   "description": "scroll load more data 滚动加载更多的数据",
   "main": "lib/Scrollload.js",
   "scripts": {
-    "start": "webpack-dev-server --env=dev --host 0.0.0.0",
+    "start": "webpack-dev-server --env=dev --host 0.0.0.0 --open",
     "dist": "rimraf dist/* & webpack --env=dist",
     "lib": "rimraf lib/* & webpack --env=lib",
     "test": "echo \"Error: no test specified\" && exit 1"
