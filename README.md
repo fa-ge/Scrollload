@@ -142,9 +142,8 @@ isInitLock: false,
 // 阀值 (滚动到底部提前加载的距离)
 threshold: 10,
 
-// 修复局部滚动的两个坑。参见ios局部滚动的坑及解决方案 https://zhuanlan.zhihu.com/p/24837233
+// 修复局部滚动的坑。参见ios局部滚动的坑及解决方案 https://zhuanlan.zhihu.com/p/24837233
 useLocalScrollFix: false,
-useScrollFix: false,
 
 // 底部加载中的html
 loadingHtml: generateHtml('加载中...'),
