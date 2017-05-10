@@ -5,6 +5,7 @@ import Swiper from 'swiper/dist/js/swiper.min'
 import 'swiper/dist/css/swiper.css'
 
 import $ from 'jquery'
+import LocalScrollFix from 'LocalScrollFix'
 
 function getData(data) {
     return data.data
@@ -29,6 +30,10 @@ function getData(data) {
         .join('')
 }
 const wins = document.querySelectorAll('.window')
+
+// 修复局部滚动的bug，具体见https://zhuanlan.zhihu.com/p/24837233
+wins.forEach(win => LocalScrollFix(win))
+
 const pages = [1, 1, 1]
 const scrollloads = []
 Array.prototype.slice.call(document.querySelectorAll('.scrollload-container')).forEach((container, index) => {

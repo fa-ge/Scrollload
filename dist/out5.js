@@ -10394,12 +10394,10 @@ return jQuery;
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__underscore_throttle__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__underscore_throttle__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__assign__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_localscrollfix__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_localscrollfix___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_localscrollfix__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__loading__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__loading__ = __webpack_require__(6);
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -10408,7 +10406,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  *  author: fa-ge
  *  github: https://github.com/fa-ge/Scrollload
  */
-
 
 
 
@@ -10477,22 +10474,10 @@ var Scrollload = function () {
             this.attachTouchListener();
         }
 
-        this.fixLocalScroll();
-
         this._options.initedHandler.call(this, this);
     }
 
-    //修复ios局部滚动的bug
-
-
     _createClass(Scrollload, [{
-        key: 'fixLocalScroll',
-        value: function fixLocalScroll() {
-            if (this._options.useLocalScrollFix) {
-                __WEBPACK_IMPORTED_MODULE_2_localscrollfix___default()(this.win);
-            }
-        }
-    }, {
         key: 'createBottomDom',
         value: function createBottomDom() {
             this.container.insertAdjacentHTML('beforeend', '<div class="scrollload-bottom">' + this._options.loadingHtml + '</div>');
@@ -10542,26 +10527,26 @@ var Scrollload = function () {
     }, {
         key: 'showNotEnoughRefreshPortDom',
         value: function showNotEnoughRefreshPortDom() {
-            __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__utils__["a" /* setStyles */])([this.overRefreshPortDom, this.refreshingDom], {
+            __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__utils__["a" /* setStyles */])([this.overRefreshPortDom, this.refreshingDom], {
                 display: 'none'
             });
-            __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__utils__["a" /* setStyles */])([this.notEnoughRefreshPortDom], { display: 'block' });
+            __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__utils__["a" /* setStyles */])([this.notEnoughRefreshPortDom], { display: 'block' });
         }
     }, {
         key: 'showOverRefreshPortDom',
         value: function showOverRefreshPortDom() {
-            __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__utils__["a" /* setStyles */])([this.notEnoughRefreshPortDom, this.refreshingDom], {
+            __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__utils__["a" /* setStyles */])([this.notEnoughRefreshPortDom, this.refreshingDom], {
                 display: 'none'
             });
-            __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__utils__["a" /* setStyles */])([this.overRefreshPortDom], { display: 'block' });
+            __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__utils__["a" /* setStyles */])([this.overRefreshPortDom], { display: 'block' });
         }
     }, {
         key: 'showRefreshingDom',
         value: function showRefreshingDom() {
-            __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__utils__["a" /* setStyles */])([this.notEnoughRefreshPortDom, this.overRefreshPortDom], {
+            __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__utils__["a" /* setStyles */])([this.notEnoughRefreshPortDom, this.overRefreshPortDom], {
                 display: 'none'
             });
-            __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__utils__["a" /* setStyles */])([this.refreshingDom], { display: 'block' });
+            __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__utils__["a" /* setStyles */])([this.refreshingDom], { display: 'block' });
         }
 
         // 计算向下滑动距离的函数
@@ -10587,11 +10572,11 @@ var Scrollload = function () {
     }, {
         key: 'refreshComplete',
         value: function refreshComplete() {
-            __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__utils__["a" /* setStyles */])([this.topDom, this.contentDom, this.bottomDom], {
+            __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__utils__["a" /* setStyles */])([this.topDom, this.contentDom, this.bottomDom], {
                 transition: 'all 300ms',
                 transform: 'translate3d(0, 0, 0)'
             });
-            __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__utils__["a" /* setStyles */])([this.topContentDom], { transition: 'all 300ms' });
+            __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__utils__["a" /* setStyles */])([this.topContentDom], { transition: 'all 300ms' });
             this.setTopDomClipTop(this.topContentDomHeight);
             this.isRefreshing = false;
         }
@@ -10618,7 +10603,7 @@ var Scrollload = function () {
                 this.isMoving = false;
             }
 
-            __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__utils__["a" /* setStyles */])([this.topDom, this.contentDom, this.bottomDom], {
+            __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__utils__["a" /* setStyles */])([this.topDom, this.contentDom, this.bottomDom], {
                 transform: 'translate3d(0, ' + distance + 'px, 0)'
             });
             // 最小值一定大于0其实是不想让repaint的区域变大，功能上没影响
@@ -10640,7 +10625,7 @@ var Scrollload = function () {
         value: function triggerPullResfresh() {
             this.showRefreshingDom();
             this.isRefreshing = true;
-            __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__utils__["a" /* setStyles */])([this.topDom, this.contentDom, this.bottomDom], {
+            __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__utils__["a" /* setStyles */])([this.topDom, this.contentDom, this.bottomDom], {
                 transition: 'all 300ms',
                 transform: 'translate3d(0, ' + this.topContentDomHeight + 'px, 0)'
             });
@@ -10705,7 +10690,7 @@ var Scrollload = function () {
 
             this.startPageY = this.prePageY = event.touches[0].pageY;
             // 在滑动的时候是不需要过渡动画的
-            __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__utils__["a" /* setStyles */])([this.topDom, this.contentDom, this.bottomDom, this.topContentDom], {
+            __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__utils__["a" /* setStyles */])([this.topDom, this.contentDom, this.bottomDom, this.topContentDom], {
                 transition: 'none'
             });
             this.showNotEnoughRefreshPortDom();
@@ -10906,8 +10891,7 @@ Scrollload.defaultOptions = {
     threshold: 10,
     // 视窗
     window: window,
-    // 修复局部滚动的坑
-    useLocalScrollFix: false,
+
     // 底部加载中的html
     loadingHtml: '',
     // 底部没有更多数据的html
@@ -10915,7 +10899,7 @@ Scrollload.defaultOptions = {
     // 底部出现异常的html
     exceptionHtml: '',
     // 加载更多的回调
-    loadMore: __WEBPACK_IMPORTED_MODULE_3__utils__["b" /* noop */],
+    loadMore: __WEBPACK_IMPORTED_MODULE_2__utils__["b" /* noop */],
 
     // 是否开启下拉刷新
     enablePullRefresh: false,
@@ -10926,19 +10910,19 @@ Scrollload.defaultOptions = {
     // 顶部正在刷新的html
     refreshingHtml: '',
     // 下拉刷新的回调
-    pullRefresh: __WEBPACK_IMPORTED_MODULE_3__utils__["b" /* noop */],
+    pullRefresh: __WEBPACK_IMPORTED_MODULE_2__utils__["b" /* noop */],
     // 到达刷新点的回调(包括向上和向下，可以通过isMovingDown判断方向)
-    arrivedRefreshPortHandler: __WEBPACK_IMPORTED_MODULE_3__utils__["b" /* noop */],
+    arrivedRefreshPortHandler: __WEBPACK_IMPORTED_MODULE_2__utils__["b" /* noop */],
     // 开始滑动的回调
-    touchStart: __WEBPACK_IMPORTED_MODULE_3__utils__["b" /* noop */],
+    touchStart: __WEBPACK_IMPORTED_MODULE_2__utils__["b" /* noop */],
     // 滑动时的回调
-    touchMove: __WEBPACK_IMPORTED_MODULE_3__utils__["b" /* noop */],
+    touchMove: __WEBPACK_IMPORTED_MODULE_2__utils__["b" /* noop */],
     // 滑动中松开手指的回调
-    touchEnd: __WEBPACK_IMPORTED_MODULE_3__utils__["b" /* noop */],
+    touchEnd: __WEBPACK_IMPORTED_MODULE_2__utils__["b" /* noop */],
     // 超过可刷新位置后的监听函数
-    overRefreshPortHandler: __WEBPACK_IMPORTED_MODULE_3__utils__["b" /* noop */],
+    overRefreshPortHandler: __WEBPACK_IMPORTED_MODULE_2__utils__["b" /* noop */],
     // 未超过可刷新位置前的监听函数
-    notEnoughRefreshPortHandler: __WEBPACK_IMPORTED_MODULE_3__utils__["b" /* noop */],
+    notEnoughRefreshPortHandler: __WEBPACK_IMPORTED_MODULE_2__utils__["b" /* noop */],
 
     // 计算下拉的阻力函数
     calMovingDistance: function calMovingDistance(distance) {
@@ -10947,12 +10931,12 @@ Scrollload.defaultOptions = {
 
 
     // 实例化完后的回调
-    initedHandler: __WEBPACK_IMPORTED_MODULE_3__utils__["b" /* noop */]
+    initedHandler: __WEBPACK_IMPORTED_MODULE_2__utils__["b" /* noop */]
 };
 /* harmony default export */ __webpack_exports__["a"] = (Scrollload);
 
 
-Scrollload.setGlobalOptions(__WEBPACK_IMPORTED_MODULE_4__loading__["a" /* default */]);
+Scrollload.setGlobalOptions(__WEBPACK_IMPORTED_MODULE_3__loading__["a" /* default */]);
 
 window.Scrollload = Scrollload;
 
@@ -11028,62 +11012,6 @@ exports.push([module.i, "@-webkit-keyframes sl-ld-ball-anim1{0%{z-index:1;-webki
 
 /***/ }),
 /* 6 */
-/***/ (function(module, exports) {
-
-/**
- * 使ios浏览器中局部滚动内容未占满视窗的一屏时候不出界
- * author: fa-ge
- * github: https://github.com/fa-ge/LocalScrollFix
- */
-
-;(function() {
-    var LocalScrollFix = function(win) {
-        var startY, startTopScroll
-        win = typeof win === 'string' ? document.querySelector(win) : win
-
-        // 只在ios局部滚动的时候才会有这个bug
-        if (!win || win === window || !/iphone/i.test(window.navigator.userAgent)) {
-            return
-        }
-
-        var winStyles = window.getComputedStyle(win, null)
-        var borderWidth = parseFloat(winStyles.borderBottomWidth) + parseFloat(winStyles.borderTopWidth)
-        win.insertAdjacentHTML(
-            'afterbegin',
-            '<div style="width: 1px;float: left;height: calc(100% + ' +
-                (borderWidth + 1) +
-                'px);margin-left: -1px;"></div>'
-        )
-        win.insertAdjacentHTML('beforeend', '<div style="width: 100%;clear: both;"></div>')
-
-        win.addEventListener(
-            'touchstart',
-            function(event) {
-                startY = event.touches[0].pageY
-                startTopScroll = win.scrollTop
-
-                if (startTopScroll <= 0) {
-                    win.scrollTop = 1
-                }
-
-                if (startTopScroll + win.offsetHeight >= win.scrollHeight) {
-                    win.scrollTop = win.scrollHeight - win.offsetHeight - 1
-                }
-            },
-            false
-        )
-    }
-
-    if (typeof window != 'undefined' && typeof module == 'undefined') {
-        window.LocalScrollFix = LocalScrollFix
-    } else {
-        module.exports = LocalScrollFix
-    }
-})()
-
-
-/***/ }),
-/* 7 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -11123,7 +11051,7 @@ function effect(ball1, ball2, prop) {
 /* harmony default export */ __webpack_exports__["a"] = (defaultSkin);
 
 /***/ }),
-/* 8 */
+/* 7 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -11169,6 +11097,7 @@ function effect(ball1, ball2, prop) {
 });
 
 /***/ }),
+/* 8 */,
 /* 9 */,
 /* 10 */,
 /* 11 */,

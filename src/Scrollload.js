@@ -4,7 +4,6 @@
  */
 import throttle from './underscore-throttle'
 import assign from './assign'
-import LocalScrollFix from 'localscrollfix'
 import { setStyles, noop } from './utils'
 import loading from './loading'
 
@@ -18,8 +17,7 @@ export default class Scrollload {
         threshold: 10,
         // 视窗
         window: window,
-        // 修复局部滚动的坑
-        useLocalScrollFix: false,
+
         // 底部加载中的html
         loadingHtml: '',
         // 底部没有更多数据的html
@@ -119,16 +117,7 @@ export default class Scrollload {
             this.attachTouchListener()
         }
 
-        this.fixLocalScroll()
-
         this._options.initedHandler.call(this, this)
-    }
-
-    //修复ios局部滚动的bug
-    fixLocalScroll() {
-        if (this._options.useLocalScrollFix) {
-            LocalScrollFix(this.win)
-        }
     }
 
     createBottomDom() {

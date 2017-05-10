@@ -1,4 +1,5 @@
 import Scrollload from '../../Scrollload'
+import LocalScrollFix from 'LocalScrollFix'
 import './index.css'
 
 import $ from 'jquery'
@@ -27,10 +28,13 @@ function getData(data) {
 }
 
 let page = 1
-const window = document.querySelector('.window')
+const win = document.querySelector('.window')
+
+// 修复局部滚动的bug，具体见https://zhuanlan.zhihu.com/p/24837233
+LocalScrollFix(win)
+
 new Scrollload({
-    window: window,
-    useLocalScrollFix: true,
+    window: win,
     loadMore: function(sl) {
         if (page === 6) {
             sl.noMoreData()
@@ -68,3 +72,4 @@ new Scrollload({
         })
     },
 })
+

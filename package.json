@@ -1,6 +1,6 @@
 {
   "name": "scrollload",
-  "version": "3.2.0",
+  "version": "3.2.1",
   "description": "scroll load more data 滚动加载更多的数据",
   "main": "lib/Scrollload.js",
   "scripts": {
@@ -43,7 +43,7 @@
     "camelcase": "^4.0.0",
     "hidpi-canvas": "^1.0.10",
     "jquery": "^3.1.1",
-    "localscrollfix": "^2.0.0",
+    "localscrollfix": "^2.1.0",
     "scrollfix": "0.0.2"
   },
   "repository": {
